@@ -1,151 +1,135 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
-function Home() {
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Dropdown, Button } from 'flowbite-react';
+import { Link } from 'react-router-dom';
+const Home = ({ className = '' }) => {
   return (
-    <section className="w-full min-h-dvh flex items-center">
-      <section className="container flex flex-col gap-[64px]">
-        <section className="flex flex-col gap-[32px]">
-          <h2 className="text-[#93A5AE] text-[64px] font-[400] leading-[64px]">
-            Welcome to
-          </h2>
-          <h1 className="text-white text-[42px] sm:text-[64px] lg:text-[128px] font-[400] leading-[42px] sm:leading-[64px] lg:leading-[128px]">
-            Quantumography
-          </h1>
-          <div>
-            <p className="text-[#93A5AE] text-[16px] font-[400] leading-[24px]">
-              Welcome to Quantumography, a revolutionary encryption project
-              merging security and user experience.{" "}
-            </p>
-            <p className="text-[#93A5AE] text-[16px] font-[400] leading-[24px]">
-              Users can seamlessly hide files within images, customising the
-              degree of deformation for optimal security.
-              <Link className="text-[#2CB1EF]"> How it works?</Link>
-            </p>
-          </div>
-        </section>
-        <section className="flex gap-[32px] flex-wrap">
-          <section className="cursor-pointer flex-1 w-full bg-[#041F39] p-[32px] rounded-[40px] flex gap-[32px] items-center">
-            <svg
-              width="88"
-              height="88"
-              viewBox="0 0 88 88"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M0 24C0 10.7452 10.7452 0 24 0H64C77.2548 0 88 10.7452 88 24V64C88 77.2548 77.2548 88 64 88H24C10.7452 88 0 77.2548 0 64V24Z"
-                fill="#07345F"
-              />
-              <path
-                opacity="0.4"
-                d="M44.0006 56.4831C46.1011 56.4831 47.8039 54.7803 47.8039 52.6798C47.8039 50.5793 46.1011 48.8765 44.0006 48.8765C41.9001 48.8765 40.1973 50.5793 40.1973 52.6798C40.1973 54.7803 41.9001 56.4831 44.0006 56.4831Z"
-                fill="#2CB1EF"
-              />
-              <path
-                d="M54.8493 38.0269H33.1493C23.5827 38.0269 20.666 40.9435 20.666 50.5102V54.8502C20.666 64.4169 23.5827 67.3335 33.1493 67.3335H54.8493C64.416 67.3335 67.3327 64.4169 67.3327 54.8502V50.5102C67.3327 40.9435 64.416 38.0269 54.8493 38.0269ZM43.9993 59.7269C40.1027 59.7269 36.9527 56.5535 36.9527 52.6802C36.9527 48.8069 40.1027 45.6335 43.9993 45.6335C47.896 45.6335 51.046 48.8069 51.046 52.6802C51.046 56.5535 47.896 59.7269 43.9993 59.7269Z"
-                fill="#2CB1EF"
-              />
-              <path
-                opacity="0.4"
-                d="M32.6124 38.0498V35.3198C32.6124 28.4832 34.549 23.9332 43.999 23.9332C53.449 23.9332 55.3857 28.4832 55.3857 35.3198V38.0498C56.5757 38.0732 57.649 38.1198 58.6524 38.2598V35.3198C58.6524 29.0198 57.1357 20.6665 43.999 20.6665C30.8624 20.6665 29.3457 29.0198 29.3457 35.3198V38.2365C30.3257 38.1198 31.4224 38.0498 32.6124 38.0498Z"
-                fill="#2CB1EF"
-              />
-            </svg>
-            <div className="flex flex-col gap-[4px]">
-              <h3 className="text-white text-[36px] font-[400] leading-[48px]">
-                Encrypt File
-              </h3>
-              <h5 className="text-[#93A5AE] text-[16px] font-[400] leading-[24px]">
-                Hide in Plain Sight: Securely Embed and Send Your Secrets with
-                Image Encryption
-              </h5>
-            </div>
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 48 48"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M0 12C0 5.37258 5.37258 0 12 0H36C42.6274 0 48 5.37258 48 12V36C48 42.6274 42.6274 48 36 48H12C5.37258 48 0 42.6274 0 36V12Z"
-                fill="#2CB1EF"
-              />
-              <path
-                opacity="0.4"
-                d="M20 17.5998V30.3865C20 34.6665 22.6667 37.3332 26.9333 37.3332H30.3867C34.6533 37.3332 37.32 34.6665 37.32 30.3998V17.5998C37.3333 13.3332 34.6667 10.6665 30.4 10.6665H26.9333C22.6667 10.6665 20 13.3332 20 17.5998Z"
-                fill="#032230"
-              />
-              <path
-                d="M24.5737 18.8269L29.0403 23.2935C29.427 23.6802 29.427 24.3202 29.0403 24.7069L24.5737 29.1735C24.187 29.5602 23.547 29.5602 23.1603 29.1735C22.7737 28.7869 22.7737 28.1469 23.1603 27.7602L25.9203 25.0002H11.667C11.1203 25.0002 10.667 24.5469 10.667 24.0002C10.667 23.4535 11.1203 23.0002 11.667 23.0002H25.9203L23.1603 20.2402C22.9603 20.0402 22.867 19.7869 22.867 19.5335C22.867 19.2802 22.9603 19.0269 23.1603 18.8269C23.547 18.4269 24.1737 18.4269 24.5737 18.8269Z"
-                fill="#032230"
-              />
-            </svg>
-          </section>
-          <section className="cursor-pointer flex-1 w-full bg-[#041F39] p-[32px] rounded-[40px] flex gap-[32px] items-center">
-            <svg
-              width="88"
-              height="88"
-              viewBox="0 0 88 88"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M0 24C0 10.7452 10.7452 0 24 0H64C77.2548 0 88 10.7452 88 24V64C88 77.2548 77.2548 88 64 88H24C10.7452 88 0 77.2548 0 64V24Z"
-                fill="#07345F"
-              />
-              <path
-                opacity="0.4"
-                d="M43.9996 56.4831C46.1001 56.4831 47.803 54.7803 47.803 52.6798C47.803 50.5793 46.1001 48.8765 43.9996 48.8765C41.8991 48.8765 40.1963 50.5793 40.1963 52.6798C40.1963 54.7803 41.8991 56.4831 43.9996 56.4831Z"
-                fill="#2CB1EF"
-              />
-              <path
-                d="M54.8503 38.0269H33.1503C23.5837 38.0269 20.667 40.9435 20.667 50.5102V54.8502C20.667 64.4169 23.5837 67.3335 33.1503 67.3335H54.8503C64.417 67.3335 67.3337 64.4169 67.3337 54.8502V50.5102C67.3337 40.9435 64.417 38.0269 54.8503 38.0269ZM44.0003 59.7269C40.1037 59.7269 36.9537 56.5535 36.9537 52.6802C36.9537 48.8069 40.1037 45.6335 44.0003 45.6335C47.897 45.6335 51.047 48.8069 51.047 52.6802C51.047 56.5535 47.897 59.7269 44.0003 59.7269Z"
-                fill="#2CB1EF"
-              />
-              <path
-                opacity="0.4"
-                d="M43.212 39.1349V36.2345C43.212 28.9711 41.3617 24.1371 32.333 24.1371C22.6801 24.1371 21.454 29.3677 21.454 33.929C21.454 34.8958 20.7629 35.6643 19.8935 35.6643C19.0241 35.6643 18.333 34.8958 18.333 33.929C18.333 25.1287 23.0368 20.6665 32.333 20.6665C44.884 20.6665 46.333 29.5412 46.333 36.2345V39.3332C45.3967 39.2092 44.3489 39.1349 43.212 39.1349Z"
-                fill="#2CB1EF"
-              />
-            </svg>
+    <section
+      className={`self-stretch overflow-x-hidden flex flex-row items-start justify-start max-w-full text-left text-lg text-gray-200 font-montserrat bg-image h-[100vh] ${className}`}
+    >
+      <div className='absolute w-full z-20 self-stretch bg-darkslategray-600 flex flex-row items-start justify-start pt-[9px] xs:px-4 md:px-8 lg:px-8 pb-2 box-border xs:gap-[15px] lg:gap-[73px] md:gap-[73px] max-w-full mq750:gap-9 mq450:flex-wrap z-[20]'>
+        <div className='menu-item'>
+          <Dropdown label='File' inline={true} arrowIcon={false}>
+            <Dropdown.Item><Link to="/key-frame">New Key Pair</Link></Dropdown.Item>
+            <Dropdown.Item>Import</Dropdown.Item>
+            <Dropdown.Item>Decrypt</Dropdown.Item>
+            <Dropdown.Item>Encrypt</Dropdown.Item>
+            <Dropdown.Item>Close</Dropdown.Item>
+            <Dropdown.Item>Quit</Dropdown.Item>
+          </Dropdown>
+        </div>
 
-            <div className="flex flex-col gap-[4px]">
-              <h3 className="text-white text-[36px] font-[400] leading-[48px]">
-                Decode File
-              </h3>
-              <h5 className="text-[#93A5AE] text-[16px] font-[400] leading-[24px]">
-                Reveal the Invisible: Uncover Hidden Files with Image-Based
-                Decryption
-              </h5>
+        <div className='flex flex-col items-start justify-start pt-px px-0 pb-0'>
+          <div className='relative inline-block min-w-[109px] z-[1] text-[16px] text-[#FFFFFF94]'>My KeyPairs</div>
+        </div>
+        <div className='flex flex-col items-start justify-start pt-px px-0 pb-0'>
+          <a className='[text-decoration:none] relative text-[16px] inline-block min-w-[121px] z-[1] text-[#FFFFFF94]'>
+            My recipients
+          </a>
+        </div>
+      </div>
+      <div className='flex-1 flex flex-col  max-w-full lg:gap-[63px] mq750:gap-8 mq450:gap-4'>
+        <div className='h-[100vh] xs:max-w-[100%] md:max-w-[883px] lg:max-w-[883px] flex flex-row items-center justify-start py-0 px-8 box-border max-w-full text-xl text-gainsboro font-neue-plak z-10'>
+          <div className='flex-1 flex flex-col items-start justify-start gap-[69px] max-w-full mq450:gap-[17px] mq1050:gap-[34px]'>
+            <div className='self-stretch flex flex-col items-start justify-start gap-[25px] max-w-full'>
+              <div className='xs:max-w-[100%] md:max-w-[724px] lg:max-w-[724px] flex flex-col items-start justify-start gap-[17px] max-w-full text-24xl text-white'>
+                <h1 className='mt-0 mb-[17px] xs:max-w-[100%] md:max-w-[518px] lg:max-w-[518px] relative text-[43px] font-normal font-[inherit] inline-block max-w-full z-[1] mq450:text-7xl mq1050:text-15xl'>
+                  Welcome to neuro.RSA
+                </h1>
+                <div className='self-stretch relative text-[20px] leading-[23px] text-gainsboro inline-block    z-[1] max-w-[724px]'>
+                  Neuro.RSA is a front-end for the crypto software. For most actions you need either a public key
+                  (certificate) or your own private key.
+                </div>
+              </div>
+              <div className='self-stretch flex flex-row items-start justify-start py-0 pl-[19px] pr-0 box-border max-w-full'>
+                <div className='flex-1 flex flex-col items-start justify-start gap-[19px] max-w-full'>
+                  <div className='w-[745px] flex flex-row  items-start justify-start gap-[9px] max-w-full'>
+                    <div className='flex flex-col items-start justify-start pt-1.5 px-0 pb-0'>
+                      <input className='cursor-pointer m-0 w-3 h-3 relative z-[1]' type='radio' name='radioGroup-1' />
+                    </div>
+                    <div className='flex-1 relative inline-block max-w-full z-[1] mq750:min-w-full text-white'>
+                      The private key is needed to decrypt or sign.
+                    </div>
+                  </div>
+                  <div className='self-stretch flex flex-row flex-wrap items-start justify-start gap-[9px] max-w-full'>
+                    <div className='flex flex-col items-start justify-start pt-1.5 px-0 pb-0'>
+                      <input className='cursor-pointer m-0 w-3 h-3 relative z-[1]' type='radio' name='radioGroup-1' />
+                    </div>
+                    <div className='flex-1 relative inline-block  max-w-full z-[1] mq750:min-w-full text-white'>
+                      The public key can be used by others to verify your identity or encrypt to you.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className='w-[724px] h-7 relative inline-block max-w-full z-[1] text-white'>
+                You can learn more about Neuro.RSA
+              </div>
             </div>
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 48 48"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M0 12C0 5.37258 5.37258 0 12 0H36C42.6274 0 48 5.37258 48 12V36C48 42.6274 42.6274 48 36 48H12C5.37258 48 0 42.6274 0 36V12Z"
-                fill="#2CB1EF"
-              />
-              <path
-                opacity="0.4"
-                d="M20 17.5998V30.3865C20 34.6665 22.6667 37.3332 26.9333 37.3332H30.3867C34.6533 37.3332 37.32 34.6665 37.32 30.3998V17.5998C37.3333 13.3332 34.6667 10.6665 30.4 10.6665H26.9333C22.6667 10.6665 20 13.3332 20 17.5998Z"
-                fill="#032230"
-              />
-              <path
-                d="M24.5737 18.8269L29.0403 23.2935C29.427 23.6802 29.427 24.3202 29.0403 24.7069L24.5737 29.1735C24.187 29.5602 23.547 29.5602 23.1603 29.1735C22.7737 28.7869 22.7737 28.1469 23.1603 27.7602L25.9203 25.0002H11.667C11.1203 25.0002 10.667 24.5469 10.667 24.0002C10.667 23.4535 11.1203 23.0002 11.667 23.0002H25.9203L23.1603 20.2402C22.9603 20.0402 22.867 19.7869 22.867 19.5335C22.867 19.2802 22.9603 19.0269 23.1603 18.8269C23.547 18.4269 24.1737 18.4269 24.5737 18.8269Z"
-                fill="#032230"
-              />
-            </svg>
-          </section>
-        </section>
-      </section>
+            <div className='w-[438px] flex flex-row flex-wrap items-start justify-start gap-[22px] max-w-full text-white font-montserrat'>
+            <button className='cursor-pointer border-darkslategray-100 border-[1px] border-solid py-[22px] pl-[27px] pr-6 bg-darkslategray-300 flex-1 box-border flex flex-row items-start justify-start gap-[15px] min-w-[135px] z-[1]'>
+                <div className='h-[82px] w-52 relative bg-darkslategray-300 border-darkslategray-100 border-[1px] border-solid box-border hidden' />
+                <div className='h-[34px] w-[37px] relative'>
+                  <img
+                    className='absolute top-[0px] left-[0px] w-[34px] h-[34px] overflow-hidden z-[1]'
+                    alt=''
+                    src='/gis_map-lock.svg'
+                  />
+                
+                </div>
+                <div className='flex-1 flex flex-col items-start justify-start pt-1 px-0 pb-0'>
+                  <div className='self-stretch relative text-xl font-neue-plak text-white text-left z-[1] mq450:text-base'>
+                    <Link to='/login' className='text-white no-underline'>
+                     
+                      Login
+                    </Link>
+                  </div>
+                </div>
+              </button>
+              <button className='cursor-pointer border-darkslategray-100 border-[1px] border-solid py-[22px] pl-[27px] pr-6 bg-darkslategray-300 flex-1 box-border flex flex-row items-start justify-start gap-[15px] min-w-[135px] z-[1]'>
+                <div className='h-[82px] w-52 relative bg-darkslategray-300 border-darkslategray-100 border-[1px] border-solid box-border hidden' />
+                <div className='h-[34px] w-[37px] relative'>
+                  <img
+                    className='absolute top-[0px] left-[0px] w-[34px] h-[34px] overflow-hidden z-[1]'
+                    alt=''
+                    src='/gis_map-lock.svg'
+                  />
+                
+                </div>
+                <div className='flex-1 flex flex-col items-start justify-start pt-1 px-0 pb-0'>
+                  <div className='self-stretch relative text-xl font-neue-plak text-white text-left z-[1] mq450:text-base'>
+                    <Link to='/register-seed' className='text-white no-underline'>
+                     
+                      Register
+                    </Link>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className='xs:w-[100%] md:w-[971px] lg:w-[971px] flex flex-col items-start justify-start pt-[41px] px-0 pb-0 box-border max-w-full xs:ml-[-100%] md:ml-[-618px] lg:ml-[-618px]'>
+        <div className='self-stretch h-[766.4px] relative'>
+          <div className='absolute xs:bottom-[0px] md:top-[0px] lg:top-[0px]  xs:right-[15px] md:left-[267px] lg:left-[267px]  rounded-[50%] bg-darkslategray-300 w-full sm:max-w-[267px] md:max-w-[704px] lg:max-w-[704px] sm:h-[336px] md:h-[704px] lg:h-[704px] z-[1]' />
+          <img
+            className='absolute xs:right-[0] md:left-[auto] lg:left-[auto] md:right-20 lg:right-20 xs:bottom-[0px] md:top-[20px] lg:top-[20px] w-full xs:max-w-[267px] md:max-w-[549.8px] lg:max-w-[549.8px] xs:h-[336px] md:h-[714.4px] lg:h-[714.4px] z-[2]'
+            loading='lazy'
+            alt=''
+            src='/group.svg'
+          />
+          <img
+            className='absolute xs:bottom-[0px] md:top-[20px] lg:top-[20px] xs:right-[0px] md:left-[auto] lg:left-[auto] md:right-20 lg:right-20  w-full xs:max-w-[267px] md:max-w-[586px] lg:max-w-[586px]  xs:h-[336px] md:h-[665.8px] lg:h-[665.8px] z-[3]'
+            alt=''
+            src='/layer-2.svg'
+          />
+        </div>
+      </div>
     </section>
   );
-}
+};
+
+Home.propTypes = {
+  className: PropTypes.string,
+};
 
 export default Home;

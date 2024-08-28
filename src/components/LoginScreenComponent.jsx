@@ -24,7 +24,9 @@ const GroupComponent = ({ className = '' }) => {
       </div>
       <div className='self-stretch flex flex-col items-start justify-start gap-[5px] text-mini-1 font-montserrat'>
         <div className='flex flex-row items-start justify-start py-0 px-px'>
-          <div className='text-[14px] relative leading-[22px] font-medium inline-block min-w-[66px] z-[1] text-[14px]'>Key Seed</div>
+          <div className='text-[14px] relative leading-[22px] font-medium inline-block min-w-[66px] z-[1] text-[14px]'>
+            Key Seed
+          </div>
         </div>
         <div className='bg-darkslategray-200 h-[153px] w-full rounded-borderradius-large box-border overflow-y-auto overflow-x-hidden custom-tab-box'>
           <TagsInput value={selected} name='tags' placeHolder='Enter your Key Seed...' />

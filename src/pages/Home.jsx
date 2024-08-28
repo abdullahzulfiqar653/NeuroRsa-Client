@@ -1,32 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, Button } from 'flowbite-react';
 import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 const Home = ({ className = '' }) => {
   return (
     <section
       className={`self-stretch overflow-x-hidden flex flex-row items-start justify-start max-w-full text-left text-lg text-gray-200 font-montserrat bg-image h-[100vh] ${className}`}
     >
-      <div className='absolute w-full z-20 self-stretch bg-darkslategray-600 flex flex-row items-start justify-start pt-[9px] xs:px-4 md:px-8 lg:px-8 pb-2 box-border xs:gap-[15px] lg:gap-[73px] md:gap-[73px] max-w-full mq750:gap-9 mq450:flex-wrap z-[20]'>
-        <div className='menu-item'>
-          <Dropdown label='File' inline={true} arrowIcon={false}>
-            <Dropdown.Item><Link to="/key-frame">New Key Pair</Link></Dropdown.Item>
-            <Dropdown.Item>Import</Dropdown.Item>
-            <Dropdown.Item>Decrypt</Dropdown.Item>
-            <Dropdown.Item>Encrypt</Dropdown.Item>
-            <Dropdown.Item>Close</Dropdown.Item>
-            <Dropdown.Item>Quit</Dropdown.Item>
-          </Dropdown>
-        </div>
-
-        <div className='flex flex-col items-start justify-start pt-px px-0 pb-0'>
-          <div className='relative inline-block min-w-[109px] z-[1] text-[16px] text-[#FFFFFF94]'>My KeyPairs</div>
-        </div>
-        <div className='flex flex-col items-start justify-start pt-px px-0 pb-0'>
-          <a className='[text-decoration:none] relative text-[16px] inline-block min-w-[121px] z-[1] text-[#FFFFFF94]'>
-            My recipients
-          </a>
-        </div>
+      <div className='absolute z-40 w-full'>
+        <Header />
       </div>
       <div className='flex-1 flex flex-col  max-w-full lg:gap-[63px] mq750:gap-8 mq450:gap-4'>
         <div className='h-[100vh] xs:max-w-[100%] md:max-w-[883px] lg:max-w-[883px] flex flex-row items-center justify-start py-0 px-8 box-border max-w-full text-xl text-gainsboro font-neue-plak z-10'>
@@ -66,7 +48,7 @@ const Home = ({ className = '' }) => {
               </div>
             </div>
             <div className='w-[438px] flex flex-row flex-wrap items-start justify-start gap-[22px] max-w-full text-white font-montserrat'>
-            <button className='cursor-pointer border-darkslategray-100 border-[1px] border-solid py-[22px] pl-[27px] pr-6 bg-darkslategray-300 flex-1 box-border flex flex-row items-start justify-start gap-[15px] min-w-[135px] z-[1]'>
+              <button className='cursor-pointer border-darkslategray-100 border-[1px] border-solid py-[22px] pl-[27px] pr-6 bg-darkslategray-300 flex-1 box-border flex flex-row items-start justify-start gap-[15px] min-w-[135px] z-[1]'>
                 <div className='h-[82px] w-52 relative bg-darkslategray-300 border-darkslategray-100 border-[1px] border-solid box-border hidden' />
                 <div className='h-[34px] w-[37px] relative'>
                   <img
@@ -74,12 +56,10 @@ const Home = ({ className = '' }) => {
                     alt=''
                     src='/gis_map-lock.svg'
                   />
-                
                 </div>
                 <div className='flex-1 flex flex-col items-start justify-start pt-1 px-0 pb-0'>
                   <div className='self-stretch relative text-xl font-neue-plak text-white text-left z-[1] mq450:text-base'>
                     <Link to='/login' className='text-white no-underline'>
-                     
                       Login
                     </Link>
                   </div>
@@ -93,12 +73,10 @@ const Home = ({ className = '' }) => {
                     alt=''
                     src='/gis_map-lock.svg'
                   />
-                
                 </div>
                 <div className='flex-1 flex flex-col items-start justify-start pt-1 px-0 pb-0'>
                   <div className='self-stretch relative text-xl font-neue-plak text-white text-left z-[1] mq450:text-base'>
                     <Link to='/register-seed' className='text-white no-underline'>
-                     
                       Register
                     </Link>
                   </div>

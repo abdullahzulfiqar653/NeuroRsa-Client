@@ -6,6 +6,9 @@ module.exports = {
 
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Montserrat', 'sans-serif'],
+      },
       colors: {
         white: '#fff',
         'light-blue': '#ebf5fe',
@@ -33,13 +36,6 @@ module.exports = {
         'surface-text-gray-disabled': 'rgba(108, 132, 157, 0.32)',
       },
       spacing: {},
-      fontFamily: {
-        'px-font': "'League Spartan'",
-        'plus-jakarta-sans': "'Plus Jakarta Sans'",
-        'neue-plak': "'Neue Plak'",
-        montserrat: 'Montserrat',
-        inter: 'Inter',
-      },
       borderRadius: {
         '11xl': '30px',
         xl: '20px',

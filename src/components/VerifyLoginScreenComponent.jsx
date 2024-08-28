@@ -17,21 +17,23 @@ const GroupComponent = ({ className = '' }) => {
             </div>
           </div>
           <h3 className='m-0 self-stretch relative text-lg leading-[22px] font-normal font-[inherit] text-center z-[1]'>
-          Please enter 6-digit code that appears in your authentication app for Two-factor authentication
+            Please enter 6-digit code that appears in your authentication app for Two-factor authentication
           </h3>
         </div>
       </div>
       <div className='self-stretch flex flex-col items-start justify-start gap-[5px] text-mini-1 font-montserrat'>
         <div className='flex flex-row items-start justify-start py-0 px-px'>
-          <div className='text-[14px]  relative leading-[22px] font-medium inline-block min-w-[66px] z-[1]'>Enter Code</div>
+          <div className='text-[14px]  relative leading-[22px] font-medium inline-block min-w-[66px] z-[1]'>
+            Enter Code
+          </div>
         </div>
-        <div className="verify-field w-full">
-        <input
-          type='number'
-          min={0}
-          className='!bg-[#0E3244] w-full border-steelblue border-[0.4px] border-solid w-auto [outline:none] self-stretch !rounded-[10px] box-border flex flex-row items-center justify-start p-3.5 font-montserrat text-base-5 text-white z-[1]'
-          placeholder='Verification Code'
-        />
+        <div className='verify-field w-full'>
+          <input
+            type='number'
+            min={0}
+            className='!bg-[#0E3244] w-full border-steelblue border-[0.4px] border-solid w-auto [outline:none] self-stretch !rounded-[10px] box-border flex flex-row items-center justify-start p-3.5 font-montserrat text-base-5 text-white z-[1]'
+            placeholder='Verification Code'
+          />
         </div>
       </div>
       <div className='self-stretch flex flex-row items-start justify-center pt-0 px-0 pb-[59px] text-center text-base font-montserrat'>
@@ -40,11 +42,10 @@ const GroupComponent = ({ className = '' }) => {
             <div className='h-[47.2px] w-[223px] relative rounded-[4.38px] bg-mediumturquoise hidden' />
             <div className='flex-1 relative z-[1]'>Verify Code</div>
           </div>
-      
         </div>
       </div>
       <div className='self-stretch flex flex-row items-start justify-center py-0 pl-px pr-0 text-center text-sm text-gray-200'>
-      <div className='w-full relative leading-[22px] inline-block z-[3]'>Produced by: Neuronus Computing</div>
+        <div className='w-full relative leading-[22px] inline-block z-[3]'>Produced by: Neuronus Computing</div>
       </div>
     </div>
   );

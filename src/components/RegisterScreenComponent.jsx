@@ -39,7 +39,10 @@ const GroupComponent = ({ className = '' }) => {
         <div className='flex flex-row items-start justify-start gap-[9px] shrink-0'>
           <div className='relative leading-[32px] z-[1]'>Already have account?</div>
           <div className='relative'>
-            <Link to='/login' className='leading-[32px] text-mediumturquoise inline-block min-w-[50px] z-[1] no-underline'>
+            <Link
+              to='/login'
+              className='leading-[32px] text-mediumturquoise inline-block min-w-[50px] z-[1] no-underline'
+            >
               Login here
             </Link>
           </div>

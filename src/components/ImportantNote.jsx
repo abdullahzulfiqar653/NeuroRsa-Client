@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-const GroupComponent = ({ className = '', onShowSeed  }) => {
+const GroupComponent = ({ className = '', onShowSeed }) => {
   return (
     <>
       <h2 className='text-white text-[32px] leading-[64px] font-normal text-center w-full mb-[5px] mt-[44px]'>
@@ -16,7 +16,10 @@ const GroupComponent = ({ className = '', onShowSeed  }) => {
       </div>
       <div className='self-stretch flex flex-col items-center justify-center pt-0 px-0 text-center text-base font-montserrat'>
         <div className='w-full flex flex-col items-start justify-start gap-[10.8px] mb-[10px]'>
-          <div  onClick={onShowSeed} className='cursor-pointer self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-3.5 pb-[13.9px] pl-[50px] pr-[49px] shrink-0 z-[1]'>
+          <div
+            onClick={onShowSeed}
+            className='cursor-pointer self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-3.5 pb-[13.9px] pl-[50px] pr-[49px] shrink-0 z-[1]'
+          >
             <div className='h-[47.2px] w-full relative rounded-[4.38px] bg-mediumturquoise hidden' />
             <div className='flex-1 relative z-[1]'>I understand, show me my seed</div>
           </div>

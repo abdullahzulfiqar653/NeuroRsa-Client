@@ -14,14 +14,13 @@ const LoginScreen = () => {
           alt=''
           src='/group-1261153234.svg'
         />
-        
       </main>
       <GroupComponent />
       <img
-          className='absolute bottom-[0px] right-[0px] w-[550px] h-[350px] z-[1] object-cover object-top'
-          alt=''
-          src='/Group-bottom.png'
-        />
+        className='absolute bottom-[0px] right-[0px] w-[550px] h-[350px] z-[1] object-cover object-top'
+        alt=''
+        src='/Group-bottom.png'
+      />
     </div>
   );
 };

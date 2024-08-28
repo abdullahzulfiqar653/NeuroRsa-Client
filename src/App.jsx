@@ -5,6 +5,11 @@ import LoginScreen from './pages/LoginScreen';
 import RegisterScreen from './pages/RegisterScreen';
 import Home from './pages/Home';
 import KeyFrame from './pages/KeyFrame';
+import Recipients from './pages/Recipients';
+import SelectRecipients from './pages/SelectRecipients';
+import MainHome from './pages/MainHome';
+import PrivateKey from './pages/PrivateKey';
+import PrublicKey from './pages/PublicKey';
 
 function App() {
   const action = useNavigationType();
@@ -47,6 +52,11 @@ function App() {
       <Route path='/VerifyLoginScreen' element={<VerifyLoginScreen />} />
       <Route path='/register-seed' element={<RegisterScreen />} />
       <Route path='/key-frame' element={<KeyFrame />} />
+      <Route path='/my-recipients' element={<Recipients />} />
+      <Route path='/select-recipients' element={<SelectRecipients />} />
+      <Route path='/main-home' element={<MainHome />} />
+      <Route path='/private-key' element={<PrivateKey />} />
+      <Route path='/public-key' element={<PrublicKey />} />
     </Routes>
   );
 }

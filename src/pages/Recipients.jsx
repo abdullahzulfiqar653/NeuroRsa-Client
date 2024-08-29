@@ -74,7 +74,7 @@ const Recipients = () => {
             <div className='self-stretch  flex-row items-start justify-start relative max-w-full xs:hidden sm:hidden md:flex lg:flex'>
               <div className='flex-1 flex flex-row items-start justify-start flex-wrap content-start gap-6 w-full'>
                 <div className='flex-1 flex flex-col items-start justify-start gap-[25px] min-w-[463px] w-full'>
-                  <div className='overflow-y-auto  md:h-[calc(100vh-35vh)] lg:h-[calc(100vh-35vh)] bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-col items-start justify-start pt-9 pb-[18px] pl-3 pr-[11px] gap-[17px] max-w-full mq800:pt-[23px] mq800:pb-5 mq800:box-border'>
+                  <div className='overflow-y-auto bg-vector-img  md:h-[calc(100vh-35vh)] lg:h-[calc(100vh-35vh)] bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-col items-start justify-start pt-9 pb-[18px] pl-3 pr-[11px] gap-[17px] max-w-full mq800:pt-[23px] mq800:pb-5 mq800:box-border'>
                     <div className='w-full max-w-[569px] flex flex-row items-start justify-start py-0 px-2.5 box-border'>
                       <div className='flex-1 relative leading-[30px] inline-block max-w-full z-[1] mq450:text-lg mq450:leading-[24px]'>
                         <p className='m-0'>Hello,</p>
@@ -113,7 +113,11 @@ const Recipients = () => {
                             </div>
                           </div>
                           <div className='w-[34.3px] h-[34.3px] flex'>
-                            <img className='w-[34.3px] h-[34.3px] relative z-[3] flex' alt='' src='/group-1261153225.svg' />
+                            <img
+                              className='w-[34.3px] h-[34.3px] relative z-[3] flex'
+                              alt=''
+                              src='/group-1261153225.svg'
+                            />
                           </div>
                         </div>
                         <div className='self-stretch shadow-[0px_3.8px_11.44px_rgba(0,_0,_0,_0.32)] rounded-[11.44px] bg-[#113C53] flex flex-row items-center justify-between pt-[5.8px] pb-[6.7px] pl-[5px] pr-3.5 box-border max-w-full gap-5 z-[1]'>
@@ -140,7 +144,11 @@ const Recipients = () => {
                             </div>
                           </div>
                           <div className='w-[34.3px] h-[34.3px] flex'>
-                            <img className='w-[34.3px] h-[34.3px] relative z-[3] flex' alt='' src='/group-1261153225.svg' />
+                            <img
+                              className='w-[34.3px] h-[34.3px] relative z-[3] flex'
+                              alt=''
+                              src='/group-1261153225.svg'
+                            />
                           </div>
                         </div>
                         <div className='self-stretch shadow-[0px_3.8px_11.44px_rgba(0,_0,_0,_0.32)] rounded-[11.44px] bg-[#113C53] flex flex-row items-center justify-between pt-[5.8px] pb-[6.7px] pl-[5px] pr-3.5 box-border max-w-full gap-5 z-[1]'>
@@ -231,7 +239,11 @@ const Recipients = () => {
                           </div>
                         </div>
                         <div className='w-[34.3px] h-[34.3px] flex'>
-                          <img className='w-[34.3px] h-[34.3px] relative z-[3] flex' alt='' src='/group-1261153225.svg' />
+                          <img
+                            className='w-[34.3px] h-[34.3px] relative z-[3] flex'
+                            alt=''
+                            src='/group-1261153225.svg'
+                          />
                         </div>
                       </div>
                       <div className='self-stretch shadow-[0px_3.8px_11.44px_rgba(0,_0,_0,_0.32)] rounded-[11.44px] bg-[#113C53] flex flex-row items-center justify-between pt-[5.8px] pb-[6.7px] pl-[5px] pr-3.5 box-border max-w-full gap-5 z-[1]'>
@@ -258,7 +270,11 @@ const Recipients = () => {
                           </div>
                         </div>
                         <div className='w-[34.3px] h-[34.3px] flex'>
-                          <img className='w-[34.3px] h-[34.3px] relative z-[3] flex' alt='' src='/group-1261153225.svg' />
+                          <img
+                            className='w-[34.3px] h-[34.3px] relative z-[3] flex'
+                            alt=''
+                            src='/group-1261153225.svg'
+                          />
                         </div>
                       </div>
                       <div className='self-stretch shadow-[0px_3.8px_11.44px_rgba(0,_0,_0,_0.32)] rounded-[11.44px] bg-[#113C53] flex flex-row items-center justify-between pt-[5.8px] pb-[6.7px] pl-[5px] pr-3.5 box-border max-w-full gap-5 z-[1]'>
@@ -331,7 +347,10 @@ const Recipients = () => {
           </section>
         </main>
       </div>
-      <ToastContainer closeButton={CloseButton} className='w-full max-w-[1000px] left-auto xs:right-0 sm:right-0 lg:!right-[1%] items-center' />
+      <ToastContainer
+        closeButton={CloseButton}
+        className='w-full max-w-[1000px] left-auto xs:right-0 sm:right-0 lg:!right-[1%] items-center'
+      />
       <Modal show={isOpen} onClose={closeModal} className='bg-black'>
         <Modal.Header className='justify-center items-center flex bg-[#0E2E3F] border-none modal-h3'>
           <div className='text-white'> Create New Recipients </div>

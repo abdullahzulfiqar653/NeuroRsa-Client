@@ -21,7 +21,7 @@ const MainHome = () => {
           <Header />
         </div>
         <div className='overflow-x-auto px-[32px] desktop-view-table xs:hidden sm:hidden md:block lg:block'>
-          <div className='mb-[30px]'>
+          <div className='mb-[30px] mt-[40px]'>
             <Formik
               initialValues={{ search: '' }}
               onSubmit={(values) => {
@@ -58,7 +58,8 @@ const MainHome = () => {
               )}
             </Formik>
           </div>
-          <Table className='bg-[#1c3d4f] rounded-t-[12px]'>
+        <div className='border-[1px] border-[#1B3D4F] p-[24px]'>
+        <Table className='bg-[#1c3d4f] rounded-t-[12px]'>
             <Table.Head className='bg-[#0f2e3f]'>
               <Table.HeadCell className='bg-[#1c3d4f] text-white border-r-[5px] border-[#0f2e3f] rounded-t-[12px]'>
                 Name
@@ -145,6 +146,7 @@ const MainHome = () => {
               </Table.Row>
             </Table.Body>
           </Table>
+        </div>
           <div className='flex justify-between items-center space-x-4 mt-[64px]'>
             <div className='flex items-center space-x-2'>
               <button className='px-3 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]'>← Prev</button>
@@ -179,7 +181,7 @@ const MainHome = () => {
           </div>
         </div>
         <div className='mobile-view-table xs:block sm:block md:hidden lg:hidden px-[16px]'>
-          <div className='mb-[12px]'>
+          <div className='mb-[12px] mt-[14px]'>
             <Formik
               initialValues={{ search: '' }}
               onSubmit={(values) => {
@@ -216,7 +218,8 @@ const MainHome = () => {
               )}
             </Formik>
           </div>
-          <div className='text-white bg-[#1B3D4F] rounded-t-[8px] px-[16px] py-[8px] text-[12px] font-normal leading-[16.7px] mb-[15px]'>
+         <div className='border-[1px] border-[#1B3D4F] p-[12px]'>
+         <div className='text-white bg-[#1B3D4F] rounded-t-[8px] px-[16px] py-[8px] text-[12px] font-normal leading-[16.7px] mb-[15px]'>
             Key Types
           </div>
           <div className='flex flex-col  w-full'>
@@ -302,6 +305,7 @@ const MainHome = () => {
               </div>
             </div>
           </div>
+         </div>
           <div className='flex justify-between items-center space-x-4 mt-[64px]'>
             <div className='flex items-center space-x-1'>
               <button className='text-[7.6px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]'>

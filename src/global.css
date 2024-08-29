@@ -156,7 +156,7 @@ body {
   align-items: center;
   gap: 10px;
   color: #fff;
-  border-radius: 10px;
+  border-radius: 4px;
 }
 
 .Toastify__toast {
@@ -213,7 +213,12 @@ body {
 .hover-btn .sub-menu {
   display: none;
 }
-
+.bg-vector-img{
+  background-image: url('./bg-vector.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
 @media screen and (max-width: 768px) {
   .menu-item button {
     min-width: 80px;

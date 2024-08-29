@@ -31,7 +31,7 @@ const GroupComponent = ({ className = '' }) => {
           <input
             type='number'
             min={0}
-            className='!bg-[#0E3244] w-full border-steelblue border-[0.4px] border-solid w-auto [outline:none] self-stretch !rounded-[10px] box-border flex flex-row items-center justify-start p-3.5 font-montserrat text-base-5 text-white z-[1]'
+            className='!bg-[#0E3244] w-full border-steelblue border-[0.4px] border-solid  [outline:none] self-stretch !rounded-[10px] box-border flex flex-row items-center justify-start p-3.5 font-montserrat text-base-5 text-white z-[1] input-field'
             placeholder='Verification Code'
           />
         </div>

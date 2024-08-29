@@ -34,8 +34,8 @@ const Header = () => {
   };
 
   return (
-    <div className='w-full mb-[50px]'>
-      <div className=' w-full z-20 self-stretch flex flex-row items-center   xs:px-4 md:px-8 lg:px-8  box-border xs:gap-[15px] lg:gap-[73px] md:gap-[73px] max-w-full mq750:gap-9 mq450:flex-wrap'>
+    <div className='w-full'>
+      <div className=' w-full z-20 self-stretch flex flex-row xs:justify-between sm:justify-start items-center   xs:px-4 md:px-8 lg:px-8  box-border xs:gap-[15px] sm:gap-[73px] md:gap-[73px] lg:gap-[73px]  max-w-full mq750:gap-9 mq450:flex-wrap'>
         <div
           className='relative inline-block text-left'
           onMouseEnter={handleMouseEnterDropdownFile}
@@ -83,7 +83,7 @@ const Header = () => {
         <div className='flex flex-col items-start justify-start pt-px px-0 pb-0'>
           <Link
             to='/key-frame'
-            className='relative inline-block min-w-[109px] z-[1] xs:text-[10px] sm:text-[10px] md;text-[16px] lg:text-[16px] text-white opacity-[72%]'
+            className='relative inline-block  z-[1] xs:text-[10px] sm:text-[10px] md;text-[16px] lg:text-[16px] text-white opacity-[72%]'
           >
             My KeyPairs
           </Link>

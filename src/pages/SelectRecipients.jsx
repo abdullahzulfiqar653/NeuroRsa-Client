@@ -97,7 +97,7 @@ const SelectKeyPair = () => {
                   </div>
                 </div>
                 <div className='flex-1 flex flex-col items-start justify-start gap-[11px] max-w-[7123px] w-full text-center text-lgi-1 text-steelblue-300'>
-                  <div className='xs:hidden sm:hidden md:flex lg:flex bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border  flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap h-[663px] overflow-auto'>
+                  <div className='xs:hidden sm:hidden md:flex lg:flex bg-vector-img bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border  flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap h-[663px] overflow-auto'>
                     <div className='flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full'>
                       <div className='text-[#A8B5BC] inline-block text-[22px] mb-[12px]'>Recipients</div>
                       <div className='self-stretch flex flex-col items-start justify-start gap-4 max-w-full'>

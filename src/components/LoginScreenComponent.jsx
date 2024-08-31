@@ -1,9 +1,72 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { TagsInput } from 'react-tag-input-component';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import useCreateToken from '../hooks/useCreateToken';
 const GroupComponent = ({ className = '' }) => {
-  const [selected, setSelected] = useState([]);
+  const navigate = useNavigate();
+  const { mutate } = useCreateToken();
+  const [inputValue, setInputValue] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [seedsValue, setSeedsValue] = useState([]);
+
+  const handleSubmit = () => {
+    mutate(seedsValue.join(" "), {
+      onSuccess: () => {
+        login();
+        navigate("/main-home");
+      },
+      onError: (error) => {
+        setError("Login failed. Please check your credentials.", error);
+      },
+    });
+  };
+
+  const handleKeyDown = (e) => {
+    switch (e.key) {
+      case "Enter":
+        // const filteredSuggestions = Words.filter((word) =>
+        //   word.toLowerCase().startsWith(inputValue.toLowerCase())
+        // );
+        setSeedsValue([...seedsValue, inputValue]);
+        setInputValue("");
+        setSuggestions([]);
+        break;
+      case "Backspace":
+        if (inputValue === "") {
+          setSeedsValue(seedsValue.slice(0, seedsValue.length - 1));
+        }
+        break;
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value.trim();
+    setInputValue(value);
+
+    if (value.split(" ").length > 1) {
+      setSeedsValue(value.split(" "));
+      setInputValue("");
+    }
+    if (value.length > 0) {
+      const filteredSuggestions = Words.filter((word) =>
+        word.toLowerCase().startsWith(value.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  // const handleSuggestionClick = (suggestion) => {
+  //   setInputValue("");
+  //   setSeedsValue([...seedsValue, suggestion]);
+  //   setSuggestions([]);
+  // };
+
+  const removeSeed = (indexToRemove) => {
+    setSeedsValue(seedsValue.filter((_, index) => index !== indexToRemove));
+  };
   return (
     <div
       className={`w-[458px] sm:w-[458px] md:w-[458px] lg:w-[458px]   rounded-[32px] [background:linear-gradient(180deg,_#1f729d,_#0b2837)] border-darkslategray-100 border-[1px] border-solid box-border flex flex-col items-end justify-start pt-[67px] pb-3.5 pl-[18px] pr-[19px] gap-[68px] max-w-full z-[2] text-left text-9xl text-white font-neue-plak mq450:gap-[34px] mq725:pt-11 mq725:pb-5 mq725:box-border ${className}`}
@@ -28,18 +91,51 @@ const GroupComponent = ({ className = '' }) => {
             Key Seed
           </div>
         </div>
-        <div className='bg-darkslategray-200 h-[153px] w-full rounded-borderradius-large box-border overflow-y-auto overflow-x-hidden custom-tab-box'>
-          <TagsInput value={selected} name='tags' placeHolder='Enter your Key Seed...' />
+        <div className='bg-darkslategray-200 flex gap-[8px] py-[15px] px-[19px] flex-wrap w-full rounded-borderradius-large box-border overflow-y-auto overflow-x-hidden custom-tab-box'>
+        {seedsValue?.map((seed, index) => (
+                <span
+                  key={index}
+                  className="group cursor-pointer dm-sans border-mediumturquoise border-[1px] px-[8px] text-[16px] leading-[27px] font-[400] text-white rounded-[6px]"
+                >
+                  {seed}
+                  <span
+                    className="cursor-pointer ml-1 text-[#ab1c1c] text-xl hidden group-hover:inline"
+                    onClick={() => removeSeed(index)}
+                  >
+                    x
+                  </span>
+                </span>
+              ))}
+              {seedsValue.length < 16 && (
+                <input
+                  className="dm-sans outline-none bg-darkslategray-200 placeholder:text-[#DFDFDF36] text-white text-[16px] leading-[32px] font-[400]"
+                  placeholder="Enter your key seed..."
+                  value={inputValue}
+                  onChange={(e) => handleInputChange(e)}
+                  onKeyDown={handleKeyDown}
+                />
+              )}
         </div>
+        {/* <div className="flex gap-[8px] mt-[11px] flex-wrap">
+              {suggestions.map((seed, index) => (
+                <span
+                  onClick={() => handleSuggestionClick(seed)}
+                  key={index}
+                  className="dm-sans cursor-pointer border-mediumturquoise border-[1px] px-[8px] text-[16px] leading-[27px] font-[400] text-white rounded-[6px]"
+                >
+                  {seed}
+                </span>
+              ))}
+            </div> */}
       </div>
       <div className='self-stretch flex flex-row items-start justify-center pt-0 px-0 pb-[59px] text-center text-base font-montserrat'>
         <div className='w-[223px] flex flex-col items-start justify-start gap-[10.8px]'>
-          <Link to='/VerifyLoginScreen' className='text-white no-underline w-full'>
-            <div className='self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-3.5 pb-[13.9px] pl-[50px] pr-[49px] shrink-0 z-[1]'>
+          {/* <Link to='/VerifyLoginScreen' className='text-white no-underline w-full'> */}
+            <div onClick={handleSubmit} className='self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-3.5 pb-[13.9px] pl-[50px] pr-[49px] shrink-0 z-[1]'>
               <div className='h-[47.2px] w-[223px] relative rounded-[4.38px] bg-mediumturquoise hidden' />
               <div className='flex-1 relative z-[1]'>Next</div>
             </div>
-          </Link>
+          {/* </Link> */}
           <div className='flex flex-row items-start justify-start py-0 px-[15px] text-xs text-gainsboro-200'>
             <div className='flex flex-row items-start justify-start gap-[9px] shrink-0'>
               <div className='relative leading-[32px] z-[1]'>Don’t have your seed?</div>

@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import ImportantNotice from './ImportantNote';
 import YourSeed from './YourSeed';
 import { Link } from 'react-router-dom';
-
+import useGenerateSeeds from '../hooks/useGenerateSeeds'; 
 const GroupComponent = ({ className = '' }) => {
+  const {data}=useGenerateSeeds();
   const [showSeed, setShowSeed] = useState(false);
-
+  const [seedsData, setSeedsData] = useState(false);
+   
   const handleShowSeed = () => {
+    setSeedsData(data.pass_phrase)
     setShowSeed(true);
   };
   return (
@@ -34,7 +37,7 @@ const GroupComponent = ({ className = '' }) => {
         height={143}
         className='w-[143px] h-[143px] mx-[auto]'
       />
-      <div className='w-full'>{!showSeed ? <ImportantNotice onShowSeed={handleShowSeed} /> : <YourSeed />}</div>
+      <div className='w-full'>{!showSeed ? <ImportantNotice onShowSeed={handleShowSeed} /> : <YourSeed seedsData={seedsData}/>}</div>
       <div className='w-full flex flex-row items-center justify-center py-0 text-xs text-gainsboro-200'>
         <div className='flex flex-row items-start justify-start gap-[9px] shrink-0'>
           <div className='relative leading-[32px] z-[1]'>Already have account?</div>

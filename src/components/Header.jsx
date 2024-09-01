@@ -1,25 +1,88 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { Button, Modal } from "flowbite-react";
+import useCreateKeypair from "../hooks/useCreateKeypair";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { Dropdown, Button, Modal } from "flowbite-react";
-import { FaAngleLeft } from "react-icons/fa";
+
 const Header = () => {
+  const [step, setStep] = useState(1);
+  const { mutate } = useCreateKeypair();
+  const [errors, setErrors] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
+  const [formValues, setFormValues] = useState({});
+  const [keypair, setKeypair] = useState({});
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownOpenFile, setIsDropdownOpenFile] = useState(false);
+
+  useEffect(() => {
+    if (step === 2) {
+      const timer = setTimeout(() => {
+        setStep(3);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [step]);
+
+  const closeModal = () => setIsOpen(false);
+  const nextStep = () => setStep((prevStep) => Math.min(prevStep + 1, 4));
+  const prevStep = () => setStep((prevStep) => Math.max(prevStep - 1, 1));
   const openModal = () => {
     setIsOpen(true);
     setStep(1);
   };
-  const [isOpen, setIsOpen] = useState(false);
-  const [step, setStep] = useState(1);
+  console.log(errors);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
-  const closeModal = () => setIsOpen(false);
+    if (name === "confirmPassphrase") {
+      if (formValues.passphrase !== formValues.confirmPassphrase) {
+        setErrors({ passphrase: "Passphrases do not match" });
+      } else {
+        setErrors({ passphrase: "" });
+      }
+    }
+    setFormValues({ ...formValues, [name]: value });
+  };
+  console.log(keypair);
 
-  const nextStep = () => setStep((prevStep) => Math.min(prevStep + 1, 4));
-  const prevStep = () => setStep((prevStep) => Math.max(prevStep - 1, 1));
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    mutate(formValues, {
+      onSuccess: (response) => {
+        setKeypair(response);
+        setStep(4);
+        toast.success(`Keypair Created  successfully.`, {
+          className: "toast-message",
+        });
+      },
+      onError: (error) => {
+        setErrors(error.response.data);
+        toast.error(
+          error.response.data?.error
+            ? error.response.data?.error[0]
+            : "Please fix the errors in mentioned fields.",
+          {
+            className: "toast-message",
+          }
+        );
+      },
+    });
+  };
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const handleBackupOfKeypair = () => {
+    const element = document.createElement("a");
+    const file = new Blob(
+      [`${keypair.public_key}\n\n\n\n${keypair.private_key}`],
+      { type: "text/plain" }
+    );
+    element.href = URL.createObjectURL(file);
+    element.download = "keypair_backup.txt";
+    document.body.appendChild(element);
+    element.click();
+  };
 
-  const [isDropdownOpenFile, setIsDropdownOpenFile] = useState(false);
-
+  // Handle Dropdown
   const handleMouseEnterDropdown = () => {
     setIsDropdownOpen(true);
   };
@@ -179,6 +242,8 @@ const Header = () => {
                         id="name"
                         name="name"
                         className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field"
+                        value={formValues.name}
+                        onChange={handleChange}
                       />
                       <ErrorMessage name="name" component="div" />
                     </div>
@@ -194,6 +259,8 @@ const Header = () => {
                         id="email"
                         name="email"
                         className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field"
+                        value={formValues.email}
+                        onChange={handleChange}
                       />
                       <ErrorMessage name="email" component="div" />
                     </div>
@@ -248,7 +315,7 @@ const Header = () => {
                           htmlFor="passphrase"
                           className="text-white mb-[6px] flex w-full"
                         >
-                          Passphrase:
+                          Passphrase (Optional):
                         </label>
                       </div>
                       <Field
@@ -256,23 +323,31 @@ const Header = () => {
                         id="passphrase"
                         name="passphrase"
                         className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field"
+                        value={formValues.passphrase}
+                        onChange={handleChange}
                       />
-                      <ErrorMessage name="passphrase" component="div" />
+                      {errors.passphrase && (
+                        <div className="text-red-500">{errors.passphrase}</div>
+                      )}
                     </div>
                     <div className="flex flex-col mt-[24px]">
                       <label
                         htmlFor="confirmPassphrase"
                         className="text-white mb-[6px] flex w-full"
                       >
-                        Repeat:
+                        Repeat Passphrase:
                       </label>
                       <Field
                         type="password"
                         id="confirmPassphrase"
                         name="confirmPassphrase"
                         className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field"
+                        value={formValues.confirmPassphrase}
+                        onChange={handleChange}
                       />
-                      <ErrorMessage name="confirmPassphrase" component="div" />
+                      {errors.passphrase && (
+                        <div className="text-red-500">{errors.passphrase}</div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -310,22 +385,30 @@ const Header = () => {
                       className="!bg-[#0E2E3F] !rounded-[5px]  text-white input-field"
                       rows="6"
                       col="40"
+                      disabled
+                      value={`Key Pair created successfully. Fingerprint: ${Array(
+                        5
+                      )
+                        .fill()
+                        .map(() => Math.random().toString(36).substring(2, 15))
+                        .join("")
+                        .toUpperCase()}`}
                     />
-                    <ErrorMessage name="message" component="div" />
                     <label
                       htmlFor="NextSteps"
                       className="text-white text-[24px] font-normal leading-[33px] mt-[32px] mb-[6px] flex w-full"
                     >
                       Next Steps
                     </label>
-                    <Field
-                      type="text"
+                    <Button
+                      type="button"
                       id="passphrase"
                       name="passphrase"
                       className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] text-white input-field input-field"
-                      placeholder=" Make a Backup Of Your Key Pair..."
-                    />
-                    <ErrorMessage name="message" component="div" />
+                      onClick={handleBackupOfKeypair}
+                    >
+                      Make a Backup Of Your Key Pair...
+                    </Button>
                   </div>
                 </div>
               )}
@@ -334,12 +417,6 @@ const Header = () => {
             <Modal.Footer className="bg-[#1B3D4F] justify-end border-[0px] pt-0 footer-btn">
               {step === 1 && (
                 <>
-                  <Button
-                    onClick={prevStep}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    Back
-                  </Button>
                   <Button
                     onClick={nextStep}
                     className="!bg-[#57CBCC] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
@@ -358,18 +435,6 @@ const Header = () => {
               {step === 2 && (
                 <>
                   <Button
-                    onClick={prevStep}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    <FaAngleLeft size={24} color="#fff" /> Back
-                  </Button>
-                  <Button
-                    onClick={nextStep}
-                    className="!bg-[#57CBCC] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    Next
-                  </Button>
-                  <Button
                     onClick={closeModal}
                     className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
@@ -387,7 +452,7 @@ const Header = () => {
                     Cancel
                   </Button>
                   <Button
-                    onClick={nextStep}
+                    onClick={handleSubmit}
                     className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
                     OK
@@ -398,13 +463,7 @@ const Header = () => {
               {step === 4 && (
                 <>
                   <Button
-                    onClick={prevStep}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    <FaAngleLeft size={24} color="#fff" /> Back
-                  </Button>
-                  <Button
-                    onClick={nextStep}
+                    onClick={closeModal}
                     className="!bg-[#57CBCC] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[5px]"
                   >
                     Finish

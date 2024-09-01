@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { TagsInput } from 'react-tag-input-component';
 import { Link, useNavigate } from 'react-router-dom';
 import useCreateToken from '../hooks/useCreateToken';
+import Words from "../data/Seeds"
 const GroupComponent = ({ className = '' }) => {
   const navigate = useNavigate();
   const { mutate } = useCreateToken();
@@ -25,10 +26,10 @@ const GroupComponent = ({ className = '' }) => {
   const handleKeyDown = (e) => {
     switch (e.key) {
       case "Enter":
-        // const filteredSuggestions = Words.filter((word) =>
-        //   word.toLowerCase().startsWith(inputValue.toLowerCase())
-        // );
-        setSeedsValue([...seedsValue, inputValue]);
+        const filteredSuggestions = Words.filter((word) =>
+          word.toLowerCase().startsWith(inputValue.toLowerCase())
+        );
+        setSeedsValue([...seedsValue, filteredSuggestions[0]]);
         setInputValue("");
         setSuggestions([]);
         break;
@@ -58,11 +59,11 @@ const GroupComponent = ({ className = '' }) => {
     }
   };
 
-  // const handleSuggestionClick = (suggestion) => {
-  //   setInputValue("");
-  //   setSeedsValue([...seedsValue, suggestion]);
-  //   setSuggestions([]);
-  // };
+  const handleSuggestionClick = (suggestion) => {
+    setInputValue("");
+    setSeedsValue([...seedsValue, suggestion]);
+    setSuggestions([]);
+  };
 
   const removeSeed = (indexToRemove) => {
     setSeedsValue(seedsValue.filter((_, index) => index !== indexToRemove));
@@ -116,7 +117,7 @@ const GroupComponent = ({ className = '' }) => {
                 />
               )}
         </div>
-        {/* <div className="flex gap-[8px] mt-[11px] flex-wrap">
+         <div className="flex gap-[8px] mt-[11px] flex-wrap">
               {suggestions.map((seed, index) => (
                 <span
                   onClick={() => handleSuggestionClick(seed)}
@@ -126,12 +127,12 @@ const GroupComponent = ({ className = '' }) => {
                   {seed}
                 </span>
               ))}
-            </div> */}
+            </div>
       </div>
       <div className='self-stretch flex flex-row items-start justify-center pt-0 px-0 pb-[59px] text-center text-base font-montserrat'>
         <div className='w-[223px] flex flex-col items-start justify-start gap-[10.8px]'>
           {/* <Link to='/VerifyLoginScreen' className='text-white no-underline w-full'> */}
-            <div onClick={handleSubmit} className='self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-3.5 pb-[13.9px] pl-[50px] pr-[49px] shrink-0 z-[1]'>
+            <div onClick={handleSubmit} className='cursor-pointer self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-3.5 pb-[13.9px] pl-[50px] pr-[49px] shrink-0 z-[1]'>
               <div className='h-[47.2px] w-[223px] relative rounded-[4.38px] bg-mediumturquoise hidden' />
               <div className='flex-1 relative z-[1]'>Next</div>
             </div>

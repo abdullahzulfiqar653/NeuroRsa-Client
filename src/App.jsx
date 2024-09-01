@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Routes, Route, useNavigationType, useLocation } from 'react-router-dom';
+import ProtectedRoute from './routes/ProtectedRoute';
 import VerifyLoginScreen from './pages/VerifyLoginScreen';
 import LoginScreen from './pages/LoginScreen';
 import RegisterScreen from './pages/RegisterScreen';
@@ -51,12 +52,12 @@ function App() {
       <Route path='/login' element={<LoginScreen />} />
       <Route path='/VerifyLoginScreen' element={<VerifyLoginScreen />} />
       <Route path='/register-seed' element={<RegisterScreen />} />
-      <Route path='/key-frame' element={<KeyFrame />} />
-      <Route path='/my-recipients' element={<Recipients />} />
-      <Route path='/select-recipients' element={<SelectRecipients />} />
-      <Route path='/main-home' element={<MainHome />} />
-      <Route path='/private-key' element={<PrivateKey />} />
-      <Route path='/public-key' element={<PrublicKey />} />
+      <Route path='/key-frame' element={<ProtectedRoute  element={<KeyFrame/>} />} />
+      <Route path='/my-recipients' element={<ProtectedRoute  element={<Recipients/>} />} />
+      <Route path='/select-recipients' element={<ProtectedRoute  element={<SelectRecipients/>} />} />
+      <Route path='/main-home' element={<ProtectedRoute  element={<MainHome/>} />}/>
+      <Route path='/private-key' element={<ProtectedRoute  element={<PrivateKey/>} />}/>
+      <Route path='/public-key' element={<ProtectedRoute  element={<PrublicKey/>} />}  />
     </Routes>
   );
 }

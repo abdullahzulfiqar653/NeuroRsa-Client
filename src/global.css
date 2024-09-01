@@ -238,3 +238,9 @@ body {
     gap: 15px;
   }
 }
+
+.toast-message {
+  background: #57cbcc;
+  color: #fff;
+  font-size: 20px;
+}

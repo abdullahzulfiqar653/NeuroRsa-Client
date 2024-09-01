@@ -1,7 +1,9 @@
-import GroupComponent from "../components/RegisterScreenComponent";
-import ErrorBoundary from "../components/ErrorBoundary";
 import { Link, Navigate } from "react-router-dom";
-import { useAuth } from "../../AuthContext";
+
+import { useAuth } from "../AuthContext";
+import ErrorBoundary from "../components/ErrorBoundary";
+import GroupComponent from "../components/RegisterScreenComponent";
+
 const RegisterScreen = () => {
   const { isAuthenticated } = useAuth();
   if (isAuthenticated) return <Navigate to="/main-home" />;

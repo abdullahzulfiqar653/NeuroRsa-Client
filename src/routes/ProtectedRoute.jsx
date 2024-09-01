@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "../../AuthContext";
+import { useAuth } from "../AuthContext";
 import { Navigate, useLocation } from "react-router-dom";
 
 const ProtectedRoute = ({ element, ...rest }) => {

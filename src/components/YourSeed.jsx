@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { TagsInput } from "react-tag-input-component";
-import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAuth } from "../AuthContext";
 import useCreateToken from "../hooks/useCreateToken";
-const GroupComponent = ({ className = "", seedsData = "" }) => {
-  const [selected, setSelected] = useState([]);
+
+const GroupComponent = ({ seedsData = "" }) => {
+  const { signup } = useAuth();
+  const { mutate } = useCreateToken();
   const [copytext, setCopyText] = useState(false);
+
   const copyToClipBoard = () => {
     setCopyText(true);
     navigator.clipboard.writeText(seedsData);
@@ -14,8 +17,25 @@ const GroupComponent = ({ className = "", seedsData = "" }) => {
     }, [700]);
   };
 
-  const navigate = useNavigate();
-  const { mutate } = useCreateToken();
+  const handleLogin = () => {
+    mutate(seedsData, {
+      onSuccess: (res) => {
+        toast.success("Logged In Successfully.", {
+          className: "toast-message",
+        });
+        signup();
+      },
+
+      onError: (error) => {
+        toast.error(error.response.data.detail, { className: "toast-message" });
+        setError(
+          "Login failed. Please check your credentials.",
+          error.response.data
+        );
+      },
+    });
+  };
+
   return (
     <>
       <h2 className="text-white text-[22px] leading-[64px] font-normal text-center w-full mb-[5px] mt-[0px]">
@@ -97,11 +117,8 @@ const GroupComponent = ({ className = "", seedsData = "" }) => {
       <div className="w-full max-w-[223px] mx-auto  mt-[68px] flex flex-col items-center justify-center pt-0 px-0 text-center text-base font-montserrat">
         <div className="w-full flex flex-col items-start justify-start gap-[10.8px] mb-[10px]">
           <div
-            onClick={() => {
-              mutate(seedsData);
-              navigate("/main-home");
-            }}
-            className="self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-3.5 pb-[13.9px] pl-[50px] pr-[49px] shrink-0 z-[1]"
+            onClick={handleLogin}
+            className="self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-3.5 pb-[13.9px] pl-[50px] pr-[49px] shrink-0 z-[1] hover:cursor-pointer"
           >
             <div className="h-[47.2px] w-full relative rounded-[4.38px] bg-mediumturquoise hidden" />
             <div className="flex-1 relative z-[1]">Next</div>

@@ -14,6 +14,7 @@ import KeyFrame from "./pages/KeyFrame";
 import Recipients from "./pages/Recipients";
 import SelectRecipients from "./pages/SelectRecipients";
 import MainHome from "./pages/MainHome";
+import KeyDisplay from "./pages/KeyDisplay";
 import PrivateKey from "./pages/PrivateKey";
 import PrublicKey from "./pages/PublicKey";
 import { ToastContainer } from "react-toastify";
@@ -79,12 +80,8 @@ function App() {
           element={<ProtectedRoute element={<MainHome />} />}
         />
         <Route
-          path="/private-key"
-          element={<ProtectedRoute element={<PrivateKey />} />}
-        />
-        <Route
-          path="/public-key"
-          element={<ProtectedRoute element={<PrublicKey />} />}
+          path="/key-display"
+          element={<ProtectedRoute element={<KeyDisplay />} />}
         />
       </Routes>
     </>

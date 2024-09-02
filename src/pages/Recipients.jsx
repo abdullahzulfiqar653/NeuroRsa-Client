@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import useGetRecipients from "../hooks/useGetRecipients";
 import useCreateRecipient from "../hooks/useCreateRecipient";
 import useCreateEncryptedMessage from "../hooks/useCreateEncryptedMessage";
+import useCreateDecryptedMessage from "../hooks/useCreateDecryptedMessage";
 
 const Recipients = () => {
   const location = useLocation();
@@ -17,15 +18,21 @@ const Recipients = () => {
   const { data: keypairs, refetch: refetchKeypairs } = useGetKeyPairs();
   const { data: recipients, refetch: refetchRecipients } = useGetRecipients();
   const { mutate: mutateCreateEncryptedMessage } = useCreateEncryptedMessage();
+  const { mutate: mutateCreateDecryptedMessage } = useCreateDecryptedMessage();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenTwo, setIsOpenTwo] = useState(false);
-  const [decryptMessageData, setDecryptMessageData] = useState({});
+  const [decryptMessageData, setDecryptMessageData] = useState({
+    keypair_id: "",
+    message: "",
+    passphrase: null,
+  });
   const [encryptMessageData, setencryptMessageData] = useState({
     message: "",
     recipient_ids: [],
   });
-
+  console.log(decryptMessageData);
+  console.log(encryptMessageData);
   useEffect(() => {
     refetchKeypairs();
     refetchRecipients();
@@ -43,6 +50,28 @@ const Recipients = () => {
         toast.error(
           error.response.data?.recipient_ids
             ? error.response.data?.recipient_ids[0]
+            : "Message Required."
+        );
+      },
+    });
+  };
+
+  const handleDecryption = () => {
+    mutateCreateDecryptedMessage(decryptMessageData, {
+      onSuccess: (res) => {
+        setDecryptMessageData((prevState) => ({
+          ...prevState,
+          message: res.message,
+        }));
+        toast.success(`Message Decrypted successfully.`);
+      },
+      onError: (error) => {
+        console.log(error.response);
+        toast.error(
+          error.response.data?.error
+            ? error.response.data?.error
+            : error.response.data?.keypair_id
+            ? "Please Choose related Keypair."
             : "Message Required."
         );
       },
@@ -150,12 +179,20 @@ const Recipients = () => {
                     <div className="w-full max-w-[569px] flex flex-row items-start justify-start py-0 px-2.5 box-border">
                       <div className="flex-1 relative leading-[30px] inline-block max-w-full z-[1] mq450:text-lg mq450:leading-[24px]">
                         <textarea
-                          onChange={(e) =>
+                          value={
+                            decryptMessageData["message"] ||
+                            encryptMessageData["message"]
+                          }
+                          onChange={(e) => {
+                            setDecryptMessageData((prevState) => ({
+                              ...prevState,
+                              message: e.target.value,
+                            }));
                             setencryptMessageData((prevState) => ({
                               ...prevState,
                               message: e.target.value,
-                            }))
-                          }
+                            }));
+                          }}
                           className="w-full max-w-3xl h-[600px] p-4 text-white bg-transparent border-none resize-none text-xl outline-none"
                         ></textarea>
                       </div>
@@ -172,7 +209,7 @@ const Recipients = () => {
                       </div>
                     </button>
                     <button
-                      onClick={notify}
+                      onClick={handleDecryption}
                       className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
                     >
                       <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
@@ -375,8 +412,10 @@ const Recipients = () => {
                 className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
               >
                 <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                <div className="flex-1 relative text-base  text-white text-center z-[1]">
-                  {" "}
+                <div
+                  onClick={handleDecryption}
+                  className="flex-1 relative text-base  text-white text-center z-[1]"
+                >
                   Decrypt
                 </div>
               </button>

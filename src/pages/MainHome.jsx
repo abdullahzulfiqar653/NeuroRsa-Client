@@ -1,55 +1,84 @@
-"use client";
 import React, { useEffect, useState } from "react";
-import { Table, Modal } from "flowbite-react";
+import { toast } from "react-toastify";
 import Header from "../components/Header";
 import { Formik, Form, Field } from "formik";
+import { Table, Modal } from "flowbite-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import useGetKeyPairs from "../hooks/useGetKeyPairs";
-import useDeleteKeyPairs from "../hooks/useDeleteKeyPairs";
-import { useNavigate } from "react-router-dom";
 import CopyToClipboard from "react-copy-to-clipboard";
+import useDeleteKeyPairs from "../hooks/useDeleteKeyPairs";
+
 const MainHome = () => {
-  const openModal = (key) => {
-    setPrivateKey(key);
-    setIsOpen(true);
-  };
-  const openModalTwo = (id) => {
-    setSelectedUserId(id);
-    setIsOpenTwo(true);
-  };
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenTwo, setIsOpenTwo] = useState(false);
   const [copiedPublic, setCopiedPublic] = useState(false);
   const [copiedPrivate, setCopiedPrivate] = useState(false);
-  const closeModal = () => setIsOpen(false);
-  const closeModalTwo = () => setIsOpenTwo(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [privateKey, setPrivateKey] = useState(null);
 
-  const { data, refetch } = useGetKeyPairs();
   const { mutate: deleteKeyPair } = useDeleteKeyPairs();
+  const { data, refetch } = useGetKeyPairs();
   useEffect(() => {
     refetch();
-  }, [refetch]);
+  }, [location, refetch, isOpenTwo]);
 
-  const navigate = useNavigate();
   const handleShowPublicKey = (type, text) => {
     navigate("/key-display", {
       state: { keyType: type, keyText: text },
     });
   };
+
+  const closeModal = () => setIsOpen(false);
+  const closeModalTwo = () => setIsOpenTwo(false);
+  const openModal = (key) => {
+    setPrivateKey(key);
+    setIsOpen(true);
+  };
+
+  const openModalTwo = (id) => {
+    setSelectedUserId(id);
+    setIsOpenTwo(true);
+  };
+
   const handleShowPrivateKey = () => {
     navigate("/key-display", {
       state: { keyType: "Private", keyText: privateKey },
     });
   };
 
-  const [search, setSearch] = useState("");
+  const handleDelete = () => {
+    deleteKeyPair(selectedUserId, {
+      onSuccess: (response) => {
+        toast.success(`Keypair Deleted successfully.`, {
+          className: "toast-message",
+        });
+        setIsOpenTwo(false);
+      },
+      onError: (error) => {
+        setErrors(error.response.data);
+        toast.error(
+          error.response.data?.error
+            ? error.response.data?.error[0]
+            : "Something bad happend while deleting please try again.",
+          {
+            className: "toast-message",
+          }
+        );
+      },
+    });
+  };
+
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
   };
-  const filteredData = data?.results.filter((item) =>
-    item.email.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredData = data?.results.filter((item) => {
+    const email = item.email?.toLowerCase() || "";
+    const name = item.name?.toLowerCase() || "";
+    return email.includes(search) || name.includes(search);
+  });
 
   return (
     <div>
@@ -116,7 +145,7 @@ const MainHome = () => {
                     className="border-b-[5px] !border-t-[5px] border-[#0f2e3f] bg-[#1c3d4f]"
                   >
                     <Table.Cell className="text-white  border-r-[5px] border-[#0f2e3f]">
-                      {item.email}
+                      {item.name}
                     </Table.Cell>
                     <Table.Cell className="flex gap-[40px] justify-between text-white  border-r-[5px] border-[#0f2e3f]">
                       Public key
@@ -422,10 +451,7 @@ const MainHome = () => {
               Cancel
             </button>
             <button
-              onClick={() => {
-                deleteKeyPair({ id: selectedUserId });
-                closeModalTwo();
-              }}
+              onClick={handleDelete}
               className="bg-[#57CBCC] rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-white"
             >
               Delete

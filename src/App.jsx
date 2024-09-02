@@ -1,23 +1,23 @@
 import { useEffect } from "react";
 import {
-  Routes,
   Route,
-  useNavigationType,
+  Routes,
   useLocation,
+  useNavigationType,
 } from "react-router-dom";
-import ProtectedRoute from "./routes/ProtectedRoute";
-import VerifyLoginScreen from "./pages/VerifyLoginScreen";
+import { ToastContainer } from "react-toastify";
+
+import Home from "./pages/Home";
+import MainHome from "./pages/MainHome";
+import KeyFrame from "./pages/KeyFrame";
+import KeyDisplay from "./pages/KeyDisplay";
+import Recipients from "./pages/Recipients";
 import LoginScreen from "./pages/LoginScreen";
 import RegisterScreen from "./pages/RegisterScreen";
-import Home from "./pages/Home";
-import KeyFrame from "./pages/KeyFrame";
-import Recipients from "./pages/Recipients";
 import SelectRecipients from "./pages/SelectRecipients";
-import MainHome from "./pages/MainHome";
-import KeyDisplay from "./pages/KeyDisplay";
-import PrivateKey from "./pages/PrivateKey";
-import PrublicKey from "./pages/PublicKey";
-import { ToastContainer } from "react-toastify";
+import VerifyLoginScreen from "./pages/VerifyLoginScreen";
+
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   const action = useNavigationType();

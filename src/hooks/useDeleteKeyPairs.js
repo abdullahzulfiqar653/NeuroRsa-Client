@@ -8,20 +8,15 @@ const useDeleteKeyPairs = () =>{
 
   return useMutation({
     mutationFn:(id) => {
-        console.log(id)
       return apiClient
         .delete(`/keypairs/${id}`, getTokenIncludedConfig())
-        .then((res) => {
-            console.log('Deletion successful:', res.data);
-            return res.data;
-          })
+        .then((res) => res.data)
           .catch((error) => {
-            console.error("API error:", error.response ? error.response.data : error.message);
             throw error;
           });
     },
     onSuccess: () => {
-        queryClient.invalidateQueries("keys");
+        // console.log(queryClient.invalidateQueries("keys"));
       },
   })};
 

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Modal } from "flowbite-react";
 import useCreateKeypair from "../hooks/useCreateKeypair";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import { useAuth } from "../AuthContext";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [step, setStep] = useState(1);
   const { mutate } = useCreateKeypair();
   const [errors, setErrors] = useState({});
@@ -31,7 +34,7 @@ const Header = () => {
     setIsOpen(true);
     setStep(1);
   };
-  console.log(errors);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -44,8 +47,6 @@ const Header = () => {
     }
     setFormValues({ ...formValues, [name]: value });
   };
-  console.log(keypair);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     mutate(formValues, {
@@ -105,7 +106,7 @@ const Header = () => {
           onMouseLeave={handleMouseLeaveDropdownFile}
         >
           <Link
-            to="/my-recipients"
+            // to="/my-recipients"
             className="py-[10px] cursor-pointer [text-decoration:none] relative text-[inherit] inline-block max-w-[121px] z-[1] xs:text-[10px] sm:text-[10px] md:text-[16px] lg:text-[16px] text-white opacity-[72%]"
           >
             File
@@ -132,14 +133,12 @@ const Header = () => {
                 <button className="block px-4 py-2 text-sm text-white w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
                   Encrypt
                 </button>
-                <button className="block px-4 py-2 text-sm text-white w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
-                  Close
-                </button>
                 <Link
                   to="/login"
                   className="block px-4 py-2 text-sm text-white w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
+                  onClick={logout}
                 >
-                  Quit
+                  Logout
                 </Link>
               </div>
             </div>
@@ -148,7 +147,7 @@ const Header = () => {
 
         <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
           <Link
-            to="/key-frame"
+            to="/main-home"
             className="relative inline-block  z-[1] xs:text-[10px] sm:text-[10px] md;text-[16px] lg:text-[16px] text-white opacity-[72%]"
           >
             My KeyPairs
@@ -167,7 +166,7 @@ const Header = () => {
               My recipients
             </Link>
 
-            {isDropdownOpen && (
+            {/* {isDropdownOpen && (
               <div className="origin-top-right top-10  absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-[#1c3d4f]  ring-1 ring-[#345360] ring-opacity-5 focus:outline-none z-20">
                 <div className="py-4">
                   <div className="relative group hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
@@ -204,7 +203,7 @@ const Header = () => {
                   </button>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>
@@ -463,7 +462,10 @@ const Header = () => {
               {step === 4 && (
                 <>
                   <Button
-                    onClick={closeModal}
+                    onClick={() => {
+                      navigate("/main-home");
+                      closeModal();
+                    }}
                     className="!bg-[#57CBCC] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[5px]"
                   >
                     Finish

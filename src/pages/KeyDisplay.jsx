@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Formik, Form, Field } from "formik";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+
 const KeyDisplay = () => {
   const location = useLocation();
-  const { keyType, keyText } = location.state || {};
+  const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
-  const [text, setText] = useState(keyText || "");
+  const { keyType, keyText } = location.state || {};
 
   function handleHideKey() {
-    setText("");
-    navigator.clipboard.writeText("");
+    navigate("/main-home");
     setCopied(false);
   }
 
   function sharePublicKey() {
-    navigator.clipboard.writeText(text);
-    //  Add Popup message of "Public Key copied to clipboard!"
+    navigator.clipboard.writeText(keyText);
   }
+
   return (
     <div>
       <div className="bg-[#0f2e3f] h-[100vh]">
@@ -39,7 +39,10 @@ const KeyDisplay = () => {
                         Copied!
                       </span>
                     )}
-                    <CopyToClipboard text={text} onCopy={() => setCopied(true)}>
+                    <CopyToClipboard
+                      text={keyText}
+                      onCopy={() => setCopied(true)}
+                    >
                       <img
                         src="/copy-icon.svg"
                         alt="copy-icon"
@@ -56,7 +59,7 @@ const KeyDisplay = () => {
                       id="textarea"
                       name="textarea"
                       rows="20"
-                      value={text}
+                      value={keyText}
                       readOnly
                       className="w-full text-[#fff] bg-[#0B2837] border-none focus:outline-none focus:ring-0 border-[1px] border-[#1B3D4F]"
                     />
@@ -65,7 +68,7 @@ const KeyDisplay = () => {
               </div>
             </div>
             <div className="items-center flex flex-row justify-start gap-5 px-[32px] bg-[#0f2e3f]">
-              <CopyToClipboard text={text} onCopy={() => setCopied(true)}>
+              <CopyToClipboard text={keyText} onCopy={() => setCopied(true)}>
                 <button className="w-[100%] max-w-[151px] h-[47px] items-center cursor-pointer border-[#57CBCC] border-[1px] border-solid bg-transparent flex-1 rounded-[4.38px] flex  justify-center  text-[#57CBCC]">
                   Copy
                 </button>

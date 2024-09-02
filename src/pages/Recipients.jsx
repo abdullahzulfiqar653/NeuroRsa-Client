@@ -122,15 +122,15 @@ const Recipients = () => {
     </button>
   );
 
-  const notify = () =>
-    toast.success(
-      "Note: You cannot be sure who encrypted this message as it is not signed.",
-      {
-        position: "bottom-right",
-        className: "bg-[#345360] text-white",
-        autoClose: false,
-      }
-    );
+  // const notify = () =>
+  //   toast.success(
+  //     "Note: You cannot be sure who encrypted this message as it is not signed.",
+  //     {
+  //       position: "bottom-right",
+  //       className: "bg-[#345360] text-white",
+  //       autoClose: false,
+  //     }
+  //   );
 
   return (
     <div>
@@ -310,10 +310,24 @@ const Recipients = () => {
           <div className="overflow-y-auto xs:min-h-[353px] md:min-h-[400px] lg:min-h-[663px] bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-col items-start justify-start pt-9 pb-[18px] pl-3 pr-[11px] gap-[17px] max-w-full mq800:pt-[23px] mq800:pb-5 mq800:box-border">
             <div className="w-full max-w-[569px] flex flex-row items-start justify-start py-0 px-2.5 box-border">
               <div className="flex-1 relative leading-[30px] inline-block max-w-full z-[1] mq450:text-lg mq450:leading-[24px]">
-                <p className="m-0">Hello,</p>
-                <p className="m-0">
-                  You will receive 1.000.000 USD for tomorrow
-                </p>
+                <textarea
+                  placeholder="Enter your message here..."
+                  value={
+                    decryptMessageData["message"] ||
+                    encryptMessageData["message"]
+                  }
+                  onChange={(e) => {
+                    setDecryptMessageData((prevState) => ({
+                      ...prevState,
+                      message: e.target.value,
+                    }));
+                    setencryptMessageData((prevState) => ({
+                      ...prevState,
+                      message: e.target.value,
+                    }));
+                  }}
+                  className="w-full max-w-3xl h-[600px] p-4 text-white bg-transparent border-none resize-none text-xl outline-none"
+                ></textarea>
               </div>
             </div>
           </div>
@@ -403,14 +417,14 @@ const Recipients = () => {
             <div className="w-[245px] mx-auto flex-row items-start justify-start gap-5 xs:flex sm:flex md:hidden lg:hidden mt-[23px]">
               <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
                 <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                <div className="flex-1 relative text-base  text-white text-center z-[1]">
+                <div
+                  onClick={handleEncryption}
+                  className="flex-1 relative text-base  text-white text-center z-[1]"
+                >
                   Encrypt
                 </div>
               </button>
-              <button
-                onClick={notify}
-                className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
-              >
+              <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
                 <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
                 <div
                   onClick={handleDecryption}

@@ -7,13 +7,17 @@ import useGetKeyPairs from "../hooks/useGetKeyPairs";
 import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import useGetRecipients from "../hooks/useGetRecipients";
+import useCreateRecipient from "../hooks/useCreateRecipient";
 
 const Recipients = () => {
   const location = useLocation();
 
+  const { mutate } = useCreateRecipient();
   const { data: keypairs, refetch: refetchKeypairs } = useGetKeyPairs();
   const { data: recipients, refetch: refetchRecipients } = useGetRecipients();
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenTwo, setIsOpenTwo] = useState(false);
   const [decryptMessageData, setDecryptMessageData] = useState({});
   const [encryptMessageData, setencryptMessageData] = useState({
     message: "string",
@@ -23,7 +27,23 @@ const Recipients = () => {
   useEffect(() => {
     refetchKeypairs();
     refetchRecipients();
-  }, [location, refetchKeypairs, refetchRecipients]);
+  }, [location, refetchKeypairs, refetchRecipients, isOpen]);
+
+  const handleSubmit = (values) => {
+    mutate(values, {
+      onSuccess: () => {
+        toast.success(`Recipient Created successfully.`);
+        setIsOpen(false);
+      },
+      onError: (error) => {
+        toast.error(
+          error.response.data?.error
+            ? error.response.data?.error[0]
+            : "Something bad happend while creating recipient please try again."
+        );
+      },
+    });
+  };
 
   const handleRecipientClick = (id) => {
     setencryptMessageData((prevState) => ({
@@ -34,11 +54,9 @@ const Recipients = () => {
     }));
   };
 
-  const [isOpen, setIsOpen] = useState(false);
   const openModal = () => {
     setIsOpen(true);
   };
-  const [isOpenTwo, setIsOpenTwo] = useState(false);
   const openModalTwo = () => {
     setIsOpenTwo(true);
   };
@@ -54,6 +72,7 @@ const Recipients = () => {
       <img src="/close-btn.svg" className="w-4 h-4" /> Close
     </button>
   );
+
   const notify = () =>
     toast.success(
       "Note: You cannot be sure who encrypted this message as it is not signed.",
@@ -63,6 +82,7 @@ const Recipients = () => {
         autoClose: false,
       }
     );
+
   return (
     <div>
       <div
@@ -343,45 +363,53 @@ const Recipients = () => {
         <Modal.Header className="justify-center items-center flex bg-[#0E2E3F] border-none modal-h3">
           <div className="text-white"> Create New Recipients </div>
         </Modal.Header>
-        <Formik>
-          <Form>
-            <Modal.Body className="bg-[#1B3D4F]">
-              <div className="flex flex-col">
-                <div className="flex">
-                  <label htmlFor="name" className="text-white mb-[6px]">
-                    Enter Nickname
-                  </label>
+        <Formik
+          initialValues={{ name: "", public_key: "" }}
+          onSubmit={handleSubmit}
+        >
+          {({ handleSubmit }) => (
+            <Form onSubmit={handleSubmit}>
+              <Modal.Body className="bg-[#1B3D4F]">
+                <div className="flex flex-col">
+                  <div className="flex">
+                    <label htmlFor="name" className="text-white mb-[6px]">
+                      Enter Nickname
+                    </label>
+                  </div>
+                  <Field
+                    type="text"
+                    id="name"
+                    name="name"
+                    className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] text-white focus:ring-[#57CACC] input-field"
+                  />
                 </div>
-                <Field
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] text-white focus:ring-[#57CACC] input-field"
-                />
-              </div>
-              <div className="flex flex-col mt-[28px]">
-                <div className="flex">
-                  <label htmlFor="name" className="text-white mb-[6px]">
-                    Enter Public Key
-                  </label>
+                <div className="flex flex-col mt-[28px]">
+                  <div className="flex">
+                    <label htmlFor="textarea" className="text-white mb-[6px]">
+                      Enter Public Key
+                    </label>
+                  </div>
+                  <Field
+                    as="textarea"
+                    id="public_key"
+                    name="public_key"
+                    rows="4"
+                    cols="50"
+                    className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F]  focus:ring-[#57CACC] input-field"
+                  />
                 </div>
-                <Field
-                  as="textarea"
-                  id="textarea"
-                  name="textarea"
-                  rows="4"
-                  cols="50"
-                  className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F]  focus:ring-[#57CACC] input-field"
-                />
-              </div>
-            </Modal.Body>
+              </Modal.Body>
 
-            <Modal.Footer className="bg-[#1B3D4F] justify-center border-[0px] pt-0">
-              <Button className="!bg-[#57CBCC] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[5px] save-btn">
-                Save
-              </Button>
-            </Modal.Footer>
-          </Form>
+              <Modal.Footer className="bg-[#1B3D4F] justify-center border-[0px] pt-0">
+                <Button
+                  type="submit"
+                  className="!bg-[#57CBCC] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[5px] save-btn"
+                >
+                  Save
+                </Button>
+              </Modal.Footer>
+            </Form>
+          )}
         </Formik>
       </Modal>
 

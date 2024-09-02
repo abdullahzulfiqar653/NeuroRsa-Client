@@ -11,7 +11,7 @@ const KeyDisplay = () => {
   const { keyType, keyText } = location.state || {};
 
   function handleHideKey() {
-    navigate("/main-home");
+    navigate(-1);
     setCopied(false);
   }
 
@@ -31,7 +31,8 @@ const KeyDisplay = () => {
               <div className="w-full py-0 px-2.5 box-border">
                 <div className="flex justify-between gap-[10px] bg-[#1B3D4F] p-[15px]">
                   <p className="text-[18px] leading-[30px] font-normal text-white">
-                    ----- BEGIN PGP {keyType} KEY BLOCK -----
+                    ----- BEGIN PGP {keyType} {!keyType === "Message" && "KEY"}{" "}
+                    BLOCK -----
                   </p>
                   <div className="flex gap-[10px] items-center">
                     {copied && (

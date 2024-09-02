@@ -4,23 +4,25 @@ import { Formik, Form, Field } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 import { Tabs, Modal, Button } from "flowbite-react";
 import useGetKeyPairs from "../hooks/useGetKeyPairs";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import useGetRecipients from "../hooks/useGetRecipients";
 import useCreateRecipient from "../hooks/useCreateRecipient";
+import useCreateEncryptedMessage from "../hooks/useCreateEncryptedMessage";
 
 const Recipients = () => {
   const location = useLocation();
-
-  const { mutate } = useCreateRecipient();
+  const navigate = useNavigate();
+  const { mutate: mutateCreaterecipient } = useCreateRecipient();
   const { data: keypairs, refetch: refetchKeypairs } = useGetKeyPairs();
   const { data: recipients, refetch: refetchRecipients } = useGetRecipients();
+  const { mutate: mutateCreateEncryptedMessage } = useCreateEncryptedMessage();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenTwo, setIsOpenTwo] = useState(false);
   const [decryptMessageData, setDecryptMessageData] = useState({});
   const [encryptMessageData, setencryptMessageData] = useState({
-    message: "string",
+    message: "",
     recipient_ids: [],
   });
 
@@ -29,8 +31,26 @@ const Recipients = () => {
     refetchRecipients();
   }, [location, refetchKeypairs, refetchRecipients, isOpen]);
 
+  const handleEncryption = () => {
+    mutateCreateEncryptedMessage(encryptMessageData, {
+      onSuccess: (res) => {
+        toast.success(`Message Encrypted successfully.`);
+        navigate("/key-display", {
+          state: { keyType: "Message", keyText: res.message },
+        });
+      },
+      onError: (error) => {
+        toast.error(
+          error.response.data?.recipient_ids
+            ? error.response.data?.recipient_ids[0]
+            : "Message Required."
+        );
+      },
+    });
+  };
+
   const handleSubmit = (values) => {
-    mutate(values, {
+    mutateCreaterecipient(values, {
       onSuccess: () => {
         toast.success(`Recipient Created successfully.`);
         setIsOpen(false);
@@ -122,23 +142,32 @@ const Recipients = () => {
                 </div>
               </div>
             </div>
+            {/* For Web */}
             <div className="self-stretch  flex-row items-start justify-start relative max-w-full xs:hidden sm:hidden md:flex lg:flex">
               <div className="flex-1 flex flex-row items-start justify-start flex-wrap content-start gap-6 w-full">
                 <div className="flex-1 flex flex-col items-start justify-start gap-[25px] min-w-[463px] w-full">
                   <div className="overflow-y-auto bg-vector-img  md:h-[calc(100vh-35vh)] lg:h-[calc(100vh-35vh)] bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-col items-start justify-start pt-9 pb-[18px] pl-3 pr-[11px] gap-[17px] max-w-full mq800:pt-[23px] mq800:pb-5 mq800:box-border">
                     <div className="w-full max-w-[569px] flex flex-row items-start justify-start py-0 px-2.5 box-border">
                       <div className="flex-1 relative leading-[30px] inline-block max-w-full z-[1] mq450:text-lg mq450:leading-[24px]">
-                        <p className="m-0">Hello,</p>
-                        <p className="m-0">
-                          You will receive 1.000.000 USD for tomorrow
-                        </p>
+                        <textarea
+                          onChange={(e) =>
+                            setencryptMessageData((prevState) => ({
+                              ...prevState,
+                              message: e.target.value,
+                            }))
+                          }
+                          className="w-full max-w-3xl h-[600px] p-4 text-white bg-transparent border-none resize-none text-xl outline-none"
+                        ></textarea>
                       </div>
                     </div>
                   </div>
                   <div className="w-[304px] flex flex-row items-start justify-start gap-5">
                     <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
                       <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                      <div className="flex-1 relative text-base  text-white text-center z-[1]">
+                      <div
+                        onClick={handleEncryption}
+                        className="flex-1 relative text-base  text-white text-center z-[1]"
+                      >
                         Encrypt
                       </div>
                     </button>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Button, Modal } from "flowbite-react";
 import useCreateKeypair from "../hooks/useCreateKeypair";
 import { Formik, Field, Form, ErrorMessage } from "formik";
@@ -105,10 +105,7 @@ const Header = () => {
           onMouseEnter={handleMouseEnterDropdownFile}
           onMouseLeave={handleMouseLeaveDropdownFile}
         >
-          <Link
-            // to="/my-recipients"
-            className="py-[10px] cursor-pointer [text-decoration:none] relative text-[inherit] inline-block max-w-[121px] z-[1] xs:text-[10px] sm:text-[10px] md:text-[16px] lg:text-[16px] text-white opacity-[72%]"
-          >
+          <Link className="py-[10px] cursor-pointer [text-decoration:none] relative text-[inherit] inline-block max-w-[121px] z-[1] xs:text-[10px] sm:text-[10px] md:text-[16px] lg:text-[16px] text-white opacity-[72%]">
             File
           </Link>
 
@@ -146,12 +143,15 @@ const Header = () => {
         </div>
 
         <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
-          <Link
+          <NavLink
             to="/main-home"
-            className="relative inline-block  z-[1] xs:text-[10px] sm:text-[10px] md;text-[16px] lg:text-[16px] text-white opacity-[72%]"
+            className={({ isActive }) =>
+              `py-[10px] cursor-pointer [text-decoration:none] relative text-[inherit] inline-block max-w-[121px] z-[1] xs:text-[10px] sm:text-[10px] md:text-[16px] lg:text-[16px] text-white opacity-[72%] 
+                 ${isActive ? "border-b-2 border-mediumturquoise" : ""}`
+            }
           >
             My KeyPairs
-          </Link>
+          </NavLink>
         </div>
         <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
           <div
@@ -159,12 +159,15 @@ const Header = () => {
             onMouseEnter={handleMouseEnterDropdown}
             onMouseLeave={handleMouseLeaveDropdown}
           >
-            <Link
+            <NavLink
               to="/my-recipients"
-              className="py-[10px] cursor-pointer [text-decoration:none] relative text-[inherit] inline-block max-w-[121px] z-[1] xs:text-[10px] sm:text-[10px] md:text-[16px] lg:text-[16px] text-white opacity-[72%]"
+              className={({ isActive }) =>
+                `py-[10px] cursor-pointer [text-decoration:none] relative text-[inherit] inline-block max-w-[121px] z-[1] xs:text-[10px] sm:text-[10px] md:text-[16px] lg:text-[16px] text-white opacity-[72%] 
+                 ${isActive ? "border-b-2 border-mediumturquoise" : ""}`
+              }
             >
-              My recipients
-            </Link>
+              My Recipients
+            </NavLink>
 
             {/* {isDropdownOpen && (
               <div className="origin-top-right top-10  absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-[#1c3d4f]  ring-1 ring-[#345360] ring-opacity-5 focus:outline-none z-20">

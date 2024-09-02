@@ -3,10 +3,10 @@ import apiClient from "../services/api-client";
 import { getTokenIncludedConfig } from "../services/Authentication";
 
 
-const useGetKeyPairs = ()=> useQuery({
+const useGetKeyPairs = (page,limit)=> useQuery({
     queryKey:["keypairs"],
     queryFn: () => apiClient  
-    .get('/keypairs/', getTokenIncludedConfig())
+    .get(`/keypairs/?page=${page}&page_size=${limit}`, getTokenIncludedConfig())
     .then(res=> res.data)
     .catch(er => er.error),
     refetchOnWindowFocus: true, // Refetches data when the window regains focus

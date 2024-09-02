@@ -19,11 +19,14 @@ const MainHome = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [privateKey, setPrivateKey] = useState(null);
 
+  const [itemPerPage, setItemPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
   const { mutate: deleteKeyPair } = useDeleteKeyPairs();
-  const { data, refetch } = useGetKeyPairs();
+  const { data, refetch } = useGetKeyPairs(currentPage, itemPerPage);
+  const totalPages = Math.ceil(data?.count / itemPerPage);
   useEffect(() => {
     refetch();
-  }, [location, refetch, isOpenTwo]);
+  }, [location, refetch, isOpenTwo, currentPage]);
 
   const handleShowPublicKey = (type, text) => {
     navigate("/key-display", {
@@ -74,6 +77,7 @@ const MainHome = () => {
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
   };
+
   const filteredData = data?.results.filter((item) => {
     const email = item.email?.toLowerCase() || "";
     const name = item.name?.toLowerCase() || "";
@@ -207,33 +211,32 @@ const MainHome = () => {
           </div>
           <div className="flex justify-between items-center space-x-4 mt-[64px]">
             <div className="flex items-center space-x-2">
-              <button className="px-3 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]">
+              <button
+                disabled={data?.previous === null}
+                onClick={() => setCurrentPage(currentPage - 1)}
+                className="px-3 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
+              >
                 ← Prev
               </button>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage(index + 1)}
+                  className={`px-3 py-1 rounded-md ${
+                    currentPage === index + 1
+                      ? "bg-teal-500 text-white"
+                      : "bg-gray-700 text-white hover:bg-gray-600"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
 
-              <button className="px-3 py-1 bg-gray-700 text-white rounded-md hover:bg-gray-600">
-                1
-              </button>
-              <button className="px-3 py-1 bg-gray-700 text-white rounded-md hover:bg-gray-600">
-                2
-              </button>
-              <button className="px-3 py-1 bg-teal-500 text-white rounded-md">
-                3
-              </button>
-              <button className="px-3 py-1 bg-gray-700 text-white rounded-md hover:bg-gray-600">
-                4
-              </button>
-              <button className="px-3 py-1 bg-gray-700 text-white rounded-md hover:bg-gray-600">
-                5
-              </button>
-
-              <span className="text-white">...</span>
-
-              <button className="px-3 py-1 bg-gray-700 text-white rounded-md hover:bg-gray-600">
-                20
-              </button>
-
-              <button className="px-3 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]">
+              <button
+                disabled={data?.next === null}
+                onClick={() => setCurrentPage(currentPage + 1)}
+                className="px-3 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
+              >
                 Next →
               </button>
             </div>
@@ -243,13 +246,15 @@ const MainHome = () => {
                 Per page:
               </label>
               <select
+                value={itemPerPage}
+                onChange={(e) => setItemPerPage(e.target.value)}
                 id="per-page"
                 className="px-2 py-1  bg-gray-700 text-white rounded-md hover:bg-gray-600 border-none focus:ring focus:ring-teal-500 input-field"
               >
-                <option>10 per page</option>
-                <option>20 per page</option>
-                <option>50 per page</option>
-                <option>100 per page</option>
+                <option value={10}>10 per page</option>
+                <option value={20}>20 per page</option>
+                <option value={50}>50 per page</option>
+                <option value={100}>100 per page</option>
               </select>
             </div>
           </div>
@@ -370,40 +375,48 @@ const MainHome = () => {
           </div>
           <div className="flex justify-between items-center space-x-4 mt-[64px]">
             <div className="flex items-center space-x-1">
-              <button className="text-[7.6px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]">
+              <button
+                disabled={data?.previous === null}
+                onClick={() => setCurrentPage(currentPage - 1)}
+                className="text-[7.6px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
+              >
                 ← Prev
               </button>
 
-              <button className="text-[7.6px] px-2 py-1 bg-gray-700 text-white rounded-md hover:bg-gray-600">
-                1
-              </button>
-              <button className="text-[7.6px] px-2 py-1 bg-gray-700 text-white rounded-md hover:bg-gray-600">
-                2
-              </button>
-              <button className="text-[7.6px] px-2 py-1 bg-teal-500 text-white rounded-md">
-                3
-              </button>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage(index + 1)}
+                  className={`text-[7.6px] px-3 py-1 rounded-md ${
+                    currentPage === index + 1
+                      ? "bg-teal-500 text-white"
+                      : "bg-gray-700 text-white hover:bg-gray-600"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
 
-              <span className="text-white">...</span>
-
-              <button className="text-[7.6px] px-2 py-1 bg-gray-700 text-white rounded-md hover:bg-gray-600">
-                20
-              </button>
-
-              <button className="text-[7.6px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]">
+              <button
+                disabled={data?.next === null}
+                onClick={() => setCurrentPage(currentPage + 1)}
+                className="text-[7.6px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
+              >
                 Next →
               </button>
             </div>
 
             <div className="flex items-center space-x-2 text-white">
               <select
+                value={itemPerPage}
+                onChange={(e) => setItemPerPage(e.target.value)}
                 id="per-page"
                 className="!px-2 py-1 text-[7.6px] bg-gray-700 text-white rounded-md hover:bg-gray-600 border-none focus:ring focus:ring-teal-500 input-field"
               >
-                <option>10 per page</option>
-                <option>20 per page</option>
-                <option>50 per page</option>
-                <option>100 per page</option>
+                <option value={10}>10 per page</option>
+                <option value={20}>20 per page</option>
+                <option value={50}>50 per page</option>
+                <option value={100}>100 per page</option>
               </select>
             </div>
           </div>

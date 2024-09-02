@@ -9,7 +9,6 @@ import { ToastContainer } from "react-toastify";
 
 import Home from "./pages/Home";
 import MainHome from "./pages/MainHome";
-import KeyFrame from "./pages/KeyFrame";
 import KeyDisplay from "./pages/KeyDisplay";
 import Recipients from "./pages/Recipients";
 import LoginScreen from "./pages/LoginScreen";
@@ -63,10 +62,6 @@ function App() {
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/VerifyLoginScreen" element={<VerifyLoginScreen />} />
         <Route path="/register-seed" element={<RegisterScreen />} />
-        <Route
-          path="/key-frame"
-          element={<ProtectedRoute element={<KeyFrame />} />}
-        />
         <Route
           path="/my-recipients"
           element={<ProtectedRoute element={<Recipients />} />}

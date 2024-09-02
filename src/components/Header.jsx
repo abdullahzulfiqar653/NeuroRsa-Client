@@ -124,7 +124,7 @@ const Header = () => {
                   </button>
                 </div>
 
-                <button className="block px-4 py-2 text-sm text-white w-full text-left z-20 hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
+                {/* <button className="block px-4 py-2 text-sm text-white w-full text-left z-20 hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
                   Import
                 </button>
                 <button className="block px-4 py-2 text-sm text-white w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
@@ -132,7 +132,7 @@ const Header = () => {
                 </button>
                 <button className="block px-4 py-2 text-sm text-white w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
                   Encrypt
-                </button>
+                </button> */}
                 <Link
                   to="/login"
                   className="block px-4 py-2 text-sm text-white w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
@@ -240,7 +240,7 @@ const Header = () => {
                         type="text"
                         id="name"
                         name="name"
-                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field"
+                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field text-white"
                         value={formValues.name}
                         onChange={handleChange}
                       />
@@ -257,7 +257,7 @@ const Header = () => {
                         type="email"
                         id="email"
                         name="email"
-                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field"
+                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field text-white"
                         value={formValues.email}
                         onChange={handleChange}
                       />
@@ -321,7 +321,7 @@ const Header = () => {
                         type="password"
                         id="passphrase"
                         name="passphrase"
-                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field"
+                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field text-white"
                         value={formValues.passphrase}
                         onChange={handleChange}
                       />
@@ -340,7 +340,7 @@ const Header = () => {
                         type="password"
                         id="confirmPassphrase"
                         name="confirmPassphrase"
-                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field"
+                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field text-white"
                         value={formValues.confirmPassphrase}
                         onChange={handleChange}
                       />

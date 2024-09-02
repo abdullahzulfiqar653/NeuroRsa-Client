@@ -385,7 +385,7 @@ const Recipients = () => {
                 </div>
                 <div className="flex flex-col mt-[28px]">
                   <div className="flex">
-                    <label htmlFor="textarea" className="text-white mb-[6px]">
+                    <label htmlFor="public_key" className="text-white mb-[6px]">
                       Enter Public Key
                     </label>
                   </div>
@@ -395,7 +395,7 @@ const Recipients = () => {
                     name="public_key"
                     rows="4"
                     cols="50"
-                    className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F]  focus:ring-[#57CACC] input-field"
+                    className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] text-white focus:ring-[#57CACC] input-field"
                   />
                 </div>
               </Modal.Body>

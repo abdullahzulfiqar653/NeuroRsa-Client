@@ -3,10 +3,10 @@ import apiClient from "../services/api-client";
 import { getTokenIncludedConfig } from "../services/Authentication";
 
 
-const useGetKeyPairs = ()=> useQuery({
-    queryKey:["keypairs"],
+const useGetRecipients = ()=> useQuery({
+    queryKey:["recipients"],
     queryFn: () => apiClient  
-    .get('/keypairs/', getTokenIncludedConfig())
+    .get('/recipients/', getTokenIncludedConfig())
     .then(res=> res.data)
     .catch(er => er.error),
     refetchOnWindowFocus: true, // Refetches data when the window regains focus
@@ -16,4 +16,4 @@ const useGetKeyPairs = ()=> useQuery({
 })
 
 
-export default useGetKeyPairs;
+export default useGetRecipients;

@@ -463,7 +463,7 @@ const Header = () => {
                 <>
                   <Button
                     onClick={() => {
-                      navigate("/main-home");
+                      navigate(-1);
                       closeModal();
                     }}
                     className="!bg-[#57CBCC] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[5px]"

@@ -8,7 +8,7 @@ const useCreateEncryptedMessage = () =>
     mutationFn: (data) => {
       const body = JSON.stringify(data);
       return apiClient
-        .post("/recipients/encrypt-message", body, getTokenIncludedConfig())
+        .post("/recipients/encrypt-message/", body, getTokenIncludedConfig())
         .then((res) => res.data)
         .catch((error) => {
           throw error;

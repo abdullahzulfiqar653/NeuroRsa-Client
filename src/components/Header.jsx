@@ -53,20 +53,15 @@ const Header = () => {
       onSuccess: (response) => {
         setKeypair(response);
         setStep(4);
-        toast.success(`Keypair Created  successfully.`, {
+        toast.success(`Keypair Created successfully.`, {
           className: "toast-message",
         });
       },
       onError: (error) => {
         setErrors(error.response.data);
-        toast.error(
-          error.response.data?.error
-            ? error.response.data?.error[0]
-            : "Please fix the errors in mentioned fields.",
-          {
-            className: "toast-message",
-          }
-        );
+        for (const [attribute, errors] of Object.entries(error.response.data)) {
+          toast.error(errors[0]);
+        }
       },
     });
   };

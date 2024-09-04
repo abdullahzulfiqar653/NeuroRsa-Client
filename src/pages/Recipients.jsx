@@ -31,8 +31,7 @@ const Recipients = () => {
     message: "",
     recipient_ids: [],
   });
-  console.log(decryptMessageData);
-  console.log(encryptMessageData);
+
   useEffect(() => {
     refetchKeypairs();
     refetchRecipients();
@@ -66,14 +65,9 @@ const Recipients = () => {
         toast.success(`Message Decrypted successfully.`);
       },
       onError: (error) => {
-        console.log(error.response);
-        toast.error(
-          error.response.data?.error
-            ? error.response.data?.error
-            : error.response.data?.keypair_id
-            ? "Please Choose related Keypair."
-            : "Message Required."
-        );
+        for (const [attribute, errors] of Object.entries(error.response.data)) {
+          toast.error(errors[0]);
+        }
       },
     });
   };

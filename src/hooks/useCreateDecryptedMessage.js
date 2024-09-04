@@ -8,7 +8,7 @@ const useCreateDecryptedMessage = () =>
     mutationFn: (data) => {
       const body = JSON.stringify(data);
       return apiClient
-        .post("/recipients/decrypt-message", body, getTokenIncludedConfig())
+        .post("/recipients/decrypt-message/", body, getTokenIncludedConfig())
         .then((res) => res.data)
         .catch((error) => {
           throw error;

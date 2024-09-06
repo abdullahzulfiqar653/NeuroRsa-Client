@@ -31,12 +31,6 @@ jobs:
             LogLevel ERROR
             StrictHostKeyChecking no
           END
-      - name: Debug Environment
-        run: |
-          ssh target "\
-            env && \
-            which npm && \
-            npm -v"
 
       - name: Run Deploy
         run: |

@@ -35,7 +35,7 @@ jobs:
       - name: Run Deploy
         run: |
           ssh target "\
-            cd /frontends/NeuroRsa-Client/ && \
+            cd frontends/NeuroRsa-Client/ && \
             git pull && \
             npm run build && \
             cp -r ./build/* /var/www/rsa/html/ && \

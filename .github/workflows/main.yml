@@ -37,6 +37,7 @@ jobs:
           ssh target "\
             cd frontends/NeuroRsa-Client/ && \
             git pull && \
+            export PATH=\$PATH:/root/.npm/bin && \
             npm run build && \
             cp -r ./build/* /var/www/rsa/html/ && \
             systemctl reload nginx"

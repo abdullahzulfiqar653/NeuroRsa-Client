@@ -54,7 +54,7 @@ const KeyDisplay = () => {
                 </div>
 
                 <Formik>
-                  <Form>
+                  <Form className="select-none">
                     <Field
                       as="textarea"
                       id="textarea"
@@ -62,7 +62,7 @@ const KeyDisplay = () => {
                       rows="20"
                       value={keyText}
                       readOnly
-                      className="w-full text-[#fff] bg-[#0B2837] border-none focus:outline-none focus:ring-0 border-[1px] border-[#1B3D4F]"
+                      className="w-full text-[#fff] bg-[#0B2837] border-none focus:outline-none focus:ring-0 border-[1px] border-[#1B3D4F] pointer-events-none"
                     />
                   </Form>
                 </Formik>

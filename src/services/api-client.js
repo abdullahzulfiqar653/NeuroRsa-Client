@@ -1,7 +1,8 @@
 import axios from "axios";
 
+const apiUrl = import.meta.env.VITE_API_URL;
 const apiClient = axios.create({
-    baseURL: "http://206.189.50.219:3001/rsa/api" ,
+    baseURL: apiUrl
 })
 
 export default apiClient;

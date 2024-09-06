@@ -41,6 +41,7 @@ jobs:
       - name: Run Deploy
         run: |
           ssh target "\
+            export PATH=/root/.nvm/versions/node/v20.17.0/bin:\$PATH && \
             cd frontends/NeuroRsa-Client/ && \
             git pull && \
             export PATH=\$PATH:/root/.npm/bin && \

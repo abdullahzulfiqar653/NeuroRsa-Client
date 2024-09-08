@@ -14,8 +14,8 @@ const MainHome = () => {
   const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenTwo, setIsOpenTwo] = useState(false);
-  const [copiedPublic, setCopiedPublic] = useState(false);
-  const [copiedPrivate, setCopiedPrivate] = useState(false);
+  const [copiedPublic, setCopiedPublic] = useState({});
+  const [copiedPrivate, setCopiedPrivate] = useState({});
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [privateKey, setPrivateKey] = useState(null);
 
@@ -32,6 +32,19 @@ const MainHome = () => {
     navigate("/key-display", {
       state: { keyType: type, keyText: text },
     });
+  };
+
+  const handleCopyPublic = (id) => {
+    setCopiedPublic((prevState) => ({
+      ...prevState,
+      [id]: true, 
+    }));
+  };
+  const handleCopyPrivate = (id) => {
+    setCopiedPrivate((prevState) => ({
+      ...prevState,
+      [id]: true, 
+    }));
   };
 
   const closeModal = () => setIsOpen(false);
@@ -164,10 +177,10 @@ const MainHome = () => {
                         />
                         <CopyToClipboard
                           text={item.public_key}
-                          onCopy={() => setCopiedPublic(true)}
+                          onCopy={() => handleCopyPublic(item.id)}
                         >
                           <div>
-                            {copiedPublic ? <TickIcon /> : <CopyIcon />}
+                            {copiedPublic[item.id] ? <TickIcon /> : <CopyIcon />}
                           </div>
                         </CopyToClipboard>
                       </div>
@@ -185,10 +198,10 @@ const MainHome = () => {
 
                           <CopyToClipboard
                             text={item.private_key}
-                            onCopy={() => setCopiedPrivate(true)}
+                            onCopy={() => handleCopyPrivate(item.id)}
                           >
                             <div>
-                              {copiedPrivate ? <TickIcon /> : <CopyIcon />}
+                              {copiedPrivate[item.id] ? <TickIcon /> : <CopyIcon />}
                             </div>
                           </CopyToClipboard>
                         </div>
@@ -335,7 +348,7 @@ const MainHome = () => {
                         />
                         <CopyToClipboard
                           text={item.public_key}
-                          onCopy={() => setCopiedPublic(true)}
+                          onCopy={() => handleCopyPublic(item.id)}
                         >
                           <img
                             src="/copy-icon.svg"
@@ -357,8 +370,8 @@ const MainHome = () => {
                           onClick={() => openModal(item.private_key)}
                         />
                         <CopyToClipboard
-                          text={item.public_key}
-                          onCopy={() => setCopiedPublic(true)}
+                          text={item.private_key}
+                          onCopy={() => handleCopyPrivate(item.id)}
                         >
                           <img
                             src="/copy-icon.svg"

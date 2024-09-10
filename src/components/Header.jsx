@@ -94,6 +94,23 @@ const Header = () => {
 
   return (
     <div className="w-full">
+      <div className="w-full bg-[#1b3d4f] flex justify-center font-bold text-white py-[0.6rem]">
+        <svg
+          width="26"
+          height="26"
+          viewBox="0 0 26 26"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M12.5516 7.62063V0L25.1033 8.96545V16.5861L12.5516 7.62063ZM0 16.586V8.96534L12.5516 17.9308V25.5514L0 16.586ZM0 0.448385V7.62075L25.1033 25.5516V17.931L0 0.448385Z"
+            fill="white"
+          />
+        </svg>
+        <h1 className="ml-2">neuro.RSA</h1>
+      </div>
       <div className=" w-full z-20 self-stretch flex flex-row xs:justify-between sm:justify-start items-center   xs:px-4 md:px-8 lg:px-8  box-border xs:gap-[15px] sm:gap-[73px] md:gap-[73px] lg:gap-[73px]  max-w-full mq750:gap-9 mq450:flex-wrap">
         <div
           className="relative inline-block text-left"

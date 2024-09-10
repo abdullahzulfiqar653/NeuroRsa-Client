@@ -253,16 +253,16 @@ const Recipients = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="xs:hidden sm:hidden md:flex lg:flex bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border  flex-col items-start justify-start pt-[21px] px-[19px] pb-[18px] gap-[21.1px] max-w-full z-[1] text-left text-3xl text-white font-neue-plak">
+                  <div className="xs:hidden sm:hidden overflow-y-scroll h-[300px] md:flex lg:flex bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border  flex-col items-start justify-start pt-[21px] px-[19px] pb-[18px] gap-[21.1px] max-w-full z-[1] text-left text-3xl text-white font-neue-plak">
                     <div className=" relative font-black inline-block text-[22px]">
                       Select Keypair for Decryption
                     </div>
                     <div className="w-[712px] h-[402px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
-                    <div className="flex gap-[20px] w-full flex-wrap">
+                    <div className="flex gap-[15px] w-full flex-wrap">
                       {keypairs?.results?.map((item) => (
                         <div
                           key={item.id}
-                          className="key-pair xs:w-[46%] sm:w-[173px] md:w-[212px] lg:w-[212px]"
+                          className="key-pair xs:w-[46%] sm:w-[173px] md:w-[200px] lg:w-[200px]"
                         >
                           <label className="relative inline-flex items-center w-full">
                             <input
@@ -298,10 +298,10 @@ const Recipients = () => {
         </main>
         {/* Mobile View */}
         <main className="mobile-View w-full md:hidden lg:hidden">
-          <div className="bg-[#1B3D4F] py-[7px] px-[28px] text-[14px] font-normal">
+          <div className="bg-[#1B3D4F] py-[7px] px-[28px] text-[14px] md:font-normal font-semibold">
             Notepad
           </div>
-          <div className="overflow-y-auto xs:min-h-[353px] md:min-h-[400px] lg:min-h-[663px] bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-col items-start justify-start pt-9 pb-[18px] pl-3 pr-[11px] gap-[17px] max-w-full mq800:pt-[23px] mq800:pb-5 mq800:box-border">
+          <div className="overflow-y-auto bg-vector-img xs:min-h-[353px] md:min-h-[400px] lg:min-h-[663px] bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-col items-start justify-start pt-9 pb-[18px] pl-3 pr-[11px] gap-[17px] max-w-full mq800:pt-[23px] mq800:pb-5 mq800:box-border">
             <textarea
               placeholder="Enter your message here..."
               value={
@@ -327,8 +327,8 @@ const Recipients = () => {
               className="justify-center  border-none"
             >
               <Tabs.Item active title="Recipients">
-                <div className="bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap h-[338px] overflow-auto">
-                  <div className="h-[338px] w-[712px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
+                <div className="custom-scrollbar bg-[#0f2e3f] overflow-y-scroll h-[215px] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap h-[338px] overflow-auto">
+                  <div className="h-[220px] w-[712px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
                   <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full">
                     <div className="self-stretch flex flex-col items-start justify-start gap-4 max-w-full">
                       {recipients?.results?.map((item) => {
@@ -340,7 +340,7 @@ const Recipients = () => {
                           >
                             <div className="w-full flex flex-row  max-w-full mq800:flex-wrap">
                               <div className="flex gap-[23.8px] items-center w-full">
-                                <div className="w-[59.1px] h-[51px] rounded-[11.44px] bg-[#0F2E3F] flex items-center justify-center  pt-[14.3px] px-[15px] pb-[14.2px] box-border z-[1]">
+                                <div className="w-[59.1px] h-[40px] rounded-[11.44px] bg-[#0F2E3F] flex items-center justify-center  pt-[14.3px] px-[15px] pb-[14.2px] box-border z-[1]">
                                   <div className="flex items-center justify-center relative z-[2] text-[#175C83]">{`K`}</div>
                                 </div>
                                 <p className=" text-[19.06px] text-white font-normal leading-[23px] break-all">
@@ -367,7 +367,7 @@ const Recipients = () => {
                 </div>
               </Tabs.Item>
               <Tabs.Item title="Keypair">
-                <div className="flex gap-[20px] w-full flex-wrap xs:px-[16px] sm:px-[16px]">
+                <div className="flex gap-[10px] h-[220px] pt-2 overflow-y-scroll w-full flex-wrap xs:px-[16px] sm:px-[16px]">
                   {keypairs?.results?.map((item) => {
                     return (
                       <div
@@ -386,7 +386,7 @@ const Recipients = () => {
                               }))
                             }
                           />
-                          <span className="w-full max-w-full h-[47px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
+                          <span className="w-full max-w-full h-[37px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
                             {item.name}
                           </span>
                           <span className="hidden peer-checked:block absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
@@ -403,8 +403,8 @@ const Recipients = () => {
                 </div>
               </Tabs.Item>
             </Tabs>
-            <div className="w-[245px] mx-auto flex-row items-start justify-start gap-5 xs:flex sm:flex md:hidden lg:hidden mt-[23px]">
-              <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
+            <div className="w-[245px] mx-auto flex-row items-start justify-start gap-3 xs:flex sm:flex md:hidden lg:hidden mt-[10px]">
+              <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
                 <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
                 <div
                   onClick={handleEncryption}
@@ -413,7 +413,7 @@ const Recipients = () => {
                   Encrypt
                 </div>
               </button>
-              <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
+              <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
                 <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
                 <div
                   onClick={handleDecryption}

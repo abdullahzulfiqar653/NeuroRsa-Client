@@ -233,8 +233,26 @@ body {
 
 @media screen and (max-width: 768px) {
   .Toastify__toast {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     gap: 15px;
   }
+}
+
+
+.scroll-blur::after {
+  content: "";
+  position: absolute;
+  bottom: 60;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(rgba(255, 255, 255, 0), rgb(8, 32, 45));
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-blur.no-blur::after {
+  opacity: 0;
 }

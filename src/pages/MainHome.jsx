@@ -317,15 +317,15 @@ const MainHome = () => {
               Key Types
             </div>
 
-            <div className="flex flex-col  w-full h-[320px] overflow-y-scroll">
+            <div className="flex flex-col  w-full h-[530px] overflow-y-scroll">
               {filteredData?.map((item, index) => (
                 <div
                   key={index}
                   className="key-item bg-[#1B3D4F] px-[6px] py-[11px] w-full mb-[6px]"
                 >
                   <div className="flex justify-between border-b-[#0F2E3F] border-b-[1px] pb-[9px]">
-                    <p className="text-white text-[14px] font-normal leading-[17px]">
-                      {item.email}
+                    <p className="text-white text-[14px] font-normal leading-[14px]">
+                    {item.name}
                     </p>
                     <img
                       src="/delete-icon.svg"
@@ -334,8 +334,8 @@ const MainHome = () => {
                       onClick={() => openModalTwo(item.id)}
                     />
                   </div>
-                  <div className="flex pt-[14px] justify-between">
-                    <div className="flex justify-between gap-[20px] items-center">
+                  <div className="flex pt-[11px] justify-between">
+                    <div className="flex justify-between gap-[20px] items-center ">
                       <span className="text-white text-[12px]">Public key</span>
                       <div className="flex gap-[10px] items-center">
                         <img
@@ -386,7 +386,7 @@ const MainHome = () => {
               ))}{" "}
             </div>
           </div>
-          <div className="flex justify-between items-center space-x-4 mt-[64px]">
+          <div className="flex justify-between items-center space-x-4 mt-[26px]">
             <div className="flex items-center space-x-1">
               <button
                 disabled={data?.previous === null}
@@ -424,8 +424,8 @@ const MainHome = () => {
                 value={itemPerPage}
                 onChange={(e) => setItemPerPage(e.target.value)}
                 id="per-page"
-                className="!px-2 py-1 text-[7.6px] bg-gray-700 text-white rounded-md hover:bg-gray-600 border-none focus:ring focus:ring-teal-500 input-field"
-              >
+                className="!px-2 py-1 text-[7.6px] bg-[#0B2837] text-white rounded-md hover:bg-gray-600 border-none focus:ring focus:ring-teal-500 input-field"
+              > 
                 <option value={10}>10 per page</option>
                 <option value={20}>20 per page</option>
                 <option value={50}>50 per page</option>

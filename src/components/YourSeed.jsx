@@ -47,13 +47,13 @@ const GroupComponent = ({ seedsData = "" }) => {
             Key Seed
           </div>
         </div>
-        <div className="bg-darkslategray-200 w-full py-[21px] pb-[10px] px-[19px] rounded-borderradius-large box-border  custom-tab-box">
+        <div className="bg-darkslategray-200 w-full py-[10px] md:py-[21px] pb-0 md:pb-[10px] px-[5px] md:px-[19px] rounded-borderradius-large box-border  custom-tab-box">
           {/* <TagsInput value={selected} name='tags' placeHolder='Enter your Key Seed...' /> */}
-          <div className="flex gap-[8px] flex-wrap">
+          <div className="flex md:gap-[8px] gap-[5px] flex-wrap">
             {seedsData?.split(" ").map((seed, index) => (
               <span
                 key={index}
-                className="dm-sans border-mediumturquoise border-[1px] px-[8px] text-[16px] leading-[27px] font-[400] text-white rounded-[6px]"
+                className="dm-sans border-mediumturquoise border-[1px] px-[8px] text-[14px] md:text-[16px] leading-[20px] md:leading-[20px] font-[400] text-white rounded-[6px]"
               >
                 {seed}
               </span>
@@ -114,11 +114,11 @@ const GroupComponent = ({ seedsData = "" }) => {
           Please write these down incase you lose your seed
         </p>
       </div>
-      <div className="w-full max-w-[223px] mx-auto  mt-[68px] flex flex-col items-center justify-center pt-0 px-0 text-center text-base font-montserrat">
+      <div className="w-full max-w-[223px] mx-auto mt-3 md:mt-[68px] flex flex-col items-center justify-center pt-0 px-0 text-center text-base font-montserrat">
         <div className="w-full flex flex-col items-start justify-start gap-[10.8px] mb-[10px]">
           <div
             onClick={handleLogin}
-            className="self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-3.5 pb-[13.9px] pl-[50px] pr-[49px] shrink-0 z-[1] hover:cursor-pointer"
+            className="self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-1 md:pt-3.5 pb-1 md:pb-[13.9px] md:pl-[50px] md:pr-[49px] shrink-0 z-[1] hover:cursor-pointer"
           >
             <div className="h-[47.2px] w-full relative rounded-[4.38px] bg-mediumturquoise hidden" />
             <div className="flex-1 relative z-[1]">Next</div>

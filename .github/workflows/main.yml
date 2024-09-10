@@ -35,10 +35,10 @@ jobs:
       - name: Run Deploy
         run: |
           ssh target "\
-            export PATH=/root/.nvm/versions/node/v20.17.0/bin:\$PATH && \
+            export PATH=/root/.nvm/versions/node/v22.5.1/bin:\$PATH && \
             cd frontends/NeuroRsa-Client/ && \
             git pull && \
             export PATH=\$PATH:/root/.npm/bin && \
             npm run build && \
-            cp -r ./build/* /var/www/rsa/html/ && \
+            cp -r ./build/* /var/www/neurorsa/html/ && \
             systemctl reload nginx"

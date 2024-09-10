@@ -18,7 +18,7 @@ const GroupComponent = ({ className = "" }) => {
 
   return (
     <div
-      className={`w-[458px] sm:w-[458px] md:w-[458px] lg:w-[458px] rounded-[32px] [background:linear-gradient(180deg,_#1f729d,_#0b2837)] border-darkslategray-100 border-[1px] border-solid box-border flex flex-col items-end justify-start xs:pt-[25px] pt-[67px] pb-3.5 pl-[18px] pr-[19px] max-w-full z-[2] text-left text-9xl text-white font-neue-plak mq450:gap-[34px] mq725:pt-11 mq725:pb-5 mq725:box-border ${className}`}
+      className={`w-[458px] sm:w-[458px] md:w-[458px] lg:w-[458px] rounded-[32px] [background:linear-gradient(180deg,_#1f729d,_#0b2837)] border-darkslategray-100 border-[1px] border-solid box-border flex flex-col items-end justify-start xs:pt-[25px] pt-[67px] pb-3.5 pl-[18px] pr-[19px] max-w-full z-[4] text-left text-9xl text-white font-neue-plak mq450:gap-[34px] mq725:pt-11 mq725:pb-5 mq725:box-border ${className}`}
     >
       <div className="w-[458px]  h-[732px] relative rounded-13xl [background:linear-gradient(180deg,_#1f729d,_#0b2837)] border-darkslategray-100 border-[1px] border-solid box-border hidden max-w-full" />
       <div className="self-stretch flex flex-row items-start justify-end pt-0 pb-2 pl-10 pr-[38px] box-border max-w-full md:mb-[24px] mb-[0px]">

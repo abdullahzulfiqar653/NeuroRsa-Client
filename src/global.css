@@ -72,7 +72,7 @@ body {
 }
 
 .bg-image {
-  background-image: url('./bg-image.png');
+  background-image: url('/bg-image.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -214,7 +214,7 @@ body {
   display: none;
 }
 .bg-vector-img{
-  background-image: url('./bg-vector.png');
+  background-image: url('/bg-vector.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100% 100%;

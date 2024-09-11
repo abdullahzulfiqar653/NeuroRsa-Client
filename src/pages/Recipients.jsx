@@ -326,8 +326,19 @@ const Recipients = () => {
               variant="default"
               className="justify-center  border-none"
             >
-              <Tabs.Item active title="Recipients">
-                <div className="custom-scrollbar bg-[#0f2e3f] overflow-y-scroll h-[215px] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap h-[338px] overflow-auto">
+              <Tabs.Item active title={<span className="font-bold text-white">Recipients</span>}>
+              <div className="flex flex-row justify-end items-center px-[17px] pb-[8px]">
+    <div
+      className="w-full flex flex-row items-start justify-end text-xs cursor-pointer"
+      onClick={openModal}
+    > <div className=" relative text-5xl">
+        <div className="h-6 w-6 rounded-[50%] border-white border-[1px] border-solid box-border flex justify-center items-center">
+          <div className="text-[20px]">+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+                <div className="custom-scrollbar bg-[#0f2e3f] overflow-y-scroll h-[190px] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap overflow-auto">
                   <div className="h-[220px] w-[712px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
                   <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full">
                     <div className="self-stretch flex flex-col items-start justify-start gap-4 max-w-full">
@@ -366,7 +377,7 @@ const Recipients = () => {
                   </div>
                 </div>
               </Tabs.Item>
-              <Tabs.Item title="Keypair">
+              <Tabs.Item title={<span className="font-bold text-white">Keypair</span>}>
                 <div className="flex gap-[10px] h-[220px] pt-2 overflow-y-scroll w-full flex-wrap xs:px-[16px] sm:px-[16px]">
                   {keypairs?.results?.map((item) => {
                     return (

@@ -18,10 +18,10 @@ const Home = ({ className = "" }) => {
           <div className="flex-1 flex flex-col items-start justify-start xs:gap-[43px] sm:gap-[43px] md:gap-[69px]  lg:gap-[69px] max-w-full">
             <div className="xs:mt-[100px] sm:mt-[100px] md:mt-[0px] lg:mt-[0px] self-stretch flex flex-col items-start justify-start  max-w-full">
               <div className="xs:max-w-[100%] md:max-w-[724px] lg:max-w-[724px] flex flex-col items-start justify-start  max-w-full text-24xl text-white">
-                <h1 className="md:mt-5 mt-11 mb-[17px] xs:max-w-[100%] md:max-w-[518px] lg:max-w-[518px] xs:text-[20px] sm:text-[20px] md:text-[43px] lg:text-[43px] xs:leading-[5px] sm:leading-[33px] md:leading-[60px] lg:leading-[60px] relative text-[43px] font-semibold md:font-medium inline-block max-w-full z-[1]">
+                <h1 className="md:mt-5 h-sm:mt-11 h-md:mt-20 mb-[17px] xs:max-w-[100%] md:max-w-[518px] lg:max-w-[518px] xs:text-[20px] sm:text-[20px] md:text-[43px] lg:text-[43px] h-sm:xs:leading-[5px] h-md:xs:leading-[33px] md:leading-[60px] lg:leading-[60px] relative text-[43px] font-semibold md:font-medium inline-block max-w-full z-[1]">
                   Welcome to neuro.RSA
                 </h1>
-                <div className="self-stretch relative xs:text-[13px] sm:text-[13px] md:text-[20px] lg:text-[20px] leading-[23px] text-gainsboro inline-block xs:mb-[14px] sm:mb-[14px] md:mb-[43px] lg:mb-[43px] z-[1] max-w-[724px]">
+                <div className="self-stretch relative xs:text-[13px] sm:text-[14px] md:text-[20px] lg:text-[20px] leading-[23px] text-gainsboro inline-block xs:mb-[14px] sm:mb-[14px] md:mb-[43px] lg:mb-[43px] z-[1] max-w-[724px]">
                   Neuro.RSA is a front-end for the crypto software. For most
                   actions you need either a public key (certificate) or your own
                   private key.
@@ -64,7 +64,7 @@ const Home = ({ className = "" }) => {
               <div className="w-[438px] flex xs:gap-[14px] sm:gap-[14px]  md:gap-[22px] lg:gap-[22px] max-w-full text-white ">
                 <Link
                   to="/login"
-                  className="p-[5px]text-white no-underline xs:text-[12px] sm:text-[12px] md:text-[20px] lg:text-[20px]  cursor-pointer bg-[#1B3D4F] flex  w-[100%] xs:max-w-[120px] sm:max-w-[134px] md:max-w-[208px] lg:max-w-[208px] xs:h-[48px] sm:h-[52px] md:h-[82px] lg:h-[82px] justify-center items-center xs:gap-[9px] sm:gap-[9px]  md:gap-[18px] lg:gap-[18px] border-[1px] border-[#345360]"
+                  className="p-[5px] text-white no-underline xs:text-[12px] sm:text-[12px] md:text-[20px] lg:text-[20px]  cursor-pointer bg-[#1B3D4F] flex  w-[100%] xs:max-w-[120px] sm:max-w-[134px] md:max-w-[208px] lg:max-w-[208px] xs:h-[48px] sm:h-[52px] md:h-[82px] lg:h-[82px] justify-center items-center xs:gap-[9px] sm:gap-[9px]  md:gap-[18px] lg:gap-[18px] border-[1px] border-[#345360]"
                 >
                   <img
                     className="xs:h-[21px] sm:h-[21px] md:h-[37px] lg:h-[37px] xs:w-[21px] sm:w-[21px] md:w-[37px] lg:w-[37px] z-[1]"
@@ -91,15 +91,15 @@ const Home = ({ className = "" }) => {
       </div>
       <div className="xs:w-[100%] md:w-[971px] lg:w-[971px] flex flex-col items-start justify-start pt-[41px] px-0 pb-0 box-border max-w-full xs:ml-[-100%] md:ml-[-618px] lg:ml-[-618px]">
         <div className="self-stretch h-[calc(100vh-5vh)] relative">
-          <div className="absolute xs:bottom-[0px] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2  xs:right-[-45px] md:right-[-180px] lg:right-[-180px]  rounded-[50%] bg-[#1B3D4F] w-full xs:max-w-[300px] sm:max-w-[350px] md:max-w-[704px] lg:max-w-[704px] xs:h-[286px] sm:h-[336px] md:h-[704px] lg:h-[704px] z-[1]" />
+          <div className="absolute xs:bottom-[0px] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2  xs:right-[-45px] md:right-[-180px] lg:right-[-180px]  rounded-[50%] bg-[#1B3D4F] w-full h-sm:xs:max-w-[300px] h-md:xs:max-w-[350px]  sm:max-w-[350px] md:max-w-[704px] lg:max-w-[704px] h-sm:xs:h-[286px] h-md:xs:h-[336px] sm:h-[336px] md:h-[704px] lg:h-[704px] z-[1]" />
           <img
-            className="absolute xs:right-[0] xs:left-[7rem] md:left-[auto] lg:left-[auto] md:right-20 lg:right-[41px] xs:bottom-[0px] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2  w-full xs:max-w-[220px] md:max-w-[549.8px] lg:max-w-[549.8px] xs:h-[336px] md:h-[714.4px] lg:h-[714.4px] z-[2]"
+            className="absolute xs:right-[0] h-sm:xs:left-[7rem] h-md:xs:left-[4rem] md:left-[auto] lg:left-[auto] md:right-20 lg:right-[41px] h-sm:xs:bottom-[0px] h-md:xs:bottom-[6px] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2  w-full h-sm:xs:max-w-[220px] h-md:xs:max-w-[270px] md:max-w-[549.8px] lg:max-w-[549.8px] xs:h-[336px] md:h-[714.4px] lg:h-[714.4px] z-[2]"
             loading="lazy"
             alt=""
             src="/group.svg"
           />
           <img
-            className="absolute xs:bottom-[0px] xs:left-[6rem] xs:top-[53%] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2 xs:right-[0px] md:left-[auto] lg:left-[auto] md:right-20 lg:right-[32px]  w-full xs:max-w-[220px] md:max-w-[586px] lg:max-w-[586px]  xs:h-[310px] md:h-[665.8px] lg:h-[665.8px] z-[3]"
+            className="absolute xs:bottom-[0px] h-sm:xs:left-[7rem] h-md:xs:left-[4rem] xs:top-[60%] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2 xs:right-[0px] md:left-[auto] lg:left-[auto] md:right-20 lg:right-[32px]  w-full h-sm:xs:max-w-[220px] h-md:xs:max-w-[270px] md:max-w-[586px] lg:max-w-[586px]  xs:h-[310px] md:h-[665.8px] lg:h-[665.8px] z-[3]"
             alt=""
             src="/layer-2.svg"
           />

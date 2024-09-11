@@ -58,6 +58,8 @@ module.exports = {
       md: '768px',
       sm: '600px',
       xs: '320px',
+      'h-sm': { 'raw': '(min-height: 731px)' }, 
+      'h-md': { 'raw': '(min-height: 844px)' },
     },
   },
   corePlugins: {

@@ -6,6 +6,7 @@ import {
   useNavigationType,
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Home from "./pages/Home";
 import MainHome from "./pages/MainHome";
@@ -68,7 +69,9 @@ function App() {
     <>
       <ToastContainer
         closeButton={CloseButton}
-        className="w-full max-w-[1000px] left-auto xs:right-0 sm:right-0 lg:!right-[1%] items-center"
+        className="w-full max-w-[1000px] xs:left-0 sm:left-0 md:left-auto xs:right-0 sm:right-0 lg:!right-[1%] items-center"
+        toastClassName={() => "Toastify__toast bg-[#345360] text-white"}
+        bodyClassName={() => "Toastify__toast-body text-white"}
       />
       <Routes>
         <Route path="/" element={<Home />} />

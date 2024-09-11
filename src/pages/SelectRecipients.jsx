@@ -3,7 +3,6 @@ import Header from '../components/Header';
 import { Tabs, Modal } from 'flowbite-react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Formik, Form, Field } from 'formik';
-import 'react-toastify/dist/ReactToastify.css';
 const SelectKeyPair = () => {
   const openModal = () => {
     setIsOpen(true);

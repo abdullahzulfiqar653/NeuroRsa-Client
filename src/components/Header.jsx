@@ -56,9 +56,7 @@ const Header = () => {
       onSuccess: (response) => {
         setKeypair(response);
         setStep(4);
-        toast.success(`Keypair Created successfully.`, {
-          className: "toast-message",
-        });
+        toast.success(`Keypair Created successfully.`);
       },
       onError: (error) => {
         setErrors(error.response.data);

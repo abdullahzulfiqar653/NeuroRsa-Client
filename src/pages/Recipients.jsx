@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import { Formik, Form, Field } from "formik";
-import "react-toastify/dist/ReactToastify.css";
 import { Tabs, Modal, Button } from "flowbite-react";
 import useGetKeyPairs from "../hooks/useGetKeyPairs";
 import { useLocation, useNavigate } from "react-router-dom";

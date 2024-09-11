@@ -18,9 +18,7 @@ const GroupComponent = ({ className = "" }) => {
     mutate(seedsValue.join(" "), {
       onSuccess: () => {
         login();
-        toast.success("Logged In Successfully.", {
-          className: "toast-message",
-        });
+        toast.success("Logged In Successfully.");
       },
       onError: (error) => {
         toast.error(error.response.data.detail, { className: "toast-message" });

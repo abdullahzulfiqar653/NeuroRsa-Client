@@ -68,9 +68,7 @@ const MainHome = () => {
   const handleDelete = () => {
     deleteKeyPair(selectedUserId, {
       onSuccess: (response) => {
-        toast.success(`Keypair Deleted successfully.`, {
-          className: "toast-message",
-        });
+        toast.success(`Keypair Deleted successfully.`);
         setIsOpenTwo(false);
       },
       onError: (error) => {

@@ -53,10 +53,23 @@ function App() {
       }
     }
   }, [pathname]);
+  const CloseButton = ({ closeToast }) => (
+    <button
+      onClick={() => {
+        closeToast();
+      }}
+      className="alert-btn"
+    >
+      <img src="/close-btn.svg" className="w-4 h-4" /> Close
+    </button>
+  );
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer
+        closeButton={CloseButton}
+        className="w-full max-w-[1000px] left-auto xs:right-0 sm:right-0 lg:!right-[1%] items-center"
+      />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginScreen />} />

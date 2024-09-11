@@ -7,9 +7,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Neue Plak';
+  src: url('./fonts/NeuePlak-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+
 body {
   @apply leading-[normal] m-0;
-  font-family: 'Montserrat';
+  font-family: 'Neue Plak';
 }
 
 *,

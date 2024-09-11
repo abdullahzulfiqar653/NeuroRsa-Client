@@ -20,9 +20,7 @@ const GroupComponent = ({ seedsData = "" }) => {
   const handleLogin = () => {
     mutate(seedsData, {
       onSuccess: (res) => {
-        toast.success("Logged In Successfully.", {
-          className: "toast-message",
-        });
+        toast.success("Logged In Successfully.");
         signup();
       },
 

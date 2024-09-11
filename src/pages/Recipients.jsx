@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import { Formik, Form, Field } from "formik";
-import "react-toastify/dist/ReactToastify.css";
 import { Tabs, Modal, Button } from "flowbite-react";
 import useGetKeyPairs from "../hooks/useGetKeyPairs";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import useGetRecipients from "../hooks/useGetRecipients";
 import useCreateRecipient from "../hooks/useCreateRecipient";
 import useCreateEncryptedMessage from "../hooks/useCreateEncryptedMessage";
@@ -105,16 +104,6 @@ const Recipients = () => {
   };
   const closeModal = () => setIsOpen(false);
   const closeModalTwo = () => setIsOpenTwo(false);
-  const CloseButton = ({ closeToast }) => (
-    <button
-      onClick={() => {
-        closeToast();
-      }}
-      className="alert-btn"
-    >
-      <img src="/close-btn.svg" className="w-4 h-4" /> Close
-    </button>
-  );
 
   // const notify = () =>
   //   toast.success(
@@ -426,10 +415,6 @@ const Recipients = () => {
           </section>
         </main>
       </div>
-      <ToastContainer
-        closeButton={CloseButton}
-        className="w-full max-w-[1000px] left-auto xs:right-0 sm:right-0 lg:!right-[1%] items-center"
-      />
       <Modal show={isOpen} onClose={closeModal} className="bg-black">
         <Modal.Header className="justify-center items-center flex bg-[#0E2E3F] border-none modal-h3">
           <div className="text-white"> Create New Recipients </div>

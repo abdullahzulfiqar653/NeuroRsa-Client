@@ -94,18 +94,13 @@ const Home = ({ className = "" }) => {
       </div>
       <div className="xs:w-[100%] md:w-[971px] lg:w-[971px] flex flex-col items-start justify-start pt-[41px] px-0 pb-0 box-border max-w-full xs:ml-[-100%] md:ml-[-618px] lg:ml-[-618px] h-[calc(100vh-0vh)]">
         <div className="self-stretch h-[calc(100vh-0vh)] relative">
-          <div className="absolute xs:bottom-[0px] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2  xs:right-[-45px] md:right-[-180px] lg:right-[-180px]  rounded-[50%] bg-[#1B3D4F] w-full xs:max-w-[300px] sm:max-w-[350px] md:max-w-[704px] lg:max-w-[704px] xs:h-[286px] sm:h-[336px] md:h-[704px] lg:h-[704px] z-[1]" />
           <img
-            className="absolute xs:right-[0] xs:right-[3rem] md:left-[auto] lg:left-[auto] md:right-20 lg:right-[41px] xs:bottom-[50px] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2  w-full xs:max-w-[220px] md:max-w-[549.8px] lg:max-w-[549.8px] xs:h-[336px] md:h-[714.4px] lg:h-[714.4px] z-[2]"
+            className="absolute xs:right-[0] xs:right-[0rem] md:left-[auto] lg:left-[auto] md:right-0 lg:right-[0px] xs:bottom-[0px] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2  w-full xs:max-w-[240px] md:max-w-[549.8px] lg:max-w-[549.8px] xs:h-[280px] md:h-[714.4px] lg:h-[714.4px] z-[2]"
             loading="lazy"
             alt=""
-            src="/group.svg"
+            src="Group-1261153244.svg"
           />
-          <img
-            className="absolute xs:bottom-[0px] xs:right-[3rem] xs:bottom-[0] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2 xs:right-[0px] md:left-[auto] lg:left-[auto] md:right-20 lg:right-[32px]  w-full xs:max-w-[220px] md:max-w-[586px] lg:max-w-[586px]  xs:h-[310px] md:h-[665.8px] lg:h-[665.8px] z-[3]"
-            alt=""
-            src="/layer-2.svg"
-          />
+         
         </div>
       </div>
     </section>

@@ -8,7 +8,7 @@ const RegisterScreen = () => {
   const { isAuthenticated } = useAuth();
   if (isAuthenticated) return <Navigate to="/main-home" />;
   return (
-    <div className="w-full h-[100vh] relative bg-darkslategray-300 overflow-x-hidden overflow-y-auto  flex md:flex-row flex-col items-start justify-around md:justify-end px-[15px] sm:px-[15px] md:px-[125px] lg:px-[125px] py-[125px]  box-border leading-[normal] tracking-[normal] mq450:pl-5 mq450:pr-5 mq450:box-border mq725:pl-[62px] mq725:pr-[62px] mq725:box-border">
+    <div className="w-full h-[100vh] items-center relative bg-darkslategray-300 overflow-x-hidden overflow-y-auto  flex md:flex-row flex-col items-start justify-around md:justify-end px-[15px] sm:px-[15px] md:px-[125px]   box-border leading-[normal] tracking-[normal] mq450:pl-5 mq450:pr-5 mq450:box-border mq725:pl-[62px] mq725:pr-[62px] mq725:box-border">
       <Link to="/" className="block sm:block md:hidden lg:none">
         <img
           src="/Group 1261153272.svg"

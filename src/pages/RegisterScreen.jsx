@@ -38,7 +38,7 @@ const RegisterScreen = () => {
         src="/Group-bottom.png"
       />
        <div className="md:hidden self-stretch flex flex-row items-start pt-0 pb-0 pl-px text-sm text-gray-200">
-       <div className="w-full relative top-[7rem] text-sm inline-block z-[3]">
+       <div className="w-full relative top-[2.5rem] text-sm inline-block z-[3]">
         Produced by: <span className="border-b-[1px] border-gray-200">Neuronus Computing</span> 
      </div>
    </div>

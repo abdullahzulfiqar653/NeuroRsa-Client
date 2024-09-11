@@ -10,6 +10,8 @@ const Home = ({ className = "" }) => {
     <section
       className={`self-stretch overflow-x-hidden flex flex-row items-start justify-start max-w-full text-left text-lg text-gray-200 font-montserrat  h-[100vh] ${className}`}
     >
+      
+      <div className="absolute inset-0 bg-[#0B2837] bg-opacity-75"></div>
       <video autoPlay muted loop id="background-video">
         <source src="./bg-video.mp4" type="video/mp4" />
       </video>
@@ -95,10 +97,10 @@ const Home = ({ className = "" }) => {
       <div className="xs:w-[100%] md:w-[971px] lg:w-[971px] flex flex-col items-start justify-start pt-[41px] px-0 pb-0 box-border max-w-full xs:ml-[-100%] md:ml-[-618px] lg:ml-[-618px] h-[calc(100vh-0vh)]">
         <div className="self-stretch h-[calc(100vh-0vh)] relative">
           <img
-            className="absolute xs:right-[0] xs:right-[0rem] md:left-[auto] lg:left-[auto] md:right-0 lg:right-[0px] xs:bottom-[0px] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2  w-full xs:max-w-[240px] md:max-w-[549.8px] lg:max-w-[549.8px] xs:h-[280px] md:h-[714.4px] lg:h-[714.4px] z-[2]"
+            className="absolute xs:right-[0] xs:right-[0rem] md:left-[auto] lg:left-[auto] md:right-0 lg:right-[0px] xs:bottom-[0px] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2  w-full xs:max-w-[310px] md:max-w-[549.8px] lg:max-w-[549.8px] xs:h-[330px] md:h-[600px] lg:h-[600px] z-[2]"
             loading="lazy"
             alt=""
-            src="Group-1261153244.svg"
+            src="home-group.png"
           />
          
         </div>

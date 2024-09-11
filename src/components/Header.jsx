@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Button, Modal } from "flowbite-react";
-import useCreateKeypair from "../hooks/useCreateKeypair";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+
 import { useAuth } from "../AuthContext";
+import useCreateKeypair from "../hooks/useCreateKeypair";
 
 const Header = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const [step, setStep] = useState(1);
+  const { isAuthenticated } = useAuth();
   const { mutate } = useCreateKeypair();
   const [errors, setErrors] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [formValues, setFormValues] = useState({});
   const [keypair, setKeypair] = useState({});
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpenFile, setIsDropdownOpenFile] = useState(false);
 
@@ -109,7 +112,9 @@ const Header = () => {
             fill="white"
           />
         </svg>
-        <h1 className="ml-2">neuro.RSA</h1>
+        <h1 onClick={() => navigate("/")} className="ml-2 cursor-pointer">
+          neuro.RSA
+        </h1>
       </div>
       <div className=" w-full z-20 self-stretch flex flex-row xs:justify-between sm:justify-start items-center   xs:px-4 md:px-8 lg:px-8  box-border xs:gap-[15px] sm:gap-[73px] md:gap-[73px] lg:gap-[73px]  max-w-full mq750:gap-9 mq450:flex-wrap">
         <div
@@ -124,14 +129,16 @@ const Header = () => {
           {isDropdownOpenFile && (
             <div className="origin-top-right top-10  absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-[#1c3d4f]  ring-1 ring-[#345360] ring-opacity-5 focus:outline-none z-20">
               <div className="py-4">
-                <div className="relative group hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
-                  <button
-                    className="block px-4 py-2 text-sm text-white w-full text-left hover-btn"
-                    onClick={openModal}
-                  >
-                    New Key Pair
-                  </button>
-                </div>
+                {isAuthenticated && (
+                  <div className="relative group hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
+                    <button
+                      className="block px-4 py-2 text-sm text-white w-full text-left hover-btn"
+                      onClick={openModal}
+                    >
+                      New Key Pair
+                    </button>
+                  </div>
+                )}
 
                 {/* <button className="block px-4 py-2 text-sm text-white w-full text-left z-20 hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
                   Import
@@ -142,13 +149,23 @@ const Header = () => {
                 <button className="block px-4 py-2 text-sm text-white w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
                   Encrypt
                 </button> */}
-                <Link
-                  to="/login"
-                  className="block px-4 py-2 text-sm text-white w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
-                  onClick={logout}
-                >
-                  Logout
-                </Link>
+                {isAuthenticated && (
+                  <Link
+                    to="/login"
+                    className="block px-4 py-2 text-sm text-white w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
+                    onClick={logout}
+                  >
+                    Logout
+                  </Link>
+                )}
+                {!isAuthenticated && (
+                  <Link
+                    to="/login"
+                    className="block px-4 py-2 text-sm text-white w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
+                  >
+                    Login
+                  </Link>
+                )}
               </div>
             </div>
           )}

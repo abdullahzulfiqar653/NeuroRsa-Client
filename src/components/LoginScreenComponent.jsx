@@ -88,7 +88,7 @@ const GroupComponent = ({ className = "" }) => {
                 alt=""
                 src="/union.svg"
               />
-              <h1 className="m-0 relative text-[25px] md:text-[30px] text-white inline-block z-[1] mq450:text-3xl">
+              <h1 className="m-0 relative text-[22.6px] font-semibold md:text-[30px] text-white inline-block z-[1] mq450:text-3xl">
                 neuro.RSA
               </h1>
             </div>
@@ -100,7 +100,7 @@ const GroupComponent = ({ className = "" }) => {
       </div>
       <div className="self-stretch flex flex-col items-start justify-start gap-[5px] text-mini-1 font-montserrat">
         <div className="flex flex-row items-start justify-start py-0 px-px">
-          <div className="text-[14px] relative leading-[22px] font-medium inline-block min-w-[66px] z-[1] text-[14px]">
+          <div className="text-[14px] relative leading-[22px] font-medium inline-block min-w-[66px] z-[1]">
             Key Seed
           </div>
         </div>
@@ -169,7 +169,7 @@ const GroupComponent = ({ className = "" }) => {
           </div>
         </div>
       </div>
-      <div className="hidden md:block self-stretch flex flex-row items-start justify-center py-0 pl-px pr-0 text-center text-sm text-gray-200">
+      <div className="hidden md:block self-stretch flex-row items-start justify-center py-0 pl-px pr-0 text-center text-sm text-gray-200">
         <div className="w-full relative leading-[22px] inline-block z-[3]">
           Produced by: Neuronus Computing
         </div>

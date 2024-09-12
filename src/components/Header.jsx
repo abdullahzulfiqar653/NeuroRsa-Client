@@ -97,7 +97,7 @@ const Header = () => {
     <div className="w-full">
       <div className="w-full bg-[#1b3d4f] flex justify-center font-bold text-white py-[0.6rem]">
         <svg
-          width="26"
+          width="25.6"
           height="26"
           viewBox="0 0 26 26"
           fill="none"
@@ -110,7 +110,7 @@ const Header = () => {
             fill="white"
           />
         </svg>
-        <h1 onClick={() => navigate("/")} className="ml-2 cursor-pointer">
+        <h1 onClick={() => navigate("/")} className="ml-2 text-[22px] leading-[30.62px] cursor-pointer">
           neuro.RSA
         </h1>
       </div>
@@ -120,7 +120,7 @@ const Header = () => {
           onMouseEnter={handleMouseEnterDropdownFile}
           onMouseLeave={handleMouseLeaveDropdownFile}
         >
-          <Link className="py-[10px] cursor-pointer [text-decoration:none] relative text-[inherit] inline-block max-w-[121px] z-[1] xs:text-[10px] sm:text-[10px] md:text-[16px] lg:text-[16px] text-white opacity-[72%]">
+          <Link className="py-[10px] cursor-pointer [text-decoration:none] text-white  relative text-[inherit] inline-block max-w-[121px] z-[1] font-sans leading-[24.38px]  xs:text-[10px] sm:text-[10px] md:text-[20px] lg:text-[20px] opacity-[72%]">
             File
           </Link>
 
@@ -130,7 +130,7 @@ const Header = () => {
                 {isAuthenticated && (
                   <div className="relative group hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
                     <button
-                      className="block px-4 py-2 text-sm text-white w-full text-left hover-btn"
+                      className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
                       onClick={openModal}
                     >
                       New Key Pair
@@ -150,7 +150,7 @@ const Header = () => {
                 {isAuthenticated && (
                   <Link
                     to="/login"
-                    className="block px-4 py-2 text-sm text-white w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
+                    className="block px-4 py-2 text-sm text-white font-sans text-[10px] md:text-[20px] w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
                     onClick={logout}
                   >
                     Logout
@@ -159,7 +159,7 @@ const Header = () => {
                 {!isAuthenticated && (
                   <Link
                     to="/login"
-                    className="block px-4 py-2 text-sm text-white w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
+                    className="block px-4 py-2 text-sm text-white font-sans text-[10px] md:text-[20px] w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
                   >
                     Login
                   </Link>
@@ -173,7 +173,7 @@ const Header = () => {
           <NavLink
             to="/main-home"
             className={({ isActive }) =>
-              `py-[10px] cursor-pointer [text-decoration:none] relative text-[inherit] inline-block max-w-[121px] z-[1] xs:text-[10px] sm:text-[10px] md:text-[16px] lg:text-[16px] text-white opacity-[72%] 
+              `py-[10px] cursor-pointer [text-decoration:none] relative text-[inherit]  text-white inline-block max-w-[121px] z-[1] font-sans leading-[21.94px]  xs:text-[10px] sm:text-[10px] md:text-[18px] lg:text-[18px] opacity-[72%] 
                  ${isActive ? "border-b-2 border-mediumturquoise" : ""}`
             }
           >
@@ -189,7 +189,7 @@ const Header = () => {
             <NavLink
               to="/my-recipients"
               className={({ isActive }) =>
-                `py-[10px] cursor-pointer [text-decoration:none] relative text-[inherit] inline-block max-w-[121px] z-[1] xs:text-[10px] sm:text-[10px] md:text-[16px] lg:text-[16px] text-white opacity-[72%] 
+                `py-[10px] cursor-pointer [text-decoration:none] relative text-[inherit] text-white inline-block max-w-[121px] z-[1] font-sans leading-[21.94px] xs:text-[10px] sm:text-[10px] md:text-[18px] lg:text-[18px] opacity-[72%] 
                  ${isActive ? "border-b-2 border-mediumturquoise" : ""}`
               }
             >
@@ -448,13 +448,13 @@ const Header = () => {
                 <>
                   <Button
                     onClick={nextStep}
-                    className="!bg-[#57CBCC] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
+                    className="!bg-[#57CBCC] hover:bg-red-700 text-white font-sans font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
                     Next
                   </Button>
                   <Button
                     onClick={closeModal}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
+                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
                     Cancel
                   </Button>
@@ -476,13 +476,13 @@ const Header = () => {
                 <>
                   <Button
                     onClick={closeModal}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
+                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
                     Cancel
                   </Button>
                   <Button
                     onClick={handleSubmit}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
+                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
                     OK
                   </Button>
@@ -496,13 +496,13 @@ const Header = () => {
                       navigate(-1);
                       closeModal();
                     }}
-                    className="!bg-[#57CBCC] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[5px]"
+                    className="!bg-[#57CBCC] hover:bg-red-700 text-white font-sans font-bold py-2 px-4 rounded-[5px]"
                   >
                     Finish
                   </Button>
                   <Button
                     onClick={closeModal}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] text-white font-bold py-2 px-4 rounded-[5px]"
+                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px]"
                   >
                     Cancel
                   </Button>

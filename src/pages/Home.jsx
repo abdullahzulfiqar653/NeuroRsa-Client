@@ -23,7 +23,7 @@ const Home = ({ className = "" }) => {
           <div className="flex-1 flex flex-col items-start justify-start xs:gap-[43px] sm:gap-[43px] md:gap-[69px]  lg:gap-[69px] max-w-full">
             <div className="xs:mt-[100px] sm:mt-[100px] md:mt-[0px] lg:mt-[0px] self-stretch flex flex-col items-start justify-start  max-w-full">
               <div className="xs:max-w-[100%] md:max-w-[724px] lg:max-w-[724px] flex flex-col items-start justify-start  max-w-full text-24xl text-white">
-                <h1 className="md:mt-5 mt-11 mb-[17px] xs:max-w-[100%] md:max-w-[518px] lg:max-w-[518px] xs:text-[20px] sm:text-[20px] md:text-[43px] lg:text-[43px] xs:leading-[5px] sm:leading-[33px] md:leading-[60px] lg:leading-[60px] relative text-[43px] font-semibold inline-block max-w-full z-[1]">
+                <h1 className="md:mt-5 mt-11 mb-[17px] xs:max-w-[100%] md:max-w-[518px] lg:max-w-[518px] xs:text-[24px] sm:text-[24px] md:text-[43px] lg:text-[43px] xs:leading-[5px] sm:leading-[33px] md:leading-[60px] lg:leading-[60px] relative text-[43px] font-semibold inline-block max-w-full z-[1]">
                   Welcome to neuro.RSA
                 </h1>
                 <div className="self-stretch relative xs:text-[13px] sm:text-[13px] md:text-[20px] lg:text-[20px] leading-[23px] text-gainsboro inline-block xs:mb-[14px] sm:mb-[14px] md:mb-[43px] lg:mb-[43px] z-[1] max-w-[724px]">

@@ -129,14 +129,14 @@ const Recipients = () => {
               <div className="w-full flex flex-col items-center justify-start  px-0 pb-0 box-border max-w-full h-full">
                 <div className="flex justify-center items-center h-full w-full">
                   <div className="w-full flex flex-row items-start justify-center py-0 px-5 box-border">
-                    <a className="[text-decoration:none] h-[31px] relative font-black text-[inherit] inline-block min-w-[89px] z-[1] mq450:text-lg">
+                    <a className="[text-decoration:none] h-[31px] text-[22px] leading-[30.62px] relative font-black text-[inherit] inline-block min-w-[89px] z-[1] mq450:text-lg">
                       Notepad
                     </a>
                   </div>
                 </div>
               </div>
               <div className="w-full max-w-[712px] flex flex-col items-center justify-center  text-gray-300">
-                <a className="[text-decoration:none] h-[31px] relative font-black text-[inherit] inline-block min-w-[108px] z-[1] mq450:text-lg">
+                <a className="[text-decoration:none] h-[31px] text-[22px] leading-[30.62px] relative font-black text-[inherit] inline-block min-w-[108px] z-[1] mq450:text-lg">
                   Recipients
                 </a>
               </div>
@@ -144,12 +144,12 @@ const Recipients = () => {
                 className="w-full max-w-[177px] flex flex-row items-start justify-start gap-2.5 text-center text-xs cursor-pointer"
                 onClick={openModal}
               >
-                <div className="flex flex-col items-start justify-start pt-[11px] px-0 pb-0">
+                <div className="flex flex-col items-start justify-start font-sans text-[12px] leading-[14.63px] pt-[11px] px-0 pb-0">
                   <div className="relative z-[1]">Create New Recipient</div>
                 </div>
                 <div className=" relative text-5xl">
                   <div className="h-9 w-9 rounded-[50%] border-white border-[1px] border-solid box-border flex justify-center items-center">
-                    <div className="text-[24px]">+</div>
+                    <div className="text-[24px] mb-2">+</div>
                   </div>
                 </div>
               </div>
@@ -243,7 +243,7 @@ const Recipients = () => {
                     </div>
                   </div>
                   <div className="xs:hidden sm:hidden overflow-y-scroll h-[300px] md:flex lg:flex bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border  flex-col items-start justify-start pt-[21px] px-[19px] pb-[18px] gap-[21.1px] max-w-full z-[1] text-left text-3xl text-white font-neue-plak">
-                    <div className=" relative font-black inline-block text-[22px]">
+                    <div className="relative font-black inline-block h-[31px] w-[297px] leading-[30.62px] text-[22px]">
                       Select Keypair for Decryption
                     </div>
                     <div className="w-[712px] h-[402px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
@@ -315,7 +315,7 @@ const Recipients = () => {
               variant="default"
               className="justify-center  border-none"
             >
-              <Tabs.Item active title="Recipients">
+              <Tabs.Item active title={"Recipients"}>
                 <div className="custom-scrollbar bg-[#0f2e3f] overflow-y-scroll h-[215px] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap h-[338px] overflow-auto">
                   <div className="h-[220px] w-[712px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
                   <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full">
@@ -459,7 +459,7 @@ const Recipients = () => {
               <Modal.Footer className="bg-[#1B3D4F] justify-center border-[0px] pt-0">
                 <Button
                   type="submit"
-                  className="!bg-[#57CBCC] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[5px] save-btn"
+                  className="!bg-[#57CBCC] hover:bg-red-700 text-white font-sans font-bold py-2 px-4 rounded-[5px] save-btn"
                 >
                   Save
                 </Button>

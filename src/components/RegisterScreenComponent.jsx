@@ -22,7 +22,7 @@ const GroupComponent = ({ className = "" }) => {
     >
       <div className="w-[458px]  h-[732px] relative rounded-13xl [background:linear-gradient(180deg,_#1f729d,_#0b2837)] border-darkslategray-100 border-[1px] border-solid box-border hidden max-w-full" />
       <div className="self-stretch flex flex-row items-start justify-end pt-0 pb-2 pl-10 pr-[38px] box-border max-w-full md:mb-[24px] mb-[0px]">
-        <div className="block  flex-1 flex flex-col items-start justify-start gap-[16px] max-w-full">
+        <div className="flex-1 flex flex-col items-start justify-start gap-[16px] max-w-full">
           <div className="self-stretch flex flex-row  py-0 items-center justify-center mq450:pl-5 mq450:pr-5 mq450:box-border">
             <div className="flex flex-row items-center justify-center gap-3 mq450:flex-wrap">
               <img

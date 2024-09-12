@@ -11,7 +11,7 @@ const Home = ({ className = "" }) => {
       className={`self-stretch overflow-x-hidden flex flex-row items-start justify-start max-w-full text-left text-lg text-gray-200 font-montserrat  h-[100vh] ${className}`}
     >
       
-      <div className="absolute inset-0 bg-[#0B2837] bg-opacity-[60%]"></div>
+      <div className="absolute inset-0 bg-[#0B2837] bg-opacity-[70%]"></div>
       <video autoPlay muted loop id="background-video">
         <source src="./bg-video.mp4" type="video/mp4" />
       </video>

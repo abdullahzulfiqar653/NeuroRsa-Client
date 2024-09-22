@@ -1,19 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
+import APIClient from "../services/api-client";
 
-import apiClient from "../services/api-client";
-import { getTokenIncludedConfig } from "../services/Authentication";
+const apiClient=new APIClient("/recipients/decrypt-message/");
 
 const useCreateDecryptedMessage = () =>
-  useMutation({
-    mutationFn: (data) => {
-      const body = JSON.stringify(data);
-      return apiClient
-        .post("/recipients/decrypt-message/", body, getTokenIncludedConfig())
-        .then((res) => res.data)
-        .catch((error) => {
-          throw error;
-        });
-    }
-  });
+  useMutation({ mutationFn: (data) => apiClient.createAll(data) });
 
 export default useCreateDecryptedMessage;

@@ -1,27 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
-import apiClient from "../services/api-client";
-import { getTokenIncludedConfig } from "../services/Authentication";
+import APIClient from "../services/api-client";
 
+const apiClient=new APIClient('/keypairs/');
 
-const useGetKeyPairs = (page, limit) => useQuery({
-    queryKey: ["keypairs", page, limit],
-    queryFn: async () => {
-        let url = '/keypairs/';
-        if (page && limit) {
-            url += `?page=${page}&page_size=${limit}`;
-        }
-        const response = await apiClient.get(url, getTokenIncludedConfig());
-        if (response && response.data) {
-            return response.data;
-        } else {
-            return [];
-        }
-    },
-    refetchOnWindowFocus: true, // Refetches data when the window regains focus
-    refetchOnMount: true,       // Refetches data whenever the component remounts
-    refetchOnReconnect: true,   // Refetches data if the connection is re-established
-    staleTime: 0,
-});
+const useGetKeyPairs = (page = 1, limit = 10) => {
+  
+    return useQuery({
+      queryKey: ["keypairs", page, limit],
+      queryFn: () => apiClient.getAll({ method: 'GET', queryParams: { page, page_size: limit }}), 
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+      staleTime: 0,
+    });
+  };
 
 
 

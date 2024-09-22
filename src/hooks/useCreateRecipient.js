@@ -1,17 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import apiClient from "../services/api-client";
-import { getTokenIncludedConfig } from "../services/Authentication";
+import APIClient from "../services/api-client";
+
+const apiClient=new APIClient("/recipients/");
 
 const useCreateRecipient = () =>
-  useMutation({
-    mutationFn: (data) => {
-      return apiClient
-        .post("/recipients/", JSON.stringify(data), getTokenIncludedConfig())
-        .then((res) => res.data)
-        .catch((error) => {
-          throw error;
-        });
-    },
-  });
+  useMutation({ mutationFn: (data) => apiClient.createAll(data) });
 
 export default useCreateRecipient; 

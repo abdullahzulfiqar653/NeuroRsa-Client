@@ -1,13 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import apiClient from "../services/api-client";
+import APIClient from "../services/api-client";
 
+const apiClient=new APIClient('/user/generate-pass-phrase/');
 
 const useGenerateSeeds = ()=> useQuery({
     queryKey:["password"],
-    queryFn: () => apiClient  
-    .post('/user/generate-pass-phrase/')
-    .then(res=> res.data)
-    .catch(er => er.error)
+    queryFn: () => apiClient.getAll({method:'POST'})
 
 })
 

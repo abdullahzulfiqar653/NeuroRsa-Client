@@ -65,6 +65,7 @@ const Header = () => {
         }
       },
     });
+    setFormValues({});
   };
 
   const handleBackupOfKeypair = () => {
@@ -453,7 +454,10 @@ const Header = () => {
                     Next
                   </Button>
                   <Button
-                    onClick={closeModal}
+                    onClick={()=>{
+                      closeModal();
+                      setFormValues({});
+                    }}
                     className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
                     Cancel
@@ -464,7 +468,10 @@ const Header = () => {
               {step === 2 && (
                 <>
                   <Button
-                    onClick={closeModal}
+                    onClick={()=>{
+                      closeModal();
+                      setFormValues({});
+                    }}
                     className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
                     Cancel
@@ -475,7 +482,10 @@ const Header = () => {
               {step === 3 && (
                 <>
                   <Button
-                    onClick={closeModal}
+                    onClick={()=>{
+                      closeModal();
+                      setFormValues({});
+                    }}
                     className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
                     Cancel

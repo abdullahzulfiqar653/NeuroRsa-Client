@@ -1,24 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import apiClient from "../services/api-client";
-import { getTokenIncludedConfig } from "../services/Authentication";
+import APIClient from "../services/api-client";
 
+const apiClient=new APIClient(`/keypairs`);
 
 const useDeleteKeyPairs = () =>{
-    const queryClient = useQueryClient();
-
+  const queryClient = useQueryClient(); 
   return useMutation({
-    mutationFn:(id) => {
-      return apiClient
-        .delete(`/keypairs/${id}`, getTokenIncludedConfig())
-        .then((res) => res.data)
-          .catch((error) => {
-            throw error;
-          });
-    },
-    onSuccess: () => {
-        // console.log(queryClient.invalidateQueries("keys"));
-      },
+    mutationFn:(id) => apiClient.delete(id),
+    onSuccess: () => { queryClient.invalidateQueries("keypairs"); },
   })};
-
 
 export default useDeleteKeyPairs;

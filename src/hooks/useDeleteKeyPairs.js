@@ -4,15 +4,10 @@ import APIClient from "../services/api-client";
 const apiClient=new APIClient(`/keypairs`);
 
 const useDeleteKeyPairs = () =>{
+  const queryClient = useQueryClient(); 
   return useMutation({
     mutationFn:(id) => apiClient.delete(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries("keypairs"); 
-       },
-    onError: (error) => {
-      console.error("Delete error:", error);
-    },
+    onSuccess: () => { queryClient.invalidateQueries("keypairs"); },
   })};
-
 
 export default useDeleteKeyPairs;

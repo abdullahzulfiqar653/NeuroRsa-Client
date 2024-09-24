@@ -6,7 +6,6 @@ const apiClient=new APIClient('/user/generate-pass-phrase/');
 const useGenerateSeeds = ()=> useQuery({
     queryKey:["password"],
     queryFn: () => apiClient.getAll({method:'POST'})
-
 })
 
 export default useGenerateSeeds;

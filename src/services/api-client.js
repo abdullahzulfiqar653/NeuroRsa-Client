@@ -13,34 +13,24 @@ class APIClient{
 
     createAll=(data)=>{
         const body = JSON.stringify(data)
-        console.log(data)
         return axiosInstance
         .post(this.endpoint, body , getTokenIncludedConfig())
         .then((res) => res.data)
-        .catch((error) => {
-            console.error("API error:", error.response ? error.response.data : error.message);
-            throw error;
-          });
+        .catch((error) => {throw error;});
     }
 
     createToken=(pass_phrase)=>{
         return axiosInstance
         .post("/user/generate-token/", { pass_phrase })
         .then((res) => res.data)
-        .catch((error) => {
-          console.error("API error:", error.response ? error.response.data : error.message);
-          throw error;
-        });
+        .catch((error) => {throw error;});
     };
 
     delete=(id)=>{
         return axiosInstance
         .delete(`${this.endpoint}/${id}`, getTokenIncludedConfig())
         .then((res) => res.data)
-        .catch((error) => {
-            console.error("API error:", error.response ? error.response.data : error.message);
-            throw error;
-          });
+        .catch((error) => {throw error;});
     }
 
     getAll = ({ method = 'GET', data = null, queryParams={}}) => {
@@ -55,18 +45,12 @@ class APIClient{
         return axiosInstance
         .post(url)
         .then(res=>res.data)
-        .catch((error) => {
-            console.error("API error:", error.response ? error.response.data : error.message);
-            throw error;
-          });
+        .catch((error) => {throw error;});
       } else {
         return axiosInstance
         .get(url, getTokenIncludedConfig())
         .then(res=>res.data)
-        .catch((error) => {
-            console.error("API error:", error.response ? error.response.data : error.message);
-            throw error;
-          });
+        .catch((error) => {throw error;});
       }
     }
 

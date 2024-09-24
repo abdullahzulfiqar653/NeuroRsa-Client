@@ -7,7 +7,6 @@ const useCreateToken = () =>
   useMutation({
     mutationFn: (pass_phrase) => apiClient.createToken(pass_phrase),
     onSuccess: (res) => localStorage.setItem("access_token", res.access),
-    onError: (error) => console.error("Error occurred:", error),
   });
 
 export default useCreateToken;

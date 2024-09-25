@@ -90,9 +90,10 @@ const MainHome = () => {
   };
 
   const filteredData = data?.results.filter((item) => {
-    const email = item.email?.toLowerCase() || "";
-    const name = item.name?.toLowerCase() || "";
-    return email.includes(search) || name.includes(search);
+    const lowercasedSearch = search.toLowerCase();
+    const email = item?.email?.toLowerCase() || "";
+    const name = item?.name?.toLowerCase() || "";
+    return email.includes(lowercasedSearch) || name.includes(lowercasedSearch);
   });
 
   return (

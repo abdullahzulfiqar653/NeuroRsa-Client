@@ -17,6 +17,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [formValues, setFormValues] = useState({});
   const [keypair, setKeypair] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpenFile, setIsDropdownOpenFile] = useState(false);
@@ -40,32 +41,55 @@ const Header = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "confirmPassphrase") {
-      if (formValues.passphrase !== formValues.confirmPassphrase) {
-        setErrors({ passphrase: "Passphrases do not match" });
-      } else {
-        setErrors({ passphrase: "" });
+    setLoading(false);
+    setFormValues((prevValues) => {
+      const updatedValues = { ...prevValues, [name]: value };
+      if (name === "confirmPassphrase") {
+        if (updatedValues.passphrase !== updatedValues.confirmPassphrase) {
+          setErrors({ passphrase: "Passphrases do not match" });
+        } else {
+          setErrors({ passphrase: "" });
+        }
       }
-    }
-    setFormValues({ ...formValues, [name]: value });
+      return updatedValues;
+    });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutate(formValues, {
-      onSuccess: (response) => {
-        setKeypair(response);
-        setStep(4);
-        toast.success(`Keypair Created successfully.`);
-      },
-      onError: (error) => {
-        setErrors(error.response.data);
-        for (const [attribute, errors] of Object.entries(error.response.data)) {
-          toast.error(errors[0]);
-        }
-      },
+    if (formValues?.passphrase && !formValues?.confirmPassphrase) {
+      toast.error("Please confirm your passphrase.");
+      return;
+    }
+
+    const filteredFormValues = { ...formValues };
+    Object.keys(filteredFormValues).forEach((key) => {
+      if (filteredFormValues[key] === "") {
+        delete filteredFormValues[key];
+      }
     });
-    setFormValues({});
+    setLoading(true);
+    if (!errors.passphrase) {
+      mutate(filteredFormValues, {
+        onSuccess: (response) => {
+          setKeypair(response);
+          setStep(4);
+          setLoading(false);
+          toast.success(`Keypair Created successfully.`);
+        },
+        onError: (error) => {
+          setErrors(error.response.data);
+          for (const [attribute, errors] of Object.entries(
+            error.response.data
+          )) {
+            toast.error(errors[0]);
+          }
+        },
+      });
+      setFormValues({});
+    } else {
+      toast.error("Passphrases do not match! Please correct it.");
+    }
   };
 
   const handleBackupOfKeypair = () => {
@@ -111,7 +135,10 @@ const Header = () => {
             fill="white"
           />
         </svg>
-        <h1 onClick={() => navigate("/")} className="ml-2 text-[22px] leading-[30.62px] cursor-pointer">
+        <h1
+          onClick={() => navigate("/")}
+          className="ml-2 text-[22px] leading-[30.62px] cursor-pointer"
+        >
           neuro.RSA
         </h1>
       </div>
@@ -238,7 +265,15 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <Modal show={isOpen} onClose={closeModal} className="bg-black">
+      <Modal
+        show={isOpen}
+        onClose={() => {
+          closeModal();
+          setFormValues({});
+          setErrors({});
+        }}
+        className="bg-black"
+      >
         <Modal.Header className="justify-center items-center flex bg-[#0E2E3F] border-none modal-h3">
           <div className="text-white">
             {" "}
@@ -454,7 +489,7 @@ const Header = () => {
                     Next
                   </Button>
                   <Button
-                    onClick={()=>{
+                    onClick={() => {
                       closeModal();
                       setFormValues({});
                     }}
@@ -468,7 +503,7 @@ const Header = () => {
               {step === 2 && (
                 <>
                   <Button
-                    onClick={()=>{
+                    onClick={() => {
                       closeModal();
                       setFormValues({});
                     }}
@@ -482,9 +517,11 @@ const Header = () => {
               {step === 3 && (
                 <>
                   <Button
-                    onClick={()=>{
+                    onClick={() => {
                       closeModal();
                       setFormValues({});
+                      setErrors({});
+                      setLoading(false);
                     }}
                     className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
@@ -492,7 +529,8 @@ const Header = () => {
                   </Button>
                   <Button
                     onClick={handleSubmit}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
+                    disabled={loading}
+                    className="bg-[#13425c] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
                     OK
                   </Button>

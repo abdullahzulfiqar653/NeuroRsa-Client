@@ -45,11 +45,9 @@ const Recipients = () => {
         });
       },
       onError: (error) => {
-        toast.error(
-          error.response.data?.recipient_ids
-            ? error.response.data?.recipient_ids[0]
-            : "Message Required."
-        );
+        Object.values(error.response.data).forEach((errorArray) => {
+          toast.error(errorArray[0]);
+        });
       },
     });
   };
@@ -64,9 +62,9 @@ const Recipients = () => {
         toast.success(`Message Decrypted successfully.`);
       },
       onError: (error) => {
-        for (const [attribute, errors] of Object.entries(error.response.data)) {
-          toast.error(errors[0]);
-        }
+        Object.values(error.response.data).forEach((errorArray) => {
+          toast.error(errorArray[0]);
+        });
       },
     });
   };

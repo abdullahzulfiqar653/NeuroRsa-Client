@@ -45,7 +45,7 @@ const Header = () => {
     setFormValues((prevValues) => {
       const updatedValues = { ...prevValues, [name]: value };
       if (name === "confirmPassphrase") {
-        if (updatedValues.passphrase !== updatedValues.confirmPassphrase) {
+        if ((updatedValues.passphrase !== updatedValues.confirmPassphrase) && (updatedValues.passphrase && updatedValues.confirmPassphrase)) {
           setErrors({ passphrase: "Passphrases do not match" });
         } else {
           setErrors({ passphrase: "" });
@@ -153,13 +153,18 @@ const Header = () => {
           </Link>
 
           {isDropdownOpenFile && (
-            <div className="origin-top-right top-10  absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-[#1c3d4f]  ring-1 ring-[#345360] ring-opacity-5 focus:outline-none z-20">
+           <div className="origin-top-right top-9 absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-[#1c3d4f] ring-1 ring-[#345360] ring-opacity-5 focus:outline-none z-20 
+           transition-opacity duration-300 hover:opacity-100 hover:delay-300">
               <div className="py-4">
                 {isAuthenticated && (
                   <div className="relative group hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
                     <button
                       className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
-                      onClick={openModal}
+                      onClick={() => {
+                        openModal();
+                        setFormValues({});
+                        setErrors({});
+                      }}
                     >
                       New Key Pair
                     </button>
@@ -265,15 +270,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <Modal
-        show={isOpen}
-        onClose={() => {
-          closeModal();
-          setFormValues({});
-          setErrors({});
-        }}
-        className="bg-black"
-      >
+      <Modal show={isOpen} onClose={closeModal} className="bg-black">
         <Modal.Header className="justify-center items-center flex bg-[#0E2E3F] border-none modal-h3">
           <div className="text-white">
             {" "}
@@ -489,10 +486,7 @@ const Header = () => {
                     Next
                   </Button>
                   <Button
-                    onClick={() => {
-                      closeModal();
-                      setFormValues({});
-                    }}
+                    onClick={closeModal}
                     className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
                     Cancel
@@ -503,10 +497,7 @@ const Header = () => {
               {step === 2 && (
                 <>
                   <Button
-                    onClick={() => {
-                      closeModal();
-                      setFormValues({});
-                    }}
+                    onClick={closeModal}
                     className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
                     Cancel
@@ -519,8 +510,6 @@ const Header = () => {
                   <Button
                     onClick={() => {
                       closeModal();
-                      setFormValues({});
-                      setErrors({});
                       setLoading(false);
                     }}
                     className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"

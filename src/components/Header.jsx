@@ -43,10 +43,16 @@ const Header = () => {
     const { name, value } = e.target;
     setLoading(false);
     setFormValues((prevValues) => {
-      const updatedValues = { ...prevValues, [name]: value };
-      if (name === "confirmPassphrase") {
-        if ((updatedValues.passphrase !== updatedValues.confirmPassphrase) && (updatedValues.passphrase && updatedValues.confirmPassphrase)) {
-          setErrors({ passphrase: "Passphrases do not match" });
+      let updatedValues = { ...prevValues, [name]: value };
+      if (value === "") {
+          delete updatedValues[name];
+      }
+      if (name === "confirmPassphrase" || name === "passphrase") {
+        const { passphrase, confirmPassphrase } = updatedValues;
+        if (!passphrase || !confirmPassphrase) {
+          setErrors({ passphrase: "" }); 
+        } else if (passphrase !== confirmPassphrase) {
+          setErrors({ passphrase: "Passphrases do not match" }); 
         } else {
           setErrors({ passphrase: "" });
         }
@@ -62,15 +68,9 @@ const Header = () => {
       return;
     }
 
-    const filteredFormValues = { ...formValues };
-    Object.keys(filteredFormValues).forEach((key) => {
-      if (filteredFormValues[key] === "") {
-        delete filteredFormValues[key];
-      }
-    });
     setLoading(true);
     if (!errors.passphrase) {
-      mutate(filteredFormValues, {
+      mutate(formValues, {
         onSuccess: (response) => {
           setKeypair(response);
           setStep(4);
@@ -272,7 +272,7 @@ const Header = () => {
       </div>
       <Modal show={isOpen} onClose={closeModal} className="bg-black">
         <Modal.Header className="justify-center items-center flex bg-[#0E2E3F] border-none modal-h3">
-          <div className="text-white">
+          <div className="text-white text-[16px] md:text-[24px]">
             {" "}
             Key Pair Creation Wizard - neuro.RSA{" "}
           </div>
@@ -282,10 +282,10 @@ const Header = () => {
             <Modal.Body className="bg-[#1B3D4F]">
               {step === 1 && (
                 <div>
-                  <h3 className="text-white text-[24px] font-normal leading-[33px]">
+                  <h3 className="text-white text-[16px] md:text-[24px] font-normal leading-[33px]">
                     Enter Details
                   </h3>
-                  <p className="text-[#CCCCCC] text-[16px] font-normal leading-[19px] mt-2">
+                  <p className="text-[#CCCCCC] text-[12px] md:text-[16px] font-normal leading-[19px] mt-2">
                     Please enter your personal details below. If you want more
                     control over the parameters, click on the advanced Settings
                     button.
@@ -333,10 +333,10 @@ const Header = () => {
 
               {step === 2 && (
                 <div>
-                  <h3 className="text-white text-[24px] font-normal leading-[33px]">
+                  <h3 className="text-white text-[16px] md:text-[24px] font-normal leading-[33px]">
                     Creating Key Pair...
                   </h3>
-                  <p className="text-[#CCCCCC] text-[16px] font-normal leading-[19px] mt-2">
+                  <p className="text-[#CCCCCC]  text-[12px] md:text-[16px] font-normal leading-[19px] mt-2">
                     The process of creating a key requires large amounts of
                     random numbers. This may require several minutes...
                   </p>
@@ -361,10 +361,10 @@ const Header = () => {
                       className="w-[35px] h-[24px] object-contain object-top mt-[10px]"
                     />
                     <div className="">
-                      <h3 className="text-white text-[24px] font-normal leading-[33px]">
+                      <h3 className="text-white text-[16px] md:text-[24px] font-normal leading-[33px]">
                         Creating Key Pair...
                       </h3>
-                      <p className="text-[#CCCCCC] text-[16px] font-normal leading-[19px] mt-2">
+                      <p className="text-[#CCCCCC] text-[13px] md:text-[16px] font-normal leading-[19px] mt-2">
                         Please enter the passphrase to protect your new key.
                       </p>
                     </div>
@@ -423,10 +423,10 @@ const Header = () => {
                       className="w-[35px] h-[24px] object-contain object-top mt-[10px]"
                     />
                     <div className="">
-                      <h3 className="text-white text-[24px] font-normal leading-[33px]">
+                      <h3 className="text-white text-[16px] md:text-[24px] font-normal leading-[33px]">
                         Key Pair Successfully Created
                       </h3>
-                      <p className="text-[#CCCCCC] text-[16px] font-normal leading-[19px] mt-2">
+                      <p className="text-[#CCCCCC] text-[12px] md:text-[16px] font-normal leading-[19px] mt-2">
                         You new key pair was created successfully. Please find
                         details on this result and some suggested next steps
                         below.
@@ -437,14 +437,14 @@ const Header = () => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="message"
-                      className="text-white text-[24px] font-normal leading-[33px] mb-[6px] flex w-full"
+                      className="text-white text-[16px] md:text-[24px] font-normal leading-[33px] mb-[6px] flex w-full"
                     >
                       Result
                     </label>
                     <Field
                       as="textarea"
                       name="message"
-                      className="!bg-[#0E2E3F] !rounded-[5px]  text-white input-field"
+                      className="!bg-[#0E2E3F] !rounded-[5px] text-[12px] md:text-[16px] text-white input-field"
                       rows="6"
                       col="40"
                       disabled
@@ -458,7 +458,7 @@ const Header = () => {
                     />
                     <label
                       htmlFor="NextSteps"
-                      className="text-white text-[24px] font-normal leading-[33px] mt-[32px] mb-[6px] flex w-full"
+                      className="text-white text-[16px] md:text-[24px] font-normal leading-[20px] md:leading-[33px] mt-[5px] md:mt-[32px] mb-[6px] flex w-full"
                     >
                       Next Steps
                     </label>
@@ -466,7 +466,7 @@ const Header = () => {
                       type="button"
                       id="passphrase"
                       name="passphrase"
-                      className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] text-white input-field input-field"
+                      className="!bg-[#0E2E3F] !rounded-[5px] text-[12px] md:text-[16px] border-[#0E2E3F] text-white input-field input-field"
                       onClick={handleBackupOfKeypair}
                     >
                       Make a Backup Of Your Key Pair...

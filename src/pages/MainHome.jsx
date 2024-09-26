@@ -89,11 +89,11 @@ const MainHome = () => {
     setSearch(event.target.value);
   };
 
-  const filteredData = data?.results.filter((item) => {
-    const lowercasedSearch = search.toLowerCase();
-    const email = item?.email?.toLowerCase() || "";
-    const name = item?.name?.toLowerCase() || "";
-    return email.includes(lowercasedSearch) || name.includes(lowercasedSearch);
+  const filteredData = data?.results.filter(({ email = "", name = "" }) => {
+    return (
+      email?.toLowerCase().includes(search.toLowerCase()) ||
+      name?.toLowerCase().includes(search.toLowerCase())
+    );
   });
 
   return (
@@ -455,13 +455,13 @@ const MainHome = () => {
             alt="alert-icon"
             className="mx-auto mb-[30px]"
           />
-          <p className="text-white text-center text-[22px] leading-[30px]">
+          <p className="text-white text-center text-[16px] md:text-[22px] leading-[30px]">
             Please make sure no body around you, keep your private key save and
             confidential.
           </p>
           <button
             onClick={handleShowPrivateKey}
-            className="bg-[#57CBCC] rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-white mt-[37px] mx-auto"
+            className="bg-[#57CBCC] rounded-[4px] text-[12px] md:text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-white mt-[37px] mx-auto"
           >
             Show me Private Key
           </button>
@@ -477,7 +477,7 @@ const MainHome = () => {
             alt="alert-icon"
             className="mx-auto mb-[30px]"
           />
-          <p className="text-white text-center text-[22px] leading-[30px] w-full max-w-[499px] mx-auto">
+          <p className="text-white text-center text-[16px] md:text-[22px] leading-[30px] w-full max-w-[499px] mx-auto">
             Are you sure you want to delete this key passcode?
           </p>
           <div className="flex gap-[15px] mt-[37px] justify-center max-w-[328px] w-full mx-auto">
@@ -502,8 +502,18 @@ const MainHome = () => {
 
 export default MainHome;
 
-const TickIcon = () => <img src="/tick-icon.svg" alt="tick-icon" className="w-[17px] h-[17px] md:w-[24px] md:h-[24px]"/>;
+const TickIcon = () => (
+  <img
+    src="/tick-icon.svg"
+    alt="tick-icon"
+    className="w-[17px] h-[17px] md:w-[24px] md:h-[24px]"
+  />
+);
 
 const CopyIcon = () => (
-  <img src="/copy-icon.svg" alt="copy-icon" className="cursor-pointer w-[15px] h-[15px] md:w-[20px] md:h-[22px]" />
+  <img
+    src="/copy-icon.svg"
+    alt="copy-icon"
+    className="cursor-pointer w-[15px] h-[15px] md:w-[20px] md:h-[22px]"
+  />
 );

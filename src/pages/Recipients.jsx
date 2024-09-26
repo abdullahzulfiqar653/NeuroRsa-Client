@@ -349,7 +349,7 @@ const Recipients = () => {
                                 <div className="w-[59.1px] h-[40px] rounded-[11.44px] bg-[#0F2E3F] flex items-center justify-center  pt-[14.3px] px-[15px] pb-[14.2px] box-border z-[1]">
                                   <div className="flex items-center justify-center relative z-[2] text-[#175C83]">{`K`}</div>
                                 </div>
-                                <p className=" text-[19.06px] text-white font-normal leading-[23px] break-all">
+                                <p className=" text-[13.69px] text-white font-normal leading-[23px] break-all">
                                   {item.name}
                                 </p>
                               </div>

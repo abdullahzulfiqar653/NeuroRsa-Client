@@ -108,18 +108,19 @@ const GroupComponent = ({ seedsData = "" }) => {
             </span>
           </div>
         </div>
-        <p className="text-[8px] font-normal leading-[27px] my-[0px]">
+        <p className="text-[12px] font-normal leading-[27px] my-[0px]">
           Please write these down incase you lose your seed
         </p>
       </div>
       <div className="w-full max-w-[223px] mx-auto mt-3 md:mt-[68px] flex flex-col items-center justify-center pt-0 px-0 text-center text-base font-montserrat">
-        <div className="w-full flex flex-col items-start justify-start gap-[10.8px] mb-[10px]">
+        <div className="w-full flex flex-col items-start justify-start gap-[10.8px] mb-[1px]">
           <div
             onClick={handleLogin}
-            className="self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-1 md:pt-3.5 pb-1 md:pb-[13.9px] md:pl-[50px] md:pr-[49px] shrink-0 z-[1] hover:cursor-pointer"
+            className="self-stretch h-[25px] rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-1 pb-7 md:pb-[2rem] md:pl-[50px] md:pr-[49px] shrink-0 z-[1] hover:cursor-pointer"
           >
-            <div className="h-[47.2px] w-full relative rounded-[4.38px] bg-mediumturquoise hidden" />
+            {/* <div className="h-[47.2px] w-full relative rounded-[4.38px] bg-mediumturquoise hidden" /> */}
             <div className="flex-1 relative z-[1]">Next</div>
+         
           </div>
         </div>
       </div>

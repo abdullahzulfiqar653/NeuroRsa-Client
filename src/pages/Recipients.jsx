@@ -81,9 +81,9 @@ const Recipients = () => {
         toast.success(`Message Decrypted successfully.`);
       },
       onError: (error) => {
-        for (const [attribute, error] of Object.entries(error.response.data)) {
-          toast.error(error[0]);
-        }
+        Object.values(error.response.data).forEach((errorArray) => {
+          toast.error(errorArray[0]);
+        });
       },
     });
   };

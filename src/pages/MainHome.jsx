@@ -37,13 +37,13 @@ const MainHome = () => {
   const handleCopyPublic = (id) => {
     setCopiedPublic((prevState) => ({
       ...prevState,
-      [id]: true, 
+      [id]: true,
     }));
   };
   const handleCopyPrivate = (id) => {
     setCopiedPrivate((prevState) => ({
       ...prevState,
-      [id]: true, 
+      [id]: true,
     }));
   };
 
@@ -89,15 +89,16 @@ const MainHome = () => {
     setSearch(event.target.value);
   };
 
-  const filteredData = data?.results.filter((item) => {
-    const email = item.email?.toLowerCase() || "";
-    const name = item.name?.toLowerCase() || "";
-    return email.includes(search) || name.includes(search);
+  const filteredData = data?.results.filter(({ email = "", name = "" }) => {
+    return (
+      email?.toLowerCase().includes(search.toLowerCase()) ||
+      name?.toLowerCase().includes(search.toLowerCase())
+    );
   });
 
   return (
     <div>
-      <div className={`bg-[#0f2e3f] h-[100vh]`}>
+      <div className={`bg-[#0f2e3f] lg:h-[100vh]`}>
         <div className="bg-[#0B2837] w-full items-center">
           <Header />
         </div>
@@ -141,7 +142,7 @@ const MainHome = () => {
               )}
             </Formik>
           </div>
-          <div className="border-[1px] border-[#1B3D4F] p-[24px] h-[450px] overflow-y-scroll">
+          <div className="border-[1px] border-[#1B3D4F] p-[24px] h-[450px] overflow-y-auto">
             <Table className="bg-[#1c3d4f] rounded-t-[12px]">
               <Table.Head className="bg-[#0f2e3f]">
                 <Table.HeadCell className="bg-[#1c3d4f] text-white border-r-[5px] border-[#0f2e3f] rounded-t-[12px]">
@@ -178,7 +179,11 @@ const MainHome = () => {
                           onCopy={() => handleCopyPublic(item.id)}
                         >
                           <div>
-                            {copiedPublic[item.id] ? <TickIcon /> : <CopyIcon />}
+                            {copiedPublic[item.id] ? (
+                              <TickIcon />
+                            ) : (
+                              <CopyIcon />
+                            )}
                           </div>
                         </CopyToClipboard>
                       </div>
@@ -199,7 +204,11 @@ const MainHome = () => {
                             onCopy={() => handleCopyPrivate(item.id)}
                           >
                             <div>
-                              {copiedPrivate[item.id] ? <TickIcon /> : <CopyIcon />}
+                              {copiedPrivate[item.id] ? (
+                                <TickIcon />
+                              ) : (
+                                <CopyIcon />
+                              )}
                             </div>
                           </CopyToClipboard>
                         </div>
@@ -220,7 +229,7 @@ const MainHome = () => {
               </Table.Body>
             </Table>
           </div>
-          <div className="flex justify-between items-center space-x-4 mt-[64px]">
+          <div className="flex justify-between items-center space-x-4 mt-[64px] mb-[64px]">
             <div className="flex items-center space-x-2">
               <button
                 disabled={data?.previous === null}
@@ -315,7 +324,7 @@ const MainHome = () => {
               Key Types
             </div>
 
-            <div className="flex flex-col  w-full h-[530px] overflow-y-scroll">
+            <div className="flex flex-col  w-full h-[530px] overflow-y-auto">
               {filteredData?.map((item, index) => (
                 <div
                   key={index}
@@ -323,7 +332,7 @@ const MainHome = () => {
                 >
                   <div className="flex justify-between border-b-[#0F2E3F] border-b-[1px] pb-[9px]">
                     <p className="text-white text-[14px] font-normal leading-[14px]">
-                    {item.name}
+                      {item.name}
                     </p>
                     <img
                       src="/delete-icon.svg"
@@ -348,11 +357,13 @@ const MainHome = () => {
                           text={item.public_key}
                           onCopy={() => handleCopyPublic(item.id)}
                         >
-                          <img
-                            src="/copy-icon.svg"
-                            alt="copy-icon"
-                            className="key-icons"
-                          />
+                          <div>
+                            {copiedPublic[item.id] ? (
+                              <TickIcon />
+                            ) : (
+                              <CopyIcon />
+                            )}
+                          </div>
                         </CopyToClipboard>
                       </div>
                     </div>
@@ -371,11 +382,13 @@ const MainHome = () => {
                           text={item.private_key}
                           onCopy={() => handleCopyPrivate(item.id)}
                         >
-                          <img
-                            src="/copy-icon.svg"
-                            alt="copy-icon"
-                            className="key-icons"
-                          />
+                          <div>
+                            {copiedPrivate[item.id] ? (
+                              <TickIcon />
+                            ) : (
+                              <CopyIcon />
+                            )}
+                          </div>
                         </CopyToClipboard>
                       </div>
                     </div>
@@ -423,7 +436,7 @@ const MainHome = () => {
                 onChange={(e) => setItemPerPage(e.target.value)}
                 id="per-page"
                 className="!px-2 py-1 text-[7.6px] bg-[#0B2837] text-white rounded-md hover:bg-gray-600 border-none focus:ring focus:ring-teal-500 input-field"
-              > 
+              >
                 <option value={10}>10 per page</option>
                 <option value={20}>20 per page</option>
                 <option value={50}>50 per page</option>
@@ -442,13 +455,13 @@ const MainHome = () => {
             alt="alert-icon"
             className="mx-auto mb-[30px]"
           />
-          <p className="text-white text-center text-[22px] leading-[30px]">
+          <p className="text-white text-center text-[16px] md:text-[22px] leading-[30px]">
             Please make sure no body around you, keep your private key save and
             confidential.
           </p>
           <button
             onClick={handleShowPrivateKey}
-            className="bg-[#57CBCC] rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-white mt-[37px] mx-auto"
+            className="bg-[#57CBCC] rounded-[4px] text-[12px] md:text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-white mt-[37px] mx-auto"
           >
             Show me Private Key
           </button>
@@ -464,7 +477,7 @@ const MainHome = () => {
             alt="alert-icon"
             className="mx-auto mb-[30px]"
           />
-          <p className="text-white text-center text-[22px] leading-[30px] w-full max-w-[499px] mx-auto">
+          <p className="text-white text-center text-[16px] md:text-[22px] leading-[30px] w-full max-w-[499px] mx-auto">
             Are you sure you want to delete this key passcode?
           </p>
           <div className="flex gap-[15px] mt-[37px] justify-center max-w-[328px] w-full mx-auto">
@@ -489,8 +502,18 @@ const MainHome = () => {
 
 export default MainHome;
 
-const TickIcon = () => <img src="/tick-icon.svg" alt="tick-icon" />;
+const TickIcon = () => (
+  <img
+    src="/tick-icon.svg"
+    alt="tick-icon"
+    className="w-[17px] h-[17px] md:w-[24px] md:h-[24px]"
+  />
+);
 
 const CopyIcon = () => (
-  <img src="/copy-icon.svg" alt="copy-icon" className="cursor-pointer" />
+  <img
+    src="/copy-icon.svg"
+    alt="copy-icon"
+    className="cursor-pointer w-[15px] h-[15px] md:w-[20px] md:h-[22px]"
+  />
 );

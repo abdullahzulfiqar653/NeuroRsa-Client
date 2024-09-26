@@ -17,6 +17,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [formValues, setFormValues] = useState({});
   const [keypair, setKeypair] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpenFile, setIsDropdownOpenFile] = useState(false);
@@ -40,31 +41,55 @@ const Header = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "confirmPassphrase") {
-      if (formValues.passphrase !== formValues.confirmPassphrase) {
-        setErrors({ passphrase: "Passphrases do not match" });
-      } else {
-        setErrors({ passphrase: "" });
+    setLoading(false);
+    setFormValues((prevValues) => {
+      let updatedValues = { ...prevValues, [name]: value };
+      if (value === "") {
+          delete updatedValues[name];
       }
-    }
-    setFormValues({ ...formValues, [name]: value });
+      if (name === "confirmPassphrase" || name === "passphrase") {
+        const { passphrase, confirmPassphrase } = updatedValues;
+        if (!passphrase || !confirmPassphrase) {
+          setErrors({ passphrase: "" }); 
+        } else if (passphrase !== confirmPassphrase) {
+          setErrors({ passphrase: "Passphrases do not match" }); 
+        } else {
+          setErrors({ passphrase: "" });
+        }
+      }
+      return updatedValues;
+    });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutate(formValues, {
-      onSuccess: (response) => {
-        setKeypair(response);
-        setStep(4);
-        toast.success(`Keypair Created successfully.`);
-      },
-      onError: (error) => {
-        setErrors(error.response.data);
-        for (const [attribute, errors] of Object.entries(error.response.data)) {
-          toast.error(errors[0]);
-        }
-      },
-    });
+    if (formValues?.passphrase && !formValues?.confirmPassphrase) {
+      toast.error("Please confirm your passphrase.");
+      return;
+    }
+
+    setLoading(true);
+    if (!errors.passphrase) {
+      mutate(formValues, {
+        onSuccess: (response) => {
+          setKeypair(response);
+          setStep(4);
+          setLoading(false);
+          toast.success(`Keypair Created successfully.`);
+        },
+        onError: (error) => {
+          setErrors(error.response.data);
+          for (const [attribute, errors] of Object.entries(
+            error.response.data
+          )) {
+            toast.error(errors[0]);
+          }
+        },
+      });
+      setFormValues({});
+    } else {
+      toast.error("Passphrases do not match! Please correct it.");
+    }
   };
 
   const handleBackupOfKeypair = () => {
@@ -110,7 +135,10 @@ const Header = () => {
             fill="white"
           />
         </svg>
-        <h1 onClick={() => navigate("/")} className="ml-2 text-[22px] leading-[30.62px] cursor-pointer">
+        <h1
+          onClick={() => navigate("/")}
+          className="ml-2 text-[22px] leading-[30.62px] cursor-pointer"
+        >
           neuro.RSA
         </h1>
       </div>
@@ -125,13 +153,18 @@ const Header = () => {
           </Link>
 
           {isDropdownOpenFile && (
-            <div className="origin-top-right top-10  absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-[#1c3d4f]  ring-1 ring-[#345360] ring-opacity-5 focus:outline-none z-20">
+           <div className="origin-top-right top-9 absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-[#1c3d4f] ring-1 ring-[#345360] ring-opacity-5 focus:outline-none z-20 
+           transition-opacity duration-300 hover:opacity-100 hover:delay-300">
               <div className="py-4">
                 {isAuthenticated && (
                   <div className="relative group hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
                     <button
                       className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
-                      onClick={openModal}
+                      onClick={() => {
+                        openModal();
+                        setFormValues({});
+                        setErrors({});
+                      }}
                     >
                       New Key Pair
                     </button>
@@ -239,7 +272,7 @@ const Header = () => {
       </div>
       <Modal show={isOpen} onClose={closeModal} className="bg-black">
         <Modal.Header className="justify-center items-center flex bg-[#0E2E3F] border-none modal-h3">
-          <div className="text-white">
+          <div className="text-white text-[16px] md:text-[24px]">
             {" "}
             Key Pair Creation Wizard - neuro.RSA{" "}
           </div>
@@ -249,10 +282,10 @@ const Header = () => {
             <Modal.Body className="bg-[#1B3D4F]">
               {step === 1 && (
                 <div>
-                  <h3 className="text-white text-[24px] font-normal leading-[33px]">
+                  <h3 className="text-white text-[16px] md:text-[24px] font-normal leading-[33px]">
                     Enter Details
                   </h3>
-                  <p className="text-[#CCCCCC] text-[16px] font-normal leading-[19px] mt-2">
+                  <p className="text-[#CCCCCC] text-[12px] md:text-[16px] font-normal leading-[19px] mt-2">
                     Please enter your personal details below. If you want more
                     control over the parameters, click on the advanced Settings
                     button.
@@ -300,10 +333,10 @@ const Header = () => {
 
               {step === 2 && (
                 <div>
-                  <h3 className="text-white text-[24px] font-normal leading-[33px]">
+                  <h3 className="text-white text-[16px] md:text-[24px] font-normal leading-[33px]">
                     Creating Key Pair...
                   </h3>
-                  <p className="text-[#CCCCCC] text-[16px] font-normal leading-[19px] mt-2">
+                  <p className="text-[#CCCCCC]  text-[12px] md:text-[16px] font-normal leading-[19px] mt-2">
                     The process of creating a key requires large amounts of
                     random numbers. This may require several minutes...
                   </p>
@@ -328,10 +361,10 @@ const Header = () => {
                       className="w-[35px] h-[24px] object-contain object-top mt-[10px]"
                     />
                     <div className="">
-                      <h3 className="text-white text-[24px] font-normal leading-[33px]">
+                      <h3 className="text-white text-[16px] md:text-[24px] font-normal leading-[33px]">
                         Creating Key Pair...
                       </h3>
-                      <p className="text-[#CCCCCC] text-[16px] font-normal leading-[19px] mt-2">
+                      <p className="text-[#CCCCCC] text-[13px] md:text-[16px] font-normal leading-[19px] mt-2">
                         Please enter the passphrase to protect your new key.
                       </p>
                     </div>
@@ -390,10 +423,10 @@ const Header = () => {
                       className="w-[35px] h-[24px] object-contain object-top mt-[10px]"
                     />
                     <div className="">
-                      <h3 className="text-white text-[24px] font-normal leading-[33px]">
+                      <h3 className="text-white text-[16px] md:text-[24px] font-normal leading-[33px]">
                         Key Pair Successfully Created
                       </h3>
-                      <p className="text-[#CCCCCC] text-[16px] font-normal leading-[19px] mt-2">
+                      <p className="text-[#CCCCCC] text-[12px] md:text-[16px] font-normal leading-[19px] mt-2">
                         You new key pair was created successfully. Please find
                         details on this result and some suggested next steps
                         below.
@@ -404,14 +437,14 @@ const Header = () => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="message"
-                      className="text-white text-[24px] font-normal leading-[33px] mb-[6px] flex w-full"
+                      className="text-white text-[16px] md:text-[24px] font-normal leading-[33px] mb-[6px] flex w-full"
                     >
                       Result
                     </label>
                     <Field
                       as="textarea"
                       name="message"
-                      className="!bg-[#0E2E3F] !rounded-[5px]  text-white input-field"
+                      className="!bg-[#0E2E3F] !rounded-[5px] text-[12px] md:text-[16px] text-white input-field"
                       rows="6"
                       col="40"
                       disabled
@@ -425,7 +458,7 @@ const Header = () => {
                     />
                     <label
                       htmlFor="NextSteps"
-                      className="text-white text-[24px] font-normal leading-[33px] mt-[32px] mb-[6px] flex w-full"
+                      className="text-white text-[16px] md:text-[24px] font-normal leading-[20px] md:leading-[33px] mt-[5px] md:mt-[32px] mb-[6px] flex w-full"
                     >
                       Next Steps
                     </label>
@@ -433,7 +466,7 @@ const Header = () => {
                       type="button"
                       id="passphrase"
                       name="passphrase"
-                      className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] text-white input-field input-field"
+                      className="!bg-[#0E2E3F] !rounded-[5px] text-[12px] md:text-[16px] border-[#0E2E3F] text-white input-field input-field"
                       onClick={handleBackupOfKeypair}
                     >
                       Make a Backup Of Your Key Pair...
@@ -475,14 +508,18 @@ const Header = () => {
               {step === 3 && (
                 <>
                   <Button
-                    onClick={closeModal}
+                    onClick={() => {
+                      closeModal();
+                      setLoading(false);
+                    }}
                     className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
                     Cancel
                   </Button>
                   <Button
                     onClick={handleSubmit}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
+                    disabled={loading}
+                    className="bg-[#13425c] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                   >
                     OK
                   </Button>

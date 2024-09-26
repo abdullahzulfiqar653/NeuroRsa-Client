@@ -19,8 +19,10 @@ const Recipients = () => {
   const { mutate: mutateCreateEncryptedMessage } = useCreateEncryptedMessage();
   const { mutate: mutateCreateDecryptedMessage } = useCreateDecryptedMessage();
 
+  const [formValues, setFormValues] = useState({ name: "", public_key: "" });
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenTwo, setIsOpenTwo] = useState(false);
+  const [error, setErrors] = useState(false);
   const [decryptMessageData, setDecryptMessageData] = useState({
     keypair_id: "",
     message: "",
@@ -36,6 +38,20 @@ const Recipients = () => {
     refetchRecipients();
   }, [location, refetchKeypairs, refetchRecipients, isOpen]);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: value ? "" : "Required Field",
+    }));
+  };
+
   const handleEncryption = () => {
     mutateCreateEncryptedMessage(encryptMessageData, {
       onSuccess: (res) => {
@@ -45,15 +61,12 @@ const Recipients = () => {
         });
       },
       onError: (error) => {
-        toast.error(
-          error.response.data?.recipient_ids
-            ? error.response.data?.recipient_ids[0]
-            : "Message Required."
-        );
+        Object.values(error.response.data).forEach((errorArray) => {
+          toast.error(errorArray[0]);
+        });
       },
     });
   };
-
   const handleDecryption = () => {
     mutateCreateDecryptedMessage(decryptMessageData, {
       onSuccess: (res) => {
@@ -61,28 +74,32 @@ const Recipients = () => {
           ...prevState,
           message: res.message,
         }));
+        setencryptMessageData((prevState) => ({
+          ...prevState,
+          message: res.message,
+        }));
         toast.success(`Message Decrypted successfully.`);
       },
       onError: (error) => {
-        for (const [attribute, errors] of Object.entries(error.response.data)) {
-          toast.error(errors[0]);
-        }
+        Object.values(error.response.data).forEach((errorArray) => {
+          toast.error(errorArray[0]);
+        });
       },
     });
   };
 
-  const handleSubmit = (values) => {
-    mutateCreaterecipient(values, {
+  const handleSubmit = () => {
+    mutateCreaterecipient(formValues, {
       onSuccess: () => {
         toast.success(`Recipient Created successfully.`);
         setIsOpen(false);
+        setFormValues({ name: "", public_key: "" });
       },
       onError: (error) => {
-        toast.error(
-          error.response.data?.error
-            ? error.response.data?.error[0]
-            : "Something bad happend while creating recipient please try again."
-        );
+        setErrors(error.response.data);
+        for (const [attribute, error] of Object.entries(error.response.data)) {
+          toast.error(error[0]);
+        }
       },
     });
   };
@@ -141,15 +158,15 @@ const Recipients = () => {
                 </a>
               </div>
               <div
-                className="w-full max-w-[177px] flex flex-row items-start justify-start gap-2.5 text-center text-xs cursor-pointer"
+                className="w-full max-w-[177px] flex flex-row items-start justify-start gap-3 text-center text-xs cursor-pointer"
                 onClick={openModal}
               >
                 <div className="flex flex-col items-start justify-start pt-[11px] px-0 pb-0">
                   <div className="relative z-[1]">Create New Recipient</div>
                 </div>
                 <div className=" relative text-5xl">
-                  <div className="h-9 w-9 rounded-[50%] border-white border-[1px] border-solid box-border flex justify-center items-center">
-                    <div className="text-[24px]">+</div>
+                  <div className="h-9 w-9 rounded-[50%] pb-[0.34rem] border-white border-[1px] border-solid box-border flex justify-center items-center">
+                    <div className="text-[24px] font-mono">+</div>
                   </div>
                 </div>
               </div>
@@ -242,7 +259,7 @@ const Recipients = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="xs:hidden sm:hidden overflow-y-scroll h-[300px] md:flex lg:flex bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border  flex-col items-start justify-start pt-[21px] px-[19px] pb-[18px] gap-[21.1px] max-w-full z-[1] text-left text-3xl text-white font-neue-plak">
+                  <div className="xs:hidden sm:hidden overflow-y-auto h-[300px] md:flex lg:flex bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border  flex-col items-start justify-start pt-[21px] px-[19px] pb-[18px] gap-[21.1px] max-w-full z-[1] text-left text-3xl text-white font-neue-plak">
                     <div className=" relative font-black inline-block text-[22px]">
                       Select Keypair for Decryption
                     </div>
@@ -316,7 +333,7 @@ const Recipients = () => {
               className="justify-center  border-none"
             >
               <Tabs.Item active title="Recipients">
-                <div className="custom-scrollbar bg-[#0f2e3f] overflow-y-scroll h-[215px] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap h-[338px] overflow-auto">
+                <div className="custom-scrollbar bg-[#0f2e3f] overflow-y-scroll h-[215px] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap md:h-[338px] overflow-auto">
                   <div className="h-[220px] w-[712px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
                   <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full">
                     <div className="self-stretch flex flex-col items-start justify-start gap-4 max-w-full">
@@ -332,7 +349,7 @@ const Recipients = () => {
                                 <div className="w-[59.1px] h-[40px] rounded-[11.44px] bg-[#0F2E3F] flex items-center justify-center  pt-[14.3px] px-[15px] pb-[14.2px] box-border z-[1]">
                                   <div className="flex items-center justify-center relative z-[2] text-[#175C83]">{`K`}</div>
                                 </div>
-                                <p className=" text-[19.06px] text-white font-normal leading-[23px] break-all">
+                                <p className=" text-[13.69px] text-white font-normal leading-[23px] break-all">
                                   {item.name}
                                 </p>
                               </div>
@@ -375,7 +392,7 @@ const Recipients = () => {
                               }))
                             }
                           />
-                          <span className="w-full max-w-full h-[37px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
+                          <span className="w-full max-w-full h-[32px] md:h-[37px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[13.69px] overflow-hidden md:text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
                             {item.name}
                           </span>
                           <span className="hidden peer-checked:block absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
@@ -436,8 +453,13 @@ const Recipients = () => {
                     type="text"
                     id="name"
                     name="name"
+                    value={formValues.name}
+                    onChange={handleChange}
                     className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] text-white focus:ring-[#57CACC] input-field"
                   />
+                  {error.name && (
+                    <div className="text-red-500">{error.name}</div>
+                  )}
                 </div>
                 <div className="flex flex-col mt-[28px]">
                   <div className="flex">
@@ -451,8 +473,13 @@ const Recipients = () => {
                     name="public_key"
                     rows="4"
                     cols="50"
+                    value={formValues.public_key}
+                    onChange={handleChange}
                     className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] text-white focus:ring-[#57CACC] input-field"
                   />
+                  {error.public_key && (
+                    <div className="text-red-500">{error.public_key}</div>
+                  )}
                 </div>
               </Modal.Body>
 

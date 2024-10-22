@@ -198,19 +198,6 @@ const MainHome = () => {
                             className="cursor-pointer"
                             onClick={() => openModal(item.private_key)}
                           />
-
-                          <CopyToClipboard
-                            text={item.private_key}
-                            onCopy={() => handleCopyPrivate(item.id)}
-                          >
-                            <div>
-                              {copiedPrivate[item.id] ? (
-                                <TickIcon />
-                              ) : (
-                                <CopyIcon />
-                              )}
-                            </div>
-                          </CopyToClipboard>
                         </div>
                       </div>
                     </Table.Cell>

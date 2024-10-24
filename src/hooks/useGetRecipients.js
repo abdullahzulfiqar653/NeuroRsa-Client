@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 import { getTokenIncludedConfig } from "../services/Authentication";
 
-const useGetRecipients = (search = "", page) =>
+const useGetRecipients = (search = "", page = "") =>
     useQuery({
         queryKey: ["recipients", search, page],
         queryFn: async () => {

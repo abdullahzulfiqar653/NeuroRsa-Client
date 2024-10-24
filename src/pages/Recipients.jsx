@@ -301,12 +301,13 @@ const Recipients = () => {
             <Tabs
               aria-label="Default tabs"
               variant="default"
-              className="justify-arround border-none"
+              className="justify-arround gap-6 border-none"
             >
-              <Tabs.Item active title="Recipients">
-                <div className="custom-scrollbar bg-[#0f2e3f] overflow-y-scroll h-[215px] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap md:h-[338px] overflow-auto">
+              <Tabs.Item active title={<p className="font-semibold">Recipients</p>}>
+                <div className="custom-scrollbar bg-[#0f2e3f] overflow-y-scroll h-[220px] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap md:h-[338px] overflow-auto">
                   <div className="h-[220px] w-[712px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
                   <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full">
+                 
                     <div className="self-stretch flex flex-col items-start justify-start gap-4 max-w-full">
                       {recipients?.results?.map((item) => {
                         return (
@@ -343,8 +344,9 @@ const Recipients = () => {
                   </div>
                 </div>
               </Tabs.Item>
-              <Tabs.Item title="Keypair">
+              <Tabs.Item title={<p className="font-semibold">Keypair</p>}>
                 <div className="flex gap-[10px] h-[220px] pt-2 overflow-y-scroll w-full flex-wrap xs:px-[16px] sm:px-[16px]">
+               
                   {keypairs?.results?.map((item) => {
                     return (
                       <div
@@ -382,11 +384,11 @@ const Recipients = () => {
             </Tabs>
             <div
               onClick={() => handleModal()}
-              className="cursor-pointer flex-row absolute bottom-[247px] right-5 ml-auto text-white text-[12px] font-sans" // Styled to look clickable
+              className="cursor-pointer flex-row absolute bottom-[266px] right-5 mq400:right-3 ml-auto text-white text-[12px] font-sans" // Styled to look clickable
             >
               <div className="flex">
                 Create Recipient
-                <Plus className={"mt-[6px] ml-[2px]"} />
+                <Plus className={"mt-[4px] ml-[3px]"} />
               </div>
             </div>
             {(decryptMessageData.message || encryptMessageData.message) && (

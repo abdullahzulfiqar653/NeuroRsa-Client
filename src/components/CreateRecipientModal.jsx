@@ -7,6 +7,7 @@ import EmojiPicker from "emoji-picker-react";
 import useCreateRecipient from "../hooks/useCreateRecipient";
 import { useAuth } from "../AuthContext";
 import useUpdateRecipients from "../hooks/useUpdateRecipients";
+import useGetRecipients from "../hooks/useGetRecipients";
 
 const CreateRecipientModal = () => {
   const { isOpen, handleModal, recipientData } = useAuth();
@@ -29,6 +30,10 @@ const CreateRecipientModal = () => {
       });
     }
   }, [recipientData]);
+
+  const page = 1;
+  const search = "";
+  const { refetch } = useGetRecipients(search, page);
 
   const onEmojiClick = (emojiObject) => {
     setInputStr((prevInput) => prevInput + emojiObject.emoji);
@@ -68,6 +73,7 @@ const CreateRecipientModal = () => {
           `Recipient ${isUpdating ? "Updated" : "Created"} successfully.`
         );
         handleModal();
+        refetch();
         setFormValues({ emoji: "", name: "", public_key: "" });
         setInputStr("");
       },

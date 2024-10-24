@@ -19,6 +19,7 @@ import VerifyLoginScreen from "./pages/VerifyLoginScreen";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import RecipentsList from "./pages/RecipentsList";
+import InfoAboutWebsite from "./pages/InfoAboutWebsite";
 
 function App() {
   const action = useNavigationType();
@@ -98,6 +99,10 @@ function App() {
         <Route
           path="/key-display"
           element={<ProtectedRoute element={<KeyDisplay />} />}
+        />
+        <Route
+          path="/what-is-this?"
+          element={<ProtectedRoute element={<InfoAboutWebsite />} />}
         />
       </Routes>
     </>

@@ -173,16 +173,12 @@ const Header = () => {
                       </button>
                     </div>
                     <div className="relative group hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
-                      <button
+                      <Link
+                        to={"/what-is-this?"}
                         className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
-                        onClick={() => {
-                          openModal();
-                          setFormValues({});
-                          setErrors({});
-                        }}
                       >
                         What is this?
-                      </button>
+                      </Link>
                     </div>{" "}
                   </>
                 )}

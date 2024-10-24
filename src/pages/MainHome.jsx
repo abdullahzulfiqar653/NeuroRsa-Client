@@ -384,7 +384,7 @@ const MainHome = () => {
                       onClick={() => openModalTwo(item.id)}
                     />
                   </div>
-                  <div className="flex pt-[11px] justify-between">
+                  <div className="flex pt-[11px] justify-between ">
                     <div className="flex justify-between gap-[20px] items-center ">
                       <span className="text-white text-[12px]">Public key</span>
                       <div className="flex gap-[10px] items-center">

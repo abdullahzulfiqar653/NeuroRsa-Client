@@ -38,6 +38,7 @@ const RecipentsList = () => {
       onSuccess: (response) => {
         toast.success(`Recipient Deleted successfully.`);
         setIsOpenTwo(false);
+        refetchRecipients();
       },
       onError: (error) => {
         setErrors(error.response.data);
@@ -59,7 +60,7 @@ const RecipentsList = () => {
         <div className="bg-[#0B2837] w-full items-center">
           <Header />
         </div>
-        <div className="overflow-x-auto px-[32px] desktop-view-table xs:hidden sm:hidden md:block lg:block">
+        <div className="overflow-x-auto px-[32px] bg-[#0f2e3f] desktop-view-table xs:hidden sm:hidden md:block lg:block">
           <div className="flex justify-around w-full mb-[30px]  mt-[25px] h-[53px]">
             {" "}
             <div className="w-[90%]">
@@ -189,8 +190,8 @@ const RecipentsList = () => {
             </div>
           </div>
         </div>
-        <div className="mobile-view-table h-full xs:block sm:block md:hidden lg:hidden px-[16px]">
-          <div className="mb-[12px] mt-[14px]">
+        <div className="mobile-view-table h-full pb-7 xs:block sm:block md:hidden lg:hidden px-[16px]">
+          <div className="flex justify-around items-center w-full mb-[12px] mt-[14px]">
             <Formik
               initialValues={{ search: "" }}
               onSubmit={(values) => {
@@ -228,6 +229,12 @@ const RecipentsList = () => {
                 </Form>
               )}
             </Formik>
+            <button
+              onClick={handleModal}
+              className="w-[130px] text-[12px] bg-[#57CBCC] h-[30px] text-white rounded-[4.38px]"
+            >
+              Create New Recipient
+            </button>
           </div>
           <div className="border-[1px] border-[#1B3D4F] p-[12px]">
             <div className="flex w-full gap-1">
@@ -303,38 +310,38 @@ const RecipentsList = () => {
           </div>
         </div>
       </div>
+    
+     <CreateRecipientModal />
 
-      <CreateRecipientModal />
+     <Modal show={isOpenTwo} onClose={closeModalTwo} className="bg-black">
+       <Modal.Header className="pt-[10px] !pl-[0px] !pb-[2px] bg-[#1B3D4F] border-none"></Modal.Header>
 
-      <Modal show={isOpenTwo} onClose={closeModalTwo} className="bg-black">
-        <Modal.Header className="pt-[10px] !pl-[0px] !pb-[2px] bg-[#1B3D4F] border-none"></Modal.Header>
-
-        <Modal.Body className="bg-[#1B3D4F] !pt-[0px] !pb-[50px]">
-          <img
-            src="/alert-icon.svg"
-            alt="alert-icon"
-            className="mx-auto mb-[30px]"
-          />
-          <p className="text-white text-center text-[16px] md:text-[22px] leading-[30px] w-full max-w-[499px] mx-auto">
-            Are you sure you want to delete this recipient?
-          </p>
-          <div className="flex gap-[15px] mt-[37px] justify-center max-w-[328px] w-full mx-auto">
-            <button
-              className="bg-transparent rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-[#57CBCC] border-[1px] border-[#57CBCC]"
-              onClick={() => closeModalTwo(false)}
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleDelete}
-              className="bg-[#57CBCC] rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-white"
-            >
-              Delete
-            </button>
-          </div>
-        </Modal.Body>
-      </Modal>
-    </div>
+       <Modal.Body className="bg-[#1B3D4F] !pt-[0px] !pb-[50px]">
+         <img
+           src="/alert-icon.svg"
+           alt="alert-icon"
+           className="mx-auto mb-[30px]"
+         />
+         <p className="text-white text-center text-[16px] md:text-[22px] leading-[30px] w-full max-w-[499px] mx-auto">
+           Are you sure you want to delete this recipient?
+         </p>
+         <div className="flex gap-[15px] mt-[37px] justify-center max-w-[328px] w-full mx-auto">
+           <button
+             className="bg-transparent rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-[#57CBCC] border-[1px] border-[#57CBCC]"
+             onClick={() => closeModalTwo(false)}
+           >
+             Cancel
+           </button>
+           <button
+             onClick={handleDelete}
+             className="bg-[#57CBCC] rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-white"
+           >
+             Delete
+           </button>
+         </div>
+       </Modal.Body>
+     </Modal>
+     </div>
   );
 };
 

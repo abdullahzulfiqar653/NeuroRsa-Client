@@ -231,7 +231,7 @@ const RecipentsList = () => {
             </Formik>
             <button
               onClick={handleModal}
-              className="w-[130px] text-[12px] bg-[#57CBCC] h-[30px] text-white rounded-[4.38px]"
+              className="w-[130px] ml-1 text-[12px] bg-[#57CBCC] h-[30px] text-white rounded-[4.38px]"
             >
               Create New Recipient
             </button>

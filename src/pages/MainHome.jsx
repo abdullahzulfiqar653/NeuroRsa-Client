@@ -21,7 +21,6 @@ const MainHome = () => {
   const [copiedPrivate, setCopiedPrivate] = useState({});
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [privateKey, setPrivateKey] = useState(null);
-
   const [itemPerPage, setItemPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const { mutate: deleteKeyPair } = useDeleteKeyPairs();
@@ -73,6 +72,7 @@ const MainHome = () => {
       onSuccess: (response) => {
         toast.success(`Keypair Deleted successfully.`);
         setIsOpenTwo(false);
+        refetch();
       },
       onError: (error) => {
         setErrors(error.response.data);

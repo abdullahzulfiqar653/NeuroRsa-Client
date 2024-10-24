@@ -303,12 +303,3 @@ body {
 .popup-arrow {
   transform: translateX(20px); 
 }
-
-#key-rotation {
-  position: absolute;
-  width: 82px;
-  height: 104px;
-  left: calc(50% - 82px / 2);
-  top: 594px;
-}
-

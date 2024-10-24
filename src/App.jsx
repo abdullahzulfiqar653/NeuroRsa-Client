@@ -18,6 +18,8 @@ import SelectRecipients from "./pages/SelectRecipients";
 import VerifyLoginScreen from "./pages/VerifyLoginScreen";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
+import RecipentsList from "./pages/RecipentsList";
+import InfoAboutWebsite from "./pages/InfoAboutWebsite";
 
 function App() {
   const action = useNavigationType();
@@ -83,6 +85,10 @@ function App() {
           element={<ProtectedRoute element={<Recipients />} />}
         />
         <Route
+          path="/recipients-list"
+          element={<ProtectedRoute element={<RecipentsList />} />}
+        />
+        <Route
           path="/select-recipients"
           element={<ProtectedRoute element={<SelectRecipients />} />}
         />
@@ -93,6 +99,10 @@ function App() {
         <Route
           path="/key-display"
           element={<ProtectedRoute element={<KeyDisplay />} />}
+        />
+        <Route
+          path="/what-is-this?"
+          element={<ProtectedRoute element={<InfoAboutWebsite />} />}
         />
       </Routes>
     </>

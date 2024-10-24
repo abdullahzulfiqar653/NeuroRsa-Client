@@ -8,6 +8,7 @@ import App from "./App";
 import "flowbite/dist/flowbite.css";
 import { AuthProvider } from "./AuthContext";
 import reportWebVitals from "./reportWebVitals";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -18,7 +19,9 @@ root.render(
   <AuthProvider>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <App />
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
       </BrowserRouter>
     </QueryClientProvider>
   </AuthProvider>

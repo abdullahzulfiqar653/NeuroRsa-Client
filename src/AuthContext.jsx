@@ -21,7 +21,9 @@ export const AuthProvider = ({ children }) => {
   const [showGeneratePassModal, setShowGeneratePassModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [generatorPassword, setGeneratorPassword] = useState("");
-
+  const [search, setSearch] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [recipientData,setRecipientData] = useState('');
   useEffect(() => {
     if (isTokenValid()) {
       setIsAuthenticated(true);
@@ -53,6 +55,11 @@ export const AuthProvider = ({ children }) => {
   const handleGeneratePassVisibility = () => {
     setShowGeneratePassModal((prev) => !prev);
   };
+ 
+  const handleModal=(item=null)=>{
+       setRecipientData(item);
+       setIsOpen((prev) => !prev);
+  };
 
   return (
     <AuthContext.Provider
@@ -60,7 +67,13 @@ export const AuthProvider = ({ children }) => {
         login,
         signup,
         logout,
+        search,
+        setSearch,
         isDesktop,
+        isOpen,
+        recipientData,
+        setRecipientData,
+        handleModal,
         isAuthenticated,
         generatorPassword,
         setGeneratorPassword,

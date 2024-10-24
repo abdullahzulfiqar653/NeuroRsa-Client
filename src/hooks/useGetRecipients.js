@@ -2,18 +2,27 @@ import { useQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 import { getTokenIncludedConfig } from "../services/Authentication";
 
+const useGetRecipients = (search = "", page) =>
+    useQuery({
+        queryKey: ["recipients", search, page],
+        queryFn: async () => {
+            let url = `/recipients/?search=${search}`;
 
-const useGetRecipients = ()=> useQuery({
-    queryKey:["recipients"],
-    queryFn: () => apiClient  
-    .get('/recipients/', getTokenIncludedConfig())
-    .then(res=> res.data)
-    .catch(er => er.error),
-    refetchOnWindowFocus: true, // Refetches data when the window regains focus
-    refetchOnMount: true,       // Refetches data whenever the component remounts
-    refetchOnReconnect: true,   // Refetches data if the connection is re-established
-    staleTime: 0,
-})
+            if (page) {
+                url += `&page=${page}&page_size=${10}`;
+            }
+
+            console.log("Fetching from:", url);
+
+            const response = await apiClient.get(url, getTokenIncludedConfig());
+
+            if (response && response.data) {
+                return response.data;
+            } else {
+                throw new Error("No data returned from the server");
+            }
+        }
+    });
 
 
 export default useGetRecipients;

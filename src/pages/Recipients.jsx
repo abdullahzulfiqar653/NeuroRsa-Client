@@ -6,23 +6,21 @@ import useGetKeyPairs from "../hooks/useGetKeyPairs";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useGetRecipients from "../hooks/useGetRecipients";
-import useCreateRecipient from "../hooks/useCreateRecipient";
 import useCreateEncryptedMessage from "../hooks/useCreateEncryptedMessage";
 import useCreateDecryptedMessage from "../hooks/useCreateDecryptedMessage";
+import CreateRecipientModal from "../components/CreateRecipientModal";
+import { useAuth } from "../AuthContext";
 
 const Recipients = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { mutate: mutateCreaterecipient } = useCreateRecipient();
+  const { isOpen, handleModal } = useAuth();
   const { data: keypairs, refetch: refetchKeypairs } = useGetKeyPairs();
   const { data: recipients, refetch: refetchRecipients } = useGetRecipients();
   const { mutate: mutateCreateEncryptedMessage } = useCreateEncryptedMessage();
   const { mutate: mutateCreateDecryptedMessage } = useCreateDecryptedMessage();
 
-  const [formValues, setFormValues] = useState({ name: "", public_key: "" });
-  const [isOpen, setIsOpen] = useState(false);
   const [isOpenTwo, setIsOpenTwo] = useState(false);
-  const [error, setErrors] = useState(false);
   const [decryptMessageData, setDecryptMessageData] = useState({
     keypair_id: "",
     message: "",
@@ -37,20 +35,6 @@ const Recipients = () => {
     refetchKeypairs();
     refetchRecipients();
   }, [location, refetchKeypairs, refetchRecipients, isOpen]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: value ? "" : "Required Field",
-    }));
-  };
 
   const handleEncryption = () => {
     mutateCreateEncryptedMessage(encryptMessageData, {
@@ -88,22 +72,6 @@ const Recipients = () => {
     });
   };
 
-  const handleSubmit = () => {
-    mutateCreaterecipient(formValues, {
-      onSuccess: () => {
-        toast.success(`Recipient Created successfully.`);
-        setIsOpen(false);
-        setFormValues({ name: "", public_key: "" });
-      },
-      onError: (error) => {
-        setErrors(error.response.data);
-        for (const [attribute, error] of Object.entries(error.response.data)) {
-          toast.error(error[0]);
-        }
-      },
-    });
-  };
-
   const handleRecipientClick = (id) => {
     setencryptMessageData((prevState) => ({
       ...prevState,
@@ -113,13 +81,9 @@ const Recipients = () => {
     }));
   };
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
   const openModalTwo = () => {
     setIsOpenTwo(true);
   };
-  const closeModal = () => setIsOpen(false);
   const closeModalTwo = () => setIsOpenTwo(false);
 
   // const notify = () =>
@@ -158,17 +122,15 @@ const Recipients = () => {
                 </a>
               </div>
               <div
-                className="w-full max-w-[177px] flex flex-row items-start justify-start gap-3 text-center text-xs cursor-pointer"
-                onClick={openModal}
+                className="w-full max-w-[207px] flex flex-row items-start justify-start gap-3 text-center text-xs cursor-pointer"
+                onClick={() => handleModal()}
               >
                 <div className="flex flex-col items-start justify-start pt-[11px] px-0 pb-0">
-                  <div className="relative z-[1]">Create New Recipient</div>
-                </div>
-                <div className=" relative text-5xl">
-                  <div className="h-9 w-9 rounded-[50%] pb-[0.34rem] border-white border-[1px] border-solid box-border flex justify-center items-center">
-                    <div className="text-[24px] font-mono">+</div>
+                  <div className="relative z-[1] text-[14px]">
+                    Create New Recipient
                   </div>
                 </div>
+                <PlusWeb className={"mt-3"} />
               </div>
             </div>
             {/* For Web */}
@@ -198,27 +160,30 @@ const Recipients = () => {
                     {/* </div>
                     </div> */}
                   </div>
-                  <div className="w-[304px] flex flex-row items-start justify-start gap-5">
-                    <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
-                      <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                      <div
-                        onClick={handleEncryption}
-                        className="flex-1 relative text-base  text-white text-center z-[1]"
+                  {(decryptMessageData.message ||
+                    encryptMessageData.message) && (
+                    <div className="w-[304px] flex flex-row items-start justify-start gap-5">
+                      <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
+                        <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
+                        <div
+                          onClick={handleEncryption}
+                          className="flex-1 relative text-base  text-white text-center z-[1]"
+                        >
+                          Encrypt
+                        </div>
+                      </button>
+                      <button
+                        onClick={handleDecryption}
+                        className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
                       >
-                        Encrypt
-                      </div>
-                    </button>
-                    <button
-                      onClick={handleDecryption}
-                      className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
-                    >
-                      <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                      <div className="flex-1 relative text-base  text-white text-center z-[1]">
-                        {" "}
-                        Decrypt
-                      </div>
-                    </button>
-                  </div>
+                        <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
+                        <div className="flex-1 relative text-base  text-white text-center z-[1]">
+                          {" "}
+                          Decrypt
+                        </div>
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <div className="flex-1 flex flex-col items-start justify-start gap-[11px] max-w-[7123px] w-full text-center text-lgi-1 text-steelblue-300">
                   <div className="xs:hidden sm:hidden md:flex lg:flex bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border  flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap h-[338px] overflow-auto">
@@ -235,7 +200,13 @@ const Recipients = () => {
                               <div className="w-full flex flex-row  max-w-full mq800:flex-wrap">
                                 <div className="flex gap-[23.8px] items-center w-full">
                                   <div className="w-[59.1px] h-[51px] rounded-[11.44px] bg-[#0F2E3F] flex items-center justify-center  pt-[14.3px] px-[15px] pb-[14.2px] box-border z-[1]">
-                                    <div className="flex items-center justify-center relative z-[2] text-[#175C83]">{`S`}</div>
+                                    <div className="flex items-center justify-center relative z-[2] text-[#175C83]">
+                                      {item.emoji
+                                        ? String.fromCodePoint(
+                                            parseInt(item.emoji, 16)
+                                          )
+                                        : item.name[0].toUpperCase()}
+                                    </div>
                                   </div>
                                   <p className=" text-[19.06px] text-white font-normal leading-[23px]">
                                     {item.name}
@@ -326,11 +297,11 @@ const Recipients = () => {
               className="w-full max-w-3xl h-full p-4 text-white bg-transparent border-none resize-none text-xl focus:outline-none focus:ring-0"
             ></textarea>
           </div>
-          <section className="w-full mobile-view-tab">
+          <section className="w-full relative mobile-view-tab">
             <Tabs
               aria-label="Default tabs"
               variant="default"
-              className="justify-center  border-none"
+              className="justify-arround border-none"
             >
               <Tabs.Item active title="Recipients">
                 <div className="custom-scrollbar bg-[#0f2e3f] overflow-y-scroll h-[215px] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap md:h-[338px] overflow-auto">
@@ -409,93 +380,41 @@ const Recipients = () => {
                 </div>
               </Tabs.Item>
             </Tabs>
-            <div className="w-[245px] mx-auto flex-row items-start justify-start gap-3 xs:flex sm:flex md:hidden lg:hidden mt-[10px]">
-              <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
-                <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                <div
-                  onClick={handleEncryption}
-                  className="flex-1 relative text-base  text-white text-center z-[1]"
-                >
-                  Encrypt
-                </div>
-              </button>
-              <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
-                <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                <div
-                  onClick={handleDecryption}
-                  className="flex-1 relative text-base  text-white text-center z-[1]"
-                >
-                  Decrypt
-                </div>
-              </button>
+            <div
+              onClick={() => handleModal()}
+              className="cursor-pointer flex-row absolute bottom-[247px] right-5 ml-auto text-white text-[12px] font-sans" // Styled to look clickable
+            >
+              <div className="flex">
+                Create Recipient
+                <Plus className={"mt-[6px] ml-[2px]"} />
+              </div>
             </div>
+            {(decryptMessageData.message || encryptMessageData.message) && (
+              <div className="w-[245px] mx-auto flex-row items-start justify-start gap-3 xs:flex sm:flex md:hidden lg:hidden mt-[10px]">
+                <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
+                  <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
+                  <div
+                    onClick={handleEncryption}
+                    className="flex-1 relative text-base  text-white text-center z-[1]"
+                  >
+                    Encrypt
+                  </div>
+                </button>
+                <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
+                  <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
+                  <div
+                    onClick={handleDecryption}
+                    className="flex-1 relative text-base  text-white text-center z-[1]"
+                  >
+                    Decrypt
+                  </div>
+                </button>
+              </div>
+            )}
           </section>
         </main>
       </div>
-      <Modal show={isOpen} onClose={closeModal} className="bg-black">
-        <Modal.Header className="justify-center items-center flex bg-[#0E2E3F] border-none modal-h3">
-          <div className="text-white"> Create New Recipients </div>
-        </Modal.Header>
-        <Formik
-          initialValues={{ name: "", public_key: "" }}
-          onSubmit={handleSubmit}
-        >
-          {({ handleSubmit }) => (
-            <Form onSubmit={handleSubmit}>
-              <Modal.Body className="bg-[#1B3D4F]">
-                <div className="flex flex-col">
-                  <div className="flex">
-                    <label htmlFor="name" className="text-white mb-[6px]">
-                      Enter Nickname
-                    </label>
-                  </div>
-                  <Field
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formValues.name}
-                    onChange={handleChange}
-                    className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] text-white focus:ring-[#57CACC] input-field"
-                  />
-                  {error.name && (
-                    <div className="text-red-500">{error.name}</div>
-                  )}
-                </div>
-                <div className="flex flex-col mt-[28px]">
-                  <div className="flex">
-                    <label htmlFor="public_key" className="text-white mb-[6px]">
-                      Enter Public Key
-                    </label>
-                  </div>
-                  <Field
-                    as="textarea"
-                    id="public_key"
-                    name="public_key"
-                    rows="4"
-                    cols="50"
-                    value={formValues.public_key}
-                    onChange={handleChange}
-                    className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] text-white focus:ring-[#57CACC] input-field"
-                  />
-                  {error.public_key && (
-                    <div className="text-red-500">{error.public_key}</div>
-                  )}
-                </div>
-              </Modal.Body>
-
-              <Modal.Footer className="bg-[#1B3D4F] justify-center border-[0px] pt-0">
-                <Button
-                  type="submit"
-                  className="!bg-[#57CBCC] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[5px] save-btn"
-                >
-                  Save
-                </Button>
-              </Modal.Footer>
-            </Form>
-          )}
-        </Formik>
-      </Modal>
-
+      <CreateRecipientModal />
       <Modal show={isOpenTwo} onClose={closeModalTwo} className="bg-black">
         <Modal.Header className="pt-[10px] !pl-[0px] !pb-[2px] bg-[#1B3D4F] border-none"></Modal.Header>
 
@@ -519,3 +438,42 @@ const Recipients = () => {
 };
 
 export default Recipients;
+
+const Plus = ({ className }) => (
+  <svg
+    width="20"
+    height="19"
+    viewBox="0 0 20 19"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <circle
+      cx="9.79984"
+      cy="9.37357"
+      r="9.1132"
+      stroke="white"
+      stroke-width="0.520754"
+    />
+    <path
+      d="M9.12083 12.344V7.256H9.87683V12.344H9.12083ZM6.88883 10.16V9.452H12.1088V10.16H6.88883Z"
+      fill="white"
+    />
+  </svg>
+);
+
+const PlusWeb = () => (
+  <svg
+    width="36"
+    height="36"
+    viewBox="0 0 36 36"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle cx="18" cy="18" r="17.5" stroke="white" />
+    <path
+      d="M17.2417 23.688V13.512H18.7537V23.688H17.2417ZM12.7777 19.32V17.904H23.2177V19.32H12.7777Z"
+      fill="white"
+    />
+  </svg>
+);

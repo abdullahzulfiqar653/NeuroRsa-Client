@@ -3,12 +3,12 @@ import apiClient from "../services/api-client";
 import { getTokenIncludedConfig } from "../services/Authentication";
 
 
-const useGetKeyPairs = (page, limit) => useQuery({
+const useGetKeyPairs = (search, page, limit) => useQuery({
     queryKey: ["keypairs", page, limit],
     queryFn: async () => {
-        let url = '/keypairs/';
+        let url = `/keypairs/?search=${search}`;
         if (page && limit) {
-            url += `?page=${page}&page_size=${limit}`;
+            url += `&page=${page}&page_size=${limit}`;
         }
         const response = await apiClient.get(url, getTokenIncludedConfig());
         if (response && response.data) {

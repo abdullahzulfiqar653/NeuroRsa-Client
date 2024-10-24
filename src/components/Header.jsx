@@ -45,14 +45,14 @@ const Header = () => {
     setFormValues((prevValues) => {
       let updatedValues = { ...prevValues, [name]: value };
       if (value === "") {
-          delete updatedValues[name];
+        delete updatedValues[name];
       }
       if (name === "confirmPassphrase" || name === "passphrase") {
         const { passphrase, confirmPassphrase } = updatedValues;
         if (!passphrase || !confirmPassphrase) {
-          setErrors({ passphrase: "" }); 
+          setErrors({ passphrase: "" });
         } else if (passphrase !== confirmPassphrase) {
-          setErrors({ passphrase: "Passphrases do not match" }); 
+          setErrors({ passphrase: "Passphrases do not match" });
         } else {
           setErrors({ passphrase: "" });
         }
@@ -153,22 +153,38 @@ const Header = () => {
           </Link>
 
           {isDropdownOpenFile && (
-           <div className="origin-top-right top-9 absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-[#1c3d4f] ring-1 ring-[#345360] ring-opacity-5 focus:outline-none z-20 
-           transition-opacity duration-300 hover:opacity-100 hover:delay-300">
+            <div
+              className="origin-top-right top-9 absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-[#1c3d4f] ring-1 ring-[#345360] ring-opacity-5 focus:outline-none z-20 
+           transition-opacity duration-300 hover:opacity-100 hover:delay-300"
+            >
               <div className="py-4">
                 {isAuthenticated && (
-                  <div className="relative group hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
-                    <button
-                      className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
-                      onClick={() => {
-                        openModal();
-                        setFormValues({});
-                        setErrors({});
-                      }}
-                    >
-                      New Key Pair
-                    </button>
-                  </div>
+                  <>
+                    <div className="relative group hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
+                      <button
+                        className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
+                        onClick={() => {
+                          openModal();
+                          setFormValues({});
+                          setErrors({});
+                        }}
+                      >
+                        New Key Pair
+                      </button>
+                    </div>
+                    <div className="relative group hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
+                      <button
+                        className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
+                        onClick={() => {
+                          openModal();
+                          setFormValues({});
+                          setErrors({});
+                        }}
+                      >
+                        What is this?
+                      </button>
+                    </div>{" "}
+                  </>
                 )}
 
                 {/* <button className="block px-4 py-2 text-sm text-white w-full text-left z-20 hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
@@ -214,6 +230,17 @@ const Header = () => {
           </NavLink>
         </div>
         <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
+          <NavLink
+            to="/recipients-list"
+            className={({ isActive }) =>
+              `py-[10px] cursor-pointer [text-decoration:none] relative text-[inherit]  text-white inline-block max-w-[121px] z-[1] font-sans leading-[21.94px]  xs:text-[10px] sm:text-[10px] md:text-[18px] lg:text-[18px] opacity-[72%] 
+                 ${isActive ? "border-b-2 border-mediumturquoise" : ""}`
+            }
+          >
+            My Recipients
+          </NavLink>
+        </div>
+        <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
           <div
             className="relative inline-block text-left"
             onMouseEnter={handleMouseEnterDropdown}
@@ -226,7 +253,7 @@ const Header = () => {
                  ${isActive ? "border-b-2 border-mediumturquoise" : ""}`
               }
             >
-              My Recipients
+              Notepad
             </NavLink>
 
             {/* {isDropdownOpen && (

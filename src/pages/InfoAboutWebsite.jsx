@@ -8,7 +8,7 @@ function InfoAboutWebsite() {
       <div className={`bg-[#0f2e3f] lg:h-[100vh]`}>
         <div className="bg-[#0B2837] w-full items-center">
           <Header />
-          <div className="flex flex-col relative justify-center items-center text-center  bg-[#1c3d4f] w-full h-full">
+          <div className="flex flex-col relative justify-center items-center text-center  bg-[#0f2e3f] w-full h-full">
           <div className="text-[#E5E5E5B8] relative z-10 flex flex-col justify-start text-start items-start px-[16px] py-5 sm:px-24 sm:py-16">
               <h1 className="text-[#f7f7f7] text-[22px] leading-[30.73px]">
                 What is neuro.RSA

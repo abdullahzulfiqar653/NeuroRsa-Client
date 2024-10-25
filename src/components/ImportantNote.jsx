@@ -18,9 +18,8 @@ const GroupComponent = ({ className = '', onShowSeed }) => {
         <div className='w-full flex flex-col items-start justify-start gap-[10.8px] mb-[10px]'>
           <div
             onClick={onShowSeed}
-            className='cursor-pointer self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-2 pb-[10.9px] md:pt-3.5 md:pb-[13.9px] pl-[35px] md:pl-[50px] pr-[49px] shrink-0 z-[1]'
+            className='cursor-pointer h-[42.2px] self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-center justify-center text-center shrink-0 z-[1]'
           >
-            <div className='h-[47.2px] w-full relative rounded-[4.38px] bg-mediumturquoise hidden' />
             <div className='flex-1 relative z-[1] text-[14px] md:text-[16px]'>I understand, show me my seed</div>
           </div>
         </div>

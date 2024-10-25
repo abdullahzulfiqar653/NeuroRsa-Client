@@ -1,28 +1,43 @@
+import { Modal, Table } from "flowbite-react";
+import { Field, Form, Formik } from "formik";
+import { debounce } from "lodash";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import Header from "../components/Header";
-import { Formik, Form, Field } from "formik";
-import { Table, Modal } from "flowbite-react";
-import useGetRecipients from "../hooks/useGetRecipients";
-import { useAuth } from "../AuthContext";
 import { useLocation } from "react-router-dom";
-import useDeleteRecipients from "../hooks/useDeleteRecipients";
+import { toast } from "react-toastify";
+import { useAuth } from "../AuthContext";
 import CreateRecipientModal from "../components/CreateRecipientModal";
+import Header from "../components/Header";
+import useDeleteRecipients from "../hooks/useDeleteRecipients";
+import useGetRecipients from "../hooks/useGetRecipients";
 
 const RecipentsList = () => {
   const { search, setSearch, handleModal } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
+  const location = useLocation();
+  const [isOpenTwo, setIsOpenTwo] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const { mutate: deleteKeyPair } = useDeleteRecipients();
   const { data: recipients, refetch: refetchRecipients } = useGetRecipients(
     search,
     currentPage
   );
-  const location = useLocation();
-
-  const [isOpenTwo, setIsOpenTwo] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState(null);
-  const { mutate: deleteKeyPair } = useDeleteRecipients();
-
   const totalPages = Math.ceil(recipients?.count / 10);
+
+  const debouncedRefetch = debounce(() => {
+    refetchRecipients();
+  }, 500);
+
+  useEffect(() => {
+    if (search) {
+      debouncedRefetch();
+    } else {
+      refetchRecipients();
+    }
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [search, debouncedRefetch]);
+
   useEffect(() => {
     refetchRecipients();
   }, [location, refetchRecipients, isOpenTwo, currentPage]);
@@ -262,6 +277,7 @@ const RecipentsList = () => {
                         src="/editBtn.svg"
                         alt="copy-icon"
                         className="key-icons cursor-pointer"
+                        onClick={() => handleModal(item)}
                       />
                       <img
                         src="/delete-icon.svg"
@@ -310,38 +326,38 @@ const RecipentsList = () => {
           </div>
         </div>
       </div>
-    
-     <CreateRecipientModal />
 
-     <Modal show={isOpenTwo} onClose={closeModalTwo} className="bg-black">
-       <Modal.Header className="pt-[10px] !pl-[0px] !pb-[2px] bg-[#1B3D4F] border-none"></Modal.Header>
+      <CreateRecipientModal />
 
-       <Modal.Body className="bg-[#1B3D4F] !pt-[0px] !pb-[50px]">
-         <img
-           src="/alert-icon.svg"
-           alt="alert-icon"
-           className="mx-auto mb-[30px]"
-         />
-         <p className="text-white text-center text-[16px] md:text-[22px] leading-[30px] w-full max-w-[499px] mx-auto">
-           Are you sure you want to delete this recipient?
-         </p>
-         <div className="flex gap-[15px] mt-[37px] justify-center max-w-[328px] w-full mx-auto">
-           <button
-             className="bg-transparent rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-[#57CBCC] border-[1px] border-[#57CBCC]"
-             onClick={() => closeModalTwo(false)}
-           >
-             Cancel
-           </button>
-           <button
-             onClick={handleDelete}
-             className="bg-[#57CBCC] rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-white"
-           >
-             Delete
-           </button>
-         </div>
-       </Modal.Body>
-     </Modal>
-     </div>
+      <Modal show={isOpenTwo} onClose={closeModalTwo} className="bg-black">
+        <Modal.Header className="pt-[10px] !pl-[0px] !pb-[2px] bg-[#1B3D4F] border-none"></Modal.Header>
+
+        <Modal.Body className="bg-[#1B3D4F] !pt-[0px] !pb-[50px]">
+          <img
+            src="/alert-icon.svg"
+            alt="alert-icon"
+            className="mx-auto mb-[30px]"
+          />
+          <p className="text-white text-center text-[16px] md:text-[22px] leading-[30px] w-full max-w-[499px] mx-auto">
+            Are you sure you want to delete this recipient?
+          </p>
+          <div className="flex gap-[15px] mt-[37px] justify-center max-w-[328px] w-full mx-auto">
+            <button
+              className="bg-transparent rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-[#57CBCC] border-[1px] border-[#57CBCC]"
+              onClick={() => closeModalTwo(false)}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleDelete}
+              className="bg-[#57CBCC] rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-white"
+            >
+              Delete
+            </button>
+          </div>
+        </Modal.Body>
+      </Modal>
+    </div>
   );
 };
 

@@ -80,6 +80,7 @@ function App() {
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/VerifyLoginScreen" element={<VerifyLoginScreen />} />
         <Route path="/register-seed" element={<RegisterScreen />} />
+        <Route path="/what-is-this?" element={<InfoAboutWebsite />} />
         <Route
           path="/my-recipients"
           element={<ProtectedRoute element={<Recipients />} />}
@@ -99,10 +100,6 @@ function App() {
         <Route
           path="/key-display"
           element={<ProtectedRoute element={<KeyDisplay />} />}
-        />
-        <Route
-          path="/what-is-this?"
-          element={<ProtectedRoute element={<InfoAboutWebsite />} />}
         />
       </Routes>
     </>

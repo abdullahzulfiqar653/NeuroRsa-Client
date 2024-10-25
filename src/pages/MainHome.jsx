@@ -1,16 +1,17 @@
+import { Modal, Table } from "flowbite-react";
+import { Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import Header from "../components/Header";
-import { Formik, Form, Field } from "formik";
-import { Table, Modal } from "flowbite-react";
-import { useNavigate, useLocation } from "react-router-dom";
-import useGetKeyPairs from "../hooks/useGetKeyPairs";
 import CopyToClipboard from "react-copy-to-clipboard";
-import useDeleteKeyPairs from "../hooks/useDeleteKeyPairs";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useAuth } from "../AuthContext";
 import BottomSheet from "../components/BottomSheet";
+import Header from "../components/Header";
+import useDeleteKeyPairs from "../hooks/useDeleteKeyPairs";
+import useGetKeyPairs from "../hooks/useGetKeyPairs";
+import { debounce } from "lodash";
 
 const MainHome = () => {
   const navigate = useNavigate();
@@ -27,6 +28,21 @@ const MainHome = () => {
   const { mutate: deleteKeyPair } = useDeleteKeyPairs();
   const { data, refetch } = useGetKeyPairs(search, currentPage, itemPerPage);
   const totalPages = Math.ceil(data?.count / itemPerPage);
+
+  const debouncedRefetch = debounce(() => {
+    refetch();
+  }, 500);
+  useEffect(() => {
+    if (search) {
+      debouncedRefetch();
+    } else {
+      refetch();
+    }
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [search, debouncedRefetch]);
+
   useEffect(() => {
     refetch();
   }, [location, refetch, isOpenTwo, currentPage]);
@@ -498,7 +514,7 @@ const MainHome = () => {
           </div>
         </div>
       </div>
-      
+
       <BottomSheet visible={isSheetVisible} onDismiss={closeSheet}>
         <div className="text-[#FFFFFF] flex flex-col justify-start text-start gap-5 pt-4">
           <h1 className="text-[15px] leading-[17.07px] flex gap-[10px] items-center pl-6 pr-6">

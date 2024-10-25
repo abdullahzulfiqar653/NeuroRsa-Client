@@ -146,7 +146,7 @@ const MainHome = () => {
               )}
             </Formik>
           </div>
-          <div className="border-[1px] border-[#1B3D4F] p-[24px] h-[450px] overflow-y-auto">
+          <div className="border-[1px] border-[#1B3D4F] p-[24px] min-h-[450px] h-full overflow-y-auto">
             <Table className="bg-[#1c3d4f] rounded-t-[12px]">
               <Table.Head className="bg-[#0f2e3f]">
                 <Table.HeadCell className="bg-[#1c3d4f] text-white border-r-[5px] border-[#0f2e3f] rounded-t-[12px]">

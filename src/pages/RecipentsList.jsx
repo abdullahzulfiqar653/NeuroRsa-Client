@@ -109,7 +109,7 @@ const RecipentsList = () => {
               Create New Recipient
             </button>
           </div>
-          <div className="border-[1px] relative border-[#1B3D4F] p-[24px] h-[450px] overflow-y-auto">
+          <div className="border-[1px] relative border-[#1B3D4F] p-[24px] h-[450px] overflow-auto">
             <Table className="bg-[#1c3d4f] rounded-t-[12px] w-[750px] relative z-10">
               <Table.Head className="bg-[#0f2e3f]">
                 <Table.HeadCell className="bg-[#1c3d4f] normal-case text w-[575px] text-white border-r-[5px] border-[#0f2e3f] rounded-t-[12px]">
@@ -154,7 +154,7 @@ const RecipentsList = () => {
             </Table>
             <img
               src="/bg-vector-bkp.png"
-              className="absolute top-9 right-1 opacity-40"
+              className="absolute top-9 right-1 opacity-40 h-[400px]"
             />
           </div>
           <div className="flex justify-between items-center space-x-4 mt-[64px] mb-[150px]">
@@ -190,7 +190,7 @@ const RecipentsList = () => {
             </div>
           </div>
         </div>
-        <div className="mobile-view-table h-full pb-7 xs:block sm:block md:hidden lg:hidden px-[16px]">
+        <div className="mobile-view-table pb-7 xs:block sm:block md:hidden lg:hidden px-[16px]">
           <div className="flex justify-around items-center w-full mb-[12px] mt-[14px]">
             <Formik
               initialValues={{ search: "" }}

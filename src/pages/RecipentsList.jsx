@@ -158,6 +158,7 @@ const RecipentsList = () => {
                           <img
                             src="/delete-icon.svg"
                             alt="delete-icon"
+                            className="cursor-pointer"
                             onClick={() => openModalTwo(item.id)}
                           />
                         </div>
@@ -260,7 +261,7 @@ const RecipentsList = () => {
                 Actions
               </div>
             </div>
-            <div className="flex flex-col  w-full h-[430px] overflow-y-auto">
+            <div className="flex flex-col  w-full h-[530px] overflow-y-auto">
               {recipients?.results?.map((item, index) => (
                 <div
                   key={index}

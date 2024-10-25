@@ -202,12 +202,19 @@ const Header = () => {
                   </Link>
                 )}
                 {!isAuthenticated && (
+                  <>
                   <Link
                     to="/login"
                     className="block px-4 py-2 text-sm text-white font-sans text-[10px] md:text-[20px] w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
                   >
                     Login
                   </Link>
+                   <Link
+                   to={"/what-is-this?"}
+                   className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
+                 >
+                   What is this?
+                 </Link></>
                 )}
               </div>
             </div>

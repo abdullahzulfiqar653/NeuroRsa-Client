@@ -11,9 +11,7 @@ const useGetRecipients = (search = "", page = "") =>
             if (page) {
                 url += `&page=${page}&page_size=${10}`;
             }
-
-            console.log("Fetching from:", url);
-
+            
             const response = await apiClient.get(url, getTokenIncludedConfig());
 
             if (response && response.data) {

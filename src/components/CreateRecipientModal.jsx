@@ -31,9 +31,7 @@ const CreateRecipientModal = () => {
     }
   }, [recipientData]);
 
-  const page = 1;
-  const search = "";
-  const { refetch } = useGetRecipients(search, page);
+  const { refetch } = useGetRecipients();
 
   const onEmojiClick = (emojiObject) => {
     setInputStr((prevInput) => prevInput + emojiObject.emoji);
@@ -96,7 +94,7 @@ const CreateRecipientModal = () => {
         setFormValues({ emoji: "", name: "", public_key: "" });
         setInputStr("");
       }}
-      className="bg-black"
+      className="bg-[#000000a3]"
     >
       <Modal.Header className="justify-center items-center flex bg-[#0E2E3F] border-none modal-h3">
         <div className="text-white">Create New Recipients</div>
@@ -137,7 +135,7 @@ const CreateRecipientModal = () => {
                     viewBox="0 0 18 10"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className="absolute top-[40%] md:top-[50%] w-[12px] md:w-[18px] translate-y-[-50%] right-[20px]"
+                    className="absolute top-[50%] w-[12px] md:w-[18px] translate-y-[-50%] right-[20px]"
                   >
                     <path
                       d="M18 0.623409C18 0.465262 17.9396 0.30342 17.8223 0.182052C17.5877 -0.0606842 17.2039 -0.0606842 16.9693 0.182052L8.94047 8.49025L1.02893 0.30342C0.794353 0.0606833 0.410505 0.0606833 0.175932 0.30342C-0.0586414 0.546156 -0.0586414 0.943361 0.175932 1.1861L8.51397 9.81795C8.74854 10.0607 9.13239 10.0607 9.36697 9.81795L17.8223 1.06841C17.9431 0.943362 18 0.785233 18 0.623409Z"
@@ -188,7 +186,7 @@ const CreateRecipientModal = () => {
               <div className="flex justify-center mt-4">
                 <Button
                   type="submit"
-                  className="!bg-[#57CBCC] w-[142px] font-sans hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[5px] save-btn"
+                  className="!bg-[#57CBCC] w-[142px] font-sans hover:bg-red-700 text-white font-bold sm:py-2 px-4 rounded-[5px] save-btn"
                 >
                   Save
                 </Button>

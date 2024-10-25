@@ -10,6 +10,9 @@ import useCreateEncryptedMessage from "../hooks/useCreateEncryptedMessage";
 import useCreateDecryptedMessage from "../hooks/useCreateDecryptedMessage";
 import CreateRecipientModal from "../components/CreateRecipientModal";
 import { useAuth } from "../AuthContext";
+import Lottie from "lottie-react";
+import keyRotation from "../animations/keyRotation.json";
+import addDocumentAnimation from "../animations/addDocument.json";
 
 const Recipients = () => {
   const location = useLocation();
@@ -274,11 +277,11 @@ const Recipients = () => {
           </section>
         </main>
         {/* Mobile View */}
-        <main className="mobile-View w-full md:hidden lg:hidden">
+        <main className="mobile-View h-[100vh] w-full md:hidden lg:hidden">
           <div className="bg-[#1B3D4F] py-[7px] px-[28px] text-[14px] md:font-normal font-semibold">
             Notepad
           </div>
-          <div className="overflow-y-auto bg-vector-img xs:min-h-[353px] md:min-h-[400px] lg:min-h-[663px] bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-col items-start justify-start pt-9 pb-[18px] pl-3 pr-[11px] gap-[17px] max-w-full mq800:pt-[23px] mq800:pb-5 mq800:box-border">
+          <div className="overflow-y-auto bg-vector-img xs:min-h-[300px] bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-col items-start justify-start pt-1 pb-[18px] pl-3 pr-[11px] gap-[17px] max-w-full mq800:pt-[23px] mq800:pb-5 mq800:box-border">
             <textarea
               placeholder="Enter your message here..."
               value={
@@ -294,105 +297,137 @@ const Recipients = () => {
                   message: e.target.value,
                 }));
               }}
-              className="w-full max-w-3xl h-full p-4 text-white bg-transparent border-none resize-none text-xl focus:outline-none focus:ring-0"
+              className="w-full max-w-3xl h-[280px] text-[14px] p-4 text-white bg-transparent border-none resize-none outline-none focus:outline-none focus:ring-0"
             ></textarea>
           </div>
-          <section className="w-full relative mobile-view-tab">
-            <Tabs
-              aria-label="Default tabs"
-              variant="default"
-              className="justify-arround gap-6 border-none"
-            >
-              <Tabs.Item active title={<p className="font-semibold">Recipients</p>}>
-                <div className="custom-scrollbar bg-[#0f2e3f] overflow-y-scroll h-[220px] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap md:h-[338px] overflow-auto">
-                  <div className="h-[220px] w-[712px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
-                  <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full">
-                 
-                    <div className="self-stretch flex flex-col items-start justify-start gap-4 max-w-full">
-                      {recipients?.results?.map((item) => {
-                        return (
-                          <div
-                            key={item.id}
-                            onClick={() => handleRecipientClick(item.id)}
-                            className="self-stretch shadow-[0px_3.8px_11.44px_rgba(0,_0,_0,_0.32)] rounded-[11.44px] bg-[#113C53] flex flex-row items-center justify-between pt-[5.8px] pb-[6.7px] pl-[5px] pr-3.5 box-border max-w-full gap-5 z-[1]"
-                          >
-                            <div className="w-full flex flex-row  max-w-full mq800:flex-wrap">
-                              <div className="flex gap-[23.8px] items-center w-full">
-                                <div className="w-[59.1px] h-[40px] rounded-[11.44px] bg-[#0F2E3F] flex items-center justify-center  pt-[14.3px] px-[15px] pb-[14.2px] box-border z-[1]">
-                                  <div className="flex items-center justify-center relative z-[2] text-[#175C83]">{`K`}</div>
-                                </div>
-                                <p className=" text-[13.69px] text-white font-normal leading-[23px] break-all">
-                                  {item.name}
-                                </p>
-                              </div>
+          <section className="w-full mobile-view-tab">
+            <div className="w-full relative">
+              <Tabs
+                aria-label="Default tabs"
+                variant="default"
+                className="justify-arround gap-6 border-none"
+              >
+                <Tabs.Item
+                  active
+                  title={<p className="font-semibold">Recipients</p>}
+                >
+                  <div className="custom-scrollbar bg-[#0f2e3f] overflow-y-scroll h-[220px] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-2 px-[17px] gap-[19px] max-w-full mq800:flex-wrap md:h-[338px] overflow-auto">
+                    <div className="h-[220px] w-[712px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
+                    <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full">
+                      <div className="self-stretch flex flex-col items-start justify-start gap-4 max-w-full">
+                        {recipients?.count === 0 && (
+                          <div className="flex flex-col justify-center items-center w-full h-[130px]">
+                            <div style={{ width: 90, height: 90 }}>
+                              <Lottie
+                                animationData={addDocumentAnimation}
+                                loop={true}
+                              />
                             </div>
-                            {encryptMessageData?.recipient_ids?.includes(
-                              item.id
-                            ) && (
-                              <div className="w-[34.3px] h-[34.3px] flex">
-                                <img
-                                  className="w-[34.3px] h-[34.3px] relative z-[3] flex"
-                                  alt=""
-                                  src="/group-1261153225.svg"
-                                />
-                              </div>
-                            )}
+                            <p className="text-[12px] font-sans mt-3">
+                              You have no recipient yet, create New Recipient
+                            </p>
                           </div>
-                        );
-                      })}
+                        )}
+                        {recipients?.results?.map((item) => {
+                          return (
+                            <div
+                              key={item.id}
+                              onClick={() => handleRecipientClick(item.id)}
+                              className="self-stretch shadow-[0px_3.8px_11.44px_rgba(0,_0,_0,_0.32)] rounded-[11.44px] bg-[#113C53] flex flex-row items-center justify-between pt-[5.8px] pb-[6.7px] pl-[5px] pr-3.5 box-border max-w-full gap-5 z-[1]"
+                            >
+                              <div className="w-full flex flex-row  max-w-full mq800:flex-wrap">
+                                <div className="flex gap-[23.8px] items-center w-full">
+                                  <div className="w-[59.1px] h-[40px] rounded-[11.44px] bg-[#0F2E3F] flex items-center justify-center  pt-[14.3px] px-[15px] pb-[14.2px] box-border z-[1]">
+                                    <div className="flex items-center justify-center relative z-[2] text-[#175C83]">
+                                      {item.emoji
+                                        ? String.fromCodePoint(
+                                            parseInt(item.emoji, 16)
+                                          )
+                                        : item.name[0].toUpperCase()}
+                                    </div>
+                                  </div>
+                                  <p className=" text-[13.69px] text-white font-normal leading-[23px] break-all">
+                                    {item.name}
+                                  </p>
+                                </div>
+                              </div>
+                              {encryptMessageData?.recipient_ids?.includes(
+                                item.id
+                              ) && (
+                                <div className="w-[34.3px] h-[34.3px] flex">
+                                  <img
+                                    className="w-[34.3px] h-[34.3px] relative z-[3] flex"
+                                    alt=""
+                                    src="/group-1261153225.svg"
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Tabs.Item>
-              <Tabs.Item title={<p className="font-semibold">Keypair</p>}>
-                <div className="flex gap-[10px] h-[220px] pt-2 overflow-y-scroll w-full flex-wrap xs:px-[16px] sm:px-[16px]">
-               
-                  {keypairs?.results?.map((item) => {
-                    return (
-                      <div
-                        key={item.id}
-                        className="key-pair xs:w-[46%] sm:w-[173px] md:w-[212px] lg:w-[212px]"
-                      >
-                        <label className="relative inline-flex items-center w-full">
-                          <input
-                            type="radio"
-                            className="hidden peer"
-                            name="key-pair"
-                            onClick={() =>
-                              setDecryptMessageData((prevState) => ({
-                                ...prevState,
-                                keypair_id: item.id,
-                              }))
-                            }
-                          />
-                          <span className="w-full max-w-full h-[32px] md:h-[37px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[13.69px] overflow-hidden md:text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
-                            {item.name}
-                          </span>
-                          <span className="hidden peer-checked:block absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
-                            <img
-                              className="h-[20.2px] w-[20.2px] z-[3]"
-                              alt=""
-                              src="/group-1261153226.svg"
-                            />
-                          </span>
-                        </label>
+                </Tabs.Item>
+                <Tabs.Item title={<p className="font-semibold">Keypair</p>}>
+                  <div className="flex gap-[10px] h-[220px] pt-2 overflow-y-scroll w-full flex-wrap xs:px-[16px] sm:px-[16px]">
+                    {keypairs?.count === 0 && (
+                      <div className="flex flex-col justify-center items-center w-full h-[130px]">
+                        <div style={{ width: 100, height: 100 }}>
+                          <Lottie animationData={keyRotation} loop={true} />
+                        </div>
+                        <p className="text-[12px] font-sans mt-3">
+                          You have no keypair yet, create New Keypair
+                        </p>
                       </div>
-                    );
-                  })}
+                    )}
+                    {keypairs?.results?.map((item) => {
+                      return (
+                        <div
+                          key={item.id}
+                          className="key-pair xs:w-[46%] sm:w-[173px] md:w-[212px] lg:w-[212px]"
+                        >
+                          <label className="relative inline-flex items-center w-full">
+                            <input
+                              type="radio"
+                              className="hidden peer"
+                              name="key-pair"
+                              onClick={() =>
+                                setDecryptMessageData((prevState) => ({
+                                  ...prevState,
+                                  keypair_id: item.id,
+                                }))
+                              }
+                            />
+                            <span className="w-full max-w-full h-[32px] md:h-[37px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[13.69px] overflow-hidden md:text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
+                              {item.name}
+                            </span>
+                            <span className="hidden peer-checked:block absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
+                              <img
+                                className="h-[20.2px] w-[20.2px] z-[3]"
+                                alt=""
+                                src="/group-1261153226.svg"
+                              />
+                            </span>
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Tabs.Item>
+              </Tabs>
+              <div
+                onClick={() => handleModal()}
+                className="cursor-pointer flex-row absolute bottom-[267px] right-5 mq400:right-3 ml-auto text-white text-[12px] font-sans" // Styled to look clickable
+              >
+                <div className="flex items-center">
+                  Create Recipient
+                  <Plus className={" ml-[3px]"} />
                 </div>
-              </Tabs.Item>
-            </Tabs>
-            <div
-              onClick={() => handleModal()}
-              className="cursor-pointer flex-row absolute bottom-[266px] right-5 mq400:right-3 ml-auto text-white text-[12px] font-sans" // Styled to look clickable
-            >
-              <div className="flex">
-                Create Recipient
-                <Plus className={"mt-[4px] ml-[3px]"} />
-              </div>
+              </div>{" "}
             </div>
             {(decryptMessageData.message || encryptMessageData.message) && (
-              <div className="w-[245px] mx-auto flex-row items-start justify-start gap-3 xs:flex sm:flex md:hidden lg:hidden mt-[10px]">
+              <div className="w-[245px] mx-auto flex-row items-start justify-start gap-3 xs:flex sm:flex md:hidden lg:hidden mt-[7px]">
                 <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
                   <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
                   <div

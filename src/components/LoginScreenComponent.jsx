@@ -93,7 +93,7 @@ const GroupComponent = ({ className = "" }) => {
               </h1>
             </div>
           </div>
-          <h3 className="m-0 self-stretch relative text-lg leading-[22px] font-normal font-[inherit] text-center z-[1]">
+          <h3 className="m-0 self-stretch relative text-[14px] md:text-lg leading-[22px] font-normal font-[inherit] text-center z-[1]">
             Welcome back! Login to your account
           </h3>
         </div>
@@ -142,17 +142,17 @@ const GroupComponent = ({ className = "" }) => {
         </div>
       </div>
       <div className="self-stretch flex flex-row items-start justify-center pt-0 px-0 pb-[59px] text-center text-base font-montserrat">
-        <div className="w-[223px] flex flex-col items-start justify-start gap-[5.8px]">
+        <div className="w-[182px] md:w-[223px]  flex flex-col items-start justify-start gap-[5.8px]">
           {/* <Link to='/VerifyLoginScreen' className='text-white no-underline w-full'> */}
           <div
             onClick={handleSubmit}
-            className="cursor-pointer self-stretch rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-2 pb-2 md:pt-3.5 md:pb-[13.9px] pl-[50px] pr-[49px] shrink-0 z-[1]"
+            className="cursor-pointer self-stretch h-[35px] w-[182px]  sm:h-[42.2px] sm:w-[223px] rounded-[4.38px] bg-mediumturquoise flex flex-row items-center justify-center text-center shrink-0 z-[1]"
           >
-            <div className="h-[47.2px] w-[223px] relative rounded-[4.38px] bg-mediumturquoise hidden" />
+            {/* <div className="h-[47.2px] w-[223px] relative rounded-[4.38px] bg-mediumturquoise hidden" /> */}
             <div className="flex-1 relative z-[1]">Next</div>
           </div>
           {/* </Link> */}
-          <div className="flex flex-row items-start justify-start py-0 px-[15px] text-xs text-gainsboro-200">
+          <div className="flex flex-row items-start justify-start px-[5px] py-0 md:px-[15px] text-xs text-gainsboro-200">
             <div className="flex flex-row items-start justify-start gap-[9px] shrink-0">
               <div className="relative leading-[32px] z-[1]">
                 Don’t have your seed?

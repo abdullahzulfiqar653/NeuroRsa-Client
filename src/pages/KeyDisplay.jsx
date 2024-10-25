@@ -80,7 +80,7 @@ const KeyDisplay = () => {
               )}
               <button
                 onClick={handleHideKey}
-                className="md:text-[16px] text-[14px] font-normal leading-[19px] text-white w-[100%] max-w-[151px] h-[47px] items-center cursor-pointer border-[#57CBCC] border-[1px] border-solid  bg-[#57CBCC] hover:bg-[#47b0b2] flex-1 rounded-[4.38px] flex  justify-center"
+                className="md:text-[16px] text-[15px] leading-[19px] text-white w-[100%] max-w-[151px] h-[47px] items-center cursor-pointer border-[#57CBCC] border-[1px] border-solid  bg-[#57CBCC] hover:bg-[#47b0b2] flex-1 rounded-[4.38px] flex  justify-center "
               >
                 Hide
               </button>

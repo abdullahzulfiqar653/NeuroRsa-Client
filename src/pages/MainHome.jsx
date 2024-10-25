@@ -122,7 +122,7 @@ const MainHome = () => {
         <div className="bg-[#0B2837] w-full items-center">
           <Header />
         </div>
-        <div className="overflow-x-auto px-[32px] pb-4 desktop-view-table xs:hidden sm:hidden md:block lg:block">
+        <div className="overflow-x-auto px-[32px] bg-[#0f2e3f] pb-4 desktop-view-table xs:hidden sm:hidden md:block lg:block">
           <div className="mb-[30px] mt-[40px]">
             <Formik
               initialValues={{ search: "" }}
@@ -300,7 +300,7 @@ const MainHome = () => {
               </Table.Body>
             </Table>
           </div>
-          <div className="flex justify-between items-center space-x-4 mt-[64px] mb-[64px]">
+          <div className="flex justify-between bg-[#0f2e3f] items-center space-x-4 mt-[64px] mb-[64px]">
             <div className="flex items-center space-x-2">
               <button
                 disabled={data?.previous === null}

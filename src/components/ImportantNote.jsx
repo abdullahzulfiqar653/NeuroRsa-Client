@@ -7,7 +7,7 @@ const GroupComponent = ({ className = '', onShowSeed }) => {
       </h2>
       <div className='self-stretch flex flex-col items-start justify-start gap-[5px] text-mini-1 font-montserrat'>
         <div className='flex flex-row items-start justify-start py-0 px-px'>
-          <p className='font-normal text-[14px] leading-[22px] text-center mt-[0px] mb-[30px]'>
+          <p className='text-[14px] leading-[22px] text-center mt-[0px] mb-[30px]'>
             On the next page you will see a series of 16 words. This is your unique and private seed and it is the ONLY
             way to recover your wallet in case of loss or manifestation. It is your responsibility to write it down and
             store it in a safe place outside of the password manager app

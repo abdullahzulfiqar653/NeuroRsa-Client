@@ -124,7 +124,7 @@ const RecipentsList = () => {
             </div>
             <button
               onClick={handleModal}
-              className="w-[212px] bg-[#57CBCC] text-white rounded-[4.38px]"
+              className="w-[212px] bg-[#57CBCC] hover:bg-[#43a5a7] text-white rounded-[4.38px]"
             >
               Create New Recipient
             </button>
@@ -252,7 +252,7 @@ const RecipentsList = () => {
             </Formik>
             <button
               onClick={handleModal}
-              className="w-[130px] ml-1 text-[12px] bg-[#57CBCC] h-[30px] text-white rounded-[4.38px]"
+              className="w-[130px] ml-1 text-[12px] bg-[#57CBCC] hover:bg-[#43a5a7] h-[30px] text-white rounded-[4.38px]"
             >
               Create New Recipient
             </button>

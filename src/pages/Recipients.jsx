@@ -247,11 +247,12 @@ const Recipients = () => {
                     <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full">
                       <div className="self-stretch flex flex-col items-start justify-start gap-4 max-w-full">
                         {recipients?.count === 0 && (
-                          <div
-                            onClick={handleModal}
-                            className="flex flex-col justify-center  cursor-pointer items-center w-full h-[250px]"
-                          >
-                            <div style={{ width: 90, height: 90 }}>
+                          <div className="flex flex-col justify-center items-center w-full h-[250px]">
+                            <div
+                              onClick={handleModal}
+                              style={{ width: 90, height: 90 }}
+                              className="cursor-pointer"
+                            >
                               <Lottie
                                 animationData={addDocumentAnimation}
                                 loop={true}
@@ -309,11 +310,12 @@ const Recipients = () => {
                     <div className="w-[712px] h-[402px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
                     <div className="flex gap-[15px] w-full flex-wrap">
                       {keypairs?.count === 0 && (
-                        <div
-                          onClick={() => openModal()}
-                          className="flex flex-col cursor-pointer justify-center items-center w-full h-[200px]"
-                        >
-                          <div style={{ width: 100, height: 100 }}>
+                        <div className="flex flex-col justify-center items-center w-full h-[200px]">
+                          <div
+                            onClick={() => openModal()}
+                            className="cursor-pointer"
+                            style={{ width: 100, height: 100 }}
+                          >
                             <Lottie animationData={keyRotation} loop={true} />
                           </div>
                           <p className="text-[12px] font-sans mt-3">

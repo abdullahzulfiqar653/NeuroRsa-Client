@@ -170,7 +170,7 @@ const MainHome = () => {
             </div>
             <button
               onClick={openModalThree}
-              className="w-[212px] bg-[#57CBCC] hover:bg-[#327C85] text-white rounded-[4.38px]"
+              className="w-[212px] bg-[#57CBCC] hover:bg-[#43a5a7] text-white rounded-[4.38px]"
             >
               New Key Pair
             </button>
@@ -404,7 +404,7 @@ const MainHome = () => {
             </Formik>
             <button
               onClick={openModalThree}
-              className="w-[130px] ml-1 text-[12px] bg-[#57CBCC] h-[30px] text-white rounded-[4.38px]"
+              className="w-[130px] ml-1 text-[12px] bg-[#57CBCC] hover:bg-[#43a5a7] h-[30px] text-white rounded-[4.38px]"
             >
               New Key Pair
             </button>

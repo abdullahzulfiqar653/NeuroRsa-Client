@@ -63,6 +63,7 @@ function CreateKeypairModal() {
         },
         onError: (error) => {
           setErrors(error.response.data);
+          setLoading(false);
           for (const [attribute, errors] of Object.entries(
             error.response.data
           )) {
@@ -345,7 +346,7 @@ function CreateKeypairModal() {
                     <ThreeDots
                       color="white"
                       height={10}
-                      width={35}
+                      width={30}
                       ariaLabel="loading"
                       wrapperStyle={{ marginLeft: "5%" }}
                     />

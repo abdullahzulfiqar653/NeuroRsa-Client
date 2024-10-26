@@ -9,12 +9,14 @@ import CreateRecipientModal from "../components/CreateRecipientModal";
 import Header from "../components/Header";
 import useDeleteRecipients from "../hooks/useDeleteRecipients";
 import useGetRecipients from "../hooks/useGetRecipients";
+import { ThreeDots } from "react-loader-spinner";
 
 const RecipentsList = () => {
   const { search, setSearch, handleModal } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
   const location = useLocation();
   const [isOpenTwo, setIsOpenTwo] = useState(false);
+  const [loading, setIsLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const { mutate: deleteKeyPair } = useDeleteRecipients();
   const { data: recipients, refetch: refetchRecipients } = useGetRecipients(
@@ -49,14 +51,17 @@ const RecipentsList = () => {
   };
 
   const handleDelete = () => {
+    setIsLoading(true);
     deleteKeyPair(selectedUserId, {
       onSuccess: (response) => {
         toast.success(`Recipient Deleted successfully.`);
+        setIsLoading(false);
         setIsOpenTwo(false);
         refetchRecipients();
       },
       onError: (error) => {
         setErrors(error.response.data);
+        setIsLoading(false);
         toast.error(
           error.response.data?.error
             ? error.response.data?.error[0]
@@ -351,9 +356,23 @@ const RecipentsList = () => {
             </button>
             <button
               onClick={handleDelete}
+              style={{
+                background: loading ? "#0f2e3f" : "#57CBCC",
+                cursor: loading ? "not-allowed" : "pointer",
+              }}
+              disabled={loading}
               className="bg-[#57CBCC] rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-white"
             >
               Delete
+              {loading && (
+                <ThreeDots
+                  color="white"
+                  height={10}
+                  width={35}
+                  ariaLabel="loading"
+                  wrapperStyle={{ marginLeft: "5%" }}
+                />
+              )}
             </button>
           </div>
         </Modal.Body>

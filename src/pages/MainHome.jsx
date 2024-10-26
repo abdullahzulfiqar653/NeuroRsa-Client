@@ -12,12 +12,13 @@ import Header from "../components/Header";
 import useDeleteKeyPairs from "../hooks/useDeleteKeyPairs";
 import useGetKeyPairs from "../hooks/useGetKeyPairs";
 import { debounce } from "lodash";
-import useCreateKeypair from "../hooks/useCreateKeypair";
+import { ThreeDots } from "react-loader-spinner";
+import CreateKeypairModal from "../CreateKeypairModal";
 
 const MainHome = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { search, setSearch } = useAuth();
+  const { search, setSearch, openModal: openModalThree } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenTwo, setIsOpenTwo] = useState(false);
   const [copiedPublic, setCopiedPublic] = useState({});
@@ -26,12 +27,6 @@ const MainHome = () => {
   const [itemPerPage, setItemPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const { mutate: deleteKeyPair } = useDeleteKeyPairs();
-  const [step, setStep] = useState(1);
-  const { mutate } = useCreateKeypair();
-  const [errors, setErrors] = useState({});
-  const [isOpenThree, setIsOpenThree] = useState(false);
-  const [formValues, setFormValues] = useState({});
-  const [keypair, setKeypair] = useState({});
   const [loading, setLoading] = useState(false);
   const { data, refetch } = useGetKeyPairs(search, currentPage, itemPerPage);
   const totalPages = Math.ceil(data?.count / itemPerPage);
@@ -54,88 +49,6 @@ const MainHome = () => {
     refetch();
   }, [location, refetch, isOpenTwo, currentPage]);
 
-  useEffect(() => {
-    if (step === 2) {
-      const timer = setTimeout(() => {
-        setStep(3);
-      }, 800);
-      return () => clearTimeout(timer);
-    }
-  }, [step]);
-
-  const closeModalThree = () => setIsOpenThree(false);
-  const nextStep = () => setStep((prevStep) => Math.min(prevStep + 1, 4));
-  const prevStep = () => setStep((prevStep) => Math.max(prevStep - 1, 1));
-  const openModalThree = () => {
-    setIsOpenThree(true);
-    setStep(1);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setLoading(false);
-    setFormValues((prevValues) => {
-      let updatedValues = { ...prevValues, [name]: value };
-      if (value === "") {
-        delete updatedValues[name];
-      }
-      if (name === "confirmPassphrase" || name === "passphrase") {
-        const { passphrase, confirmPassphrase } = updatedValues;
-        if (!passphrase || !confirmPassphrase) {
-          setErrors({ passphrase: "" });
-        } else if (passphrase !== confirmPassphrase) {
-          setErrors({ passphrase: "Passphrases do not match" });
-        } else {
-          setErrors({ passphrase: "" });
-        }
-      }
-      return updatedValues;
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (formValues?.passphrase && !formValues?.confirmPassphrase) {
-      toast.error("Please confirm your passphrase.");
-      return;
-    }
-
-    setLoading(true);
-    if (!errors.passphrase) {
-      mutate(formValues, {
-        onSuccess: (response) => {
-          setKeypair(response);
-          setStep(4);
-          setLoading(false);
-          toast.success(`Keypair Created successfully.`);
-        },
-        onError: (error) => {
-          setErrors(error.response.data);
-          for (const [attribute, errors] of Object.entries(
-            error.response.data
-          )) {
-            toast.error(errors[0]);
-          }
-        },
-      });
-      setFormValues({});
-    } else {
-      toast.error("Passphrases do not match! Please correct it.");
-    }
-  };
-
-  const handleBackupOfKeypair = () => {
-    const element = document.createElement("a");
-    const file = new Blob(
-      [`${keypair.public_key}\n\n\n\n${keypair.private_key}`],
-      { type: "text/plain" }
-    );
-    element.href = URL.createObjectURL(file);
-    element.download = "keypair_backup.txt";
-    document.body.appendChild(element);
-    element.click();
-  };
-
   const handleShowPublicKey = (type, text) => {
     navigate("/key-display", {
       state: { keyType: type, keyText: text },
@@ -154,7 +67,6 @@ const MainHome = () => {
       }));
     }, 1000);
   };
-
 
   const closeModal = () => setIsOpen(false);
   const closeModalTwo = () => setIsOpenTwo(false);
@@ -175,14 +87,17 @@ const MainHome = () => {
   };
 
   const handleDelete = () => {
+    setLoading(true);
     deleteKeyPair(selectedUserId, {
       onSuccess: (response) => {
         toast.success(`Keypair Deleted successfully.`);
+        setLoading(false);
         setIsOpenTwo(false);
         refetch();
       },
       onError: (error) => {
         setErrors(error.response.data);
+        setLoading(false);
         toast.error(
           error.response.data?.error
             ? error.response.data?.error[0]
@@ -215,50 +130,46 @@ const MainHome = () => {
         <div className="overflow-x-auto px-[32px] bg-[#0f2e3f] pb-4 desktop-view-table xs:hidden sm:hidden md:block lg:block">
           <div className="flex justify-around w-full h-[53px] mb-[30px] mt-[40px]">
             <div className="w-[90%]">
-            <Formik
-              initialValues={{ search: "" }}
-              onSubmit={(values) => {
-                console.log(values);
-              }}
-            >
-              {() => (
-                <Form className="relative">
-                  <div className="flex items-center">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                      <svg
-                        className="h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        />
-                      </svg>
-                    </span>
-                    <Field
-                      name="search"
-                      type="text"
-                      placeholder="Search..."
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                      className="w-full md:max-w-[500px] lg:max-w-[903px] h-[53px] input-field block  pl-10 pr-4 py-2 border border-gray-700 rounded-md bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
-                    />
-                  </div>
-                </Form>
-              )}
-            </Formik>
+              <Formik
+                initialValues={{ search: "" }}
+                onSubmit={(values) => {
+                  console.log(values);
+                }}
+              >
+                {() => (
+                  <Form className="relative">
+                    <div className="flex items-center">
+                      <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <svg
+                          className="h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                          />
+                        </svg>
+                      </span>
+                      <Field
+                        name="search"
+                        type="text"
+                        placeholder="Search..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-full md:max-w-[500px] lg:max-w-[903px] h-[53px] input-field block  pl-10 pr-4 py-2 border border-gray-700 rounded-md bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      />
+                    </div>
+                  </Form>
+                )}
+              </Formik>
             </div>
             <button
-               onClick={() => {
-                openModalThree();
-                setFormValues({});
-                setErrors({});
-              }}
+              onClick={openModalThree}
               className="w-[212px] bg-[#57CBCC] hover:bg-[#327C85] text-white rounded-[4.38px]"
             >
               New Key Pair
@@ -492,11 +403,7 @@ const MainHome = () => {
               )}
             </Formik>
             <button
-              onClick={() => {
-                openModalThree();
-                setFormValues({});
-                setErrors({});
-              }}
+              onClick={openModalThree}
               className="w-[130px] ml-1 text-[12px] bg-[#57CBCC] h-[30px] text-white rounded-[4.38px]"
             >
               New Key Pair
@@ -628,6 +535,8 @@ const MainHome = () => {
         </div>
       </div>
 
+      <CreateKeypairModal />
+
       <BottomSheet visible={isSheetVisible} onDismiss={closeSheet}>
         <div className="text-[#FFFFFF] flex flex-col justify-start text-start gap-5 pt-4">
           <h1 className="text-[15px] leading-[17.07px] flex gap-[10px] items-center pl-6 pr-6">
@@ -686,291 +595,26 @@ const MainHome = () => {
             </button>
             <button
               onClick={handleDelete}
+              style={{
+                background: loading ? "#0f2e3f" : "#57CBCC",
+                cursor: loading ? "not-allowed" : "pointer",
+              }}
+              disabled={loading}
               className="bg-[#57CBCC] rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-white"
             >
               Delete
+              {loading && (
+                <ThreeDots
+                  color="white"
+                  height={10}
+                  width={35}
+                  ariaLabel="loading"
+                  wrapperStyle={{ marginLeft: "5%" }}
+                />
+              )}
             </button>
           </div>
         </Modal.Body>
-      </Modal>
-      
-      <Modal show={isOpenThree} onClose={closeModalThree} className="bg-black">
-        <Modal.Header className="justify-center items-center flex bg-[#0E2E3F] border-none modal-h3">
-          <div className="text-white text-[16px] md:text-[24px]">
-            {" "}
-            Key Pair Creation Wizard - neuro.RSA{" "}
-          </div>
-        </Modal.Header>
-        <Formik>
-          <Form>
-            <Modal.Body className="bg-[#1B3D4F]">
-              {step === 1 && (
-                <div>
-                  <h3 className="text-white text-[16px] md:text-[24px] font-normal leading-[33px]">
-                    Enter Details
-                  </h3>
-                  <p className="text-[#CCCCCC] text-[12px] md:text-[16px] font-normal leading-[19px] mt-2">
-                    Please enter your personal details below. If you want more
-                    control over the parameters, click on the advanced Settings
-                    button.
-                  </p>
-                  <div className="block w-90% mx-auto h-[2px] bg-[#0E2E3F] mt-[32px]"></div>
-                  <div className="mt-[32px]">
-                    <div className="flex flex-col">
-                      <div className="flex justify-between">
-                        <label htmlFor="name" className="text-white mb-[6px]">
-                          Name:
-                        </label>
-                        <span className="text-white">(optional)</span>
-                      </div>
-                      <Field
-                        type="text"
-                        id="name"
-                        name="name"
-                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field text-white"
-                        value={formValues.name}
-                        onChange={handleChange}
-                      />
-                      <ErrorMessage name="name" component="div" />
-                    </div>
-                    <div className="flex flex-col mt-[24px]">
-                      <div className="flex justify-between">
-                        <label htmlFor="email" className="text-white mb-[6px]">
-                          Email:
-                        </label>
-                        <span className="text-white">(optional)</span>
-                      </div>
-                      <Field
-                        type="email"
-                        id="email"
-                        name="email"
-                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field text-white"
-                        value={formValues.email}
-                        onChange={handleChange}
-                      />
-                      <ErrorMessage name="email" component="div" />
-                    </div>
-                  </div>
-                  <div className="block w-[98%] mx-auto h-[2px] bg-[#0E2E3F] mt-[20px]"></div>
-                </div>
-              )}
-
-              {step === 2 && (
-                <div>
-                  <h3 className="text-white text-[16px] md:text-[24px] font-normal leading-[33px]">
-                    Creating Key Pair...
-                  </h3>
-                  <p className="text-[#CCCCCC]  text-[12px] md:text-[16px] font-normal leading-[19px] mt-2">
-                    The process of creating a key requires large amounts of
-                    random numbers. This may require several minutes...
-                  </p>
-                  <div className="mt-4 flex justify-center h-[250px]">
-                    <img
-                      src="/loader.svg" // Update path as necessary
-                      alt="Loading..."
-                      width={50} // Adjust size as needed
-                      height={50}
-                      className="animate-spin"
-                      style={{ animationDuration: "2s" }} // Set spin duration to 2 seconds
-                    />
-                  </div>
-                </div>
-              )}
-
-              {step === 3 && (
-                <div>
-                  <div className="flex gap-[18px]">
-                    <img
-                      src="./Group-1261153253.svg"
-                      className="w-[35px] h-[24px] object-contain object-top mt-[10px]"
-                    />
-                    <div className="">
-                      <h3 className="text-white text-[16px] md:text-[24px] font-normal leading-[33px]">
-                        Creating Key Pair...
-                      </h3>
-                      <p className="text-[#CCCCCC] text-[13px] md:text-[16px] font-normal leading-[19px] mt-2">
-                        Please enter the passphrase to protect your new key.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="block w-90% mx-auto h-[2px] bg-[#0E2E3F] mt-[32px]"></div>
-                  <div className="mt-[46px]">
-                    <div className="flex flex-col">
-                      <div className="">
-                        <label
-                          htmlFor="passphrase"
-                          className="text-white mb-[6px] flex w-full"
-                        >
-                          Passphrase (Optional):
-                        </label>
-                      </div>
-                      <Field
-                        type="password"
-                        id="passphrase"
-                        name="passphrase"
-                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field text-white"
-                        value={formValues.passphrase}
-                        onChange={handleChange}
-                      />
-                      {errors.passphrase && (
-                        <div className="text-red-500">{errors.passphrase}</div>
-                      )}
-                    </div>
-                    <div className="flex flex-col mt-[24px]">
-                      <label
-                        htmlFor="confirmPassphrase"
-                        className="text-white mb-[6px] flex w-full"
-                      >
-                        Repeat Passphrase:
-                      </label>
-                      <Field
-                        type="password"
-                        id="confirmPassphrase"
-                        name="confirmPassphrase"
-                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field text-white"
-                        value={formValues.confirmPassphrase}
-                        onChange={handleChange}
-                      />
-                      {errors.passphrase && (
-                        <div className="text-red-500">{errors.passphrase}</div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {step === 4 && (
-                <div>
-                  <div className="flex gap-[18px]">
-                    <img
-                      src="./Group-1261153253.svg"
-                      className="w-[35px] h-[24px] object-contain object-top mt-[10px]"
-                    />
-                    <div className="">
-                      <h3 className="text-white text-[16px] md:text-[24px] font-normal leading-[33px]">
-                        Key Pair Successfully Created
-                      </h3>
-                      <p className="text-[#CCCCCC] text-[12px] md:text-[16px] font-normal leading-[19px] mt-2">
-                        You new key pair was created successfully. Please find
-                        details on this result and some suggested next steps
-                        below.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="block w-90% mx-auto h-[2px] bg-[#0E2E3F] my-[32px]"></div>
-                  <div className="flex flex-col">
-                    <label
-                      htmlFor="message"
-                      className="text-white text-[16px] md:text-[24px] font-normal leading-[33px] mb-[6px] flex w-full"
-                    >
-                      Result
-                    </label>
-                    <Field
-                      as="textarea"
-                      name="message"
-                      className="!bg-[#0E2E3F] !rounded-[5px] text-[12px] md:text-[16px] text-white input-field"
-                      rows="6"
-                      col="40"
-                      disabled
-                      value={`Key Pair created successfully. Fingerprint: ${Array(
-                        5
-                      )
-                        .fill()
-                        .map(() => Math.random().toString(36).substring(2, 15))
-                        .join("")
-                        .toUpperCase()}`}
-                    />
-                    <label
-                      htmlFor="NextSteps"
-                      className="text-white text-[16px] md:text-[24px] font-normal leading-[20px] md:leading-[33px] mt-[5px] md:mt-[32px] mb-[6px] flex w-full"
-                    >
-                      Next Steps
-                    </label>
-                    <Button
-                      type="button"
-                      id="passphrase"
-                      name="passphrase"
-                      className="!bg-[#0E2E3F] !rounded-[5px] text-[12px] md:text-[16px] border-[#0E2E3F] text-white input-field input-field"
-                      onClick={handleBackupOfKeypair}
-                    >
-                      Make a Backup Of Your Key Pair...
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </Modal.Body>
-
-            <Modal.Footer className="bg-[#1B3D4F] justify-end border-[0px] pt-0 footer-btn">
-              {step === 1 && (
-                <>
-                  <Button
-                    onClick={nextStep}
-                    className="!bg-[#57CBCC] hover:bg-red-700 text-white font-sans font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    Next
-                  </Button>
-                  <Button
-                    onClick={closeModalThree}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    Cancel
-                  </Button>
-                </>
-              )}
-
-              {step === 2 && (
-                <>
-                  <Button
-                    onClick={closeModalThree}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    Cancel
-                  </Button>
-                </>
-              )}
-
-              {step === 3 && (
-                <>
-                  <Button
-                    onClick={() => {
-                      closeModalThree();
-                      setLoading(false);
-                    }}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    className="bg-[#13425c] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    OK
-                  </Button>
-                </>
-              )}
-
-              {step === 4 && (
-                <>
-                  <Button
-                    onClick={() => {
-                      closeModalThree();
-                    }}
-                    className="!bg-[#57CBCC] hover:bg-red-700 text-white font-sans font-bold py-2 px-4 rounded-[5px]"
-                  >
-                    Finish
-                  </Button>
-                  <Button
-                    onClick={closeModalThree}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px]"
-                  >
-                    Cancel
-                  </Button>
-                </>
-              )}
-            </Modal.Footer>
-          </Form>
-        </Formik>
       </Modal>
     </div>
   );

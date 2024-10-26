@@ -13,16 +13,21 @@ import { useAuth } from "../AuthContext";
 import Lottie from "lottie-react";
 import keyRotation from "../animations/keyRotation.json";
 import addDocumentAnimation from "../animations/addDocument.json";
+import { ThreeDots } from "react-loader-spinner";
+import CreateKeypairModal from "../CreateKeypairModal";
 
 const Recipients = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isOpen, handleModal } = useAuth();
+  const { isOpen, openModal, handleModal } = useAuth();
   const { data: keypairs, refetch: refetchKeypairs } = useGetKeyPairs();
   const { data: recipients, refetch: refetchRecipients } = useGetRecipients();
   const { mutate: mutateCreateEncryptedMessage } = useCreateEncryptedMessage();
   const { mutate: mutateCreateDecryptedMessage } = useCreateDecryptedMessage();
-
+  const [loadingState, setLoadingState] = useState({
+    loading: false,
+    loadingD: false,
+  });
   const [isOpenTwo, setIsOpenTwo] = useState(false);
   const [decryptMessageData, setDecryptMessageData] = useState({
     keypair_id: "",
@@ -40,21 +45,25 @@ const Recipients = () => {
   }, [location, refetchKeypairs, refetchRecipients, isOpen]);
 
   const handleEncryption = () => {
+    setLoadingState((prevState) => ({ ...prevState, loading: true }));
     mutateCreateEncryptedMessage(encryptMessageData, {
       onSuccess: (res) => {
         toast.success(`Message Encrypted successfully.`);
         navigate("/key-display", {
           state: { keyType: "Message", keyText: res.message },
         });
+        setLoadingState((prevState) => ({ ...prevState, loading: false }));
       },
       onError: (error) => {
         Object.values(error.response.data).forEach((errorArray) => {
           toast.error(errorArray[0]);
         });
+        setLoadingState((prevState) => ({ ...prevState, loading: false }));
       },
     });
   };
   const handleDecryption = () => {
+    setLoadingState((prevState) => ({ ...prevState, loadingD: true }));
     mutateCreateDecryptedMessage(decryptMessageData, {
       onSuccess: (res) => {
         setDecryptMessageData((prevState) => ({
@@ -65,12 +74,14 @@ const Recipients = () => {
           ...prevState,
           message: res.message,
         }));
+        setLoadingState((prevState) => ({ ...prevState, loadingD: false }));
         toast.success(`Message Decrypted successfully.`);
       },
       onError: (error) => {
         Object.values(error.response.data).forEach((errorArray) => {
           toast.error(errorArray[0]);
         });
+        setLoadingState((prevState) => ({ ...prevState, loadingD: false }));
       },
     });
   };
@@ -166,24 +177,66 @@ const Recipients = () => {
                   {(decryptMessageData.message ||
                     encryptMessageData.message) && (
                     <div className="w-[304px] flex flex-row items-start justify-start gap-5">
-                      <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
-                        <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                        <div
-                          onClick={handleEncryption}
-                          className="flex-1 relative text-base  text-white text-center z-[1]"
-                        >
+                      <button
+                        onClick={handleEncryption}
+                        style={{
+                          background: loadingState.loading
+                            ? "#0f2e3f"
+                            : "#57CBCC",
+                          cursor: loadingState.loading
+                            ? "not-allowed"
+                            : "pointer",
+                        }}
+                        disabled={loadingState.loading}
+                        className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
+                      >
+                        {/* <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" /> */}
+                        <div className="flex-1 relative text-base  text-white text-center z-[1]">
                           Encrypt
                         </div>
+                        {loadingState.loading && (
+                          <ThreeDots
+                            color="white"
+                            height={10}
+                            width={30}
+                            ariaLabel="loading"
+                            wrapperStyle={{
+                              marginLeft: "5%",
+                              marginTop: "8px",
+                            }}
+                          />
+                        )}
                       </button>
                       <button
                         onClick={handleDecryption}
+                        style={{
+                          background: loadingState.loadingD
+                            ? "#0f2e3f"
+                            : "#57CBCC",
+                          cursor: loadingState.loadingD
+                            ? "not-allowed"
+                            : "pointer",
+                        }}
+                        disabled={loadingState.loadingD}
                         className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
                       >
-                        <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
+                        {/* <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" /> */}
                         <div className="flex-1 relative text-base  text-white text-center z-[1]">
                           {" "}
                           Decrypt
                         </div>
+                        {loadingState.loadingD && (
+                          <ThreeDots
+                            color="white"
+                            height={10}
+                            width={30}
+                            ariaLabel="loading"
+                            wrapperStyle={{
+                              marginLeft: "5%",
+                              marginTop: "8px",
+                            }}
+                          />
+                        )}
                       </button>
                     </div>
                   )}
@@ -193,6 +246,22 @@ const Recipients = () => {
                     <div className="h-[338px] w-[712px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
                     <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full">
                       <div className="self-stretch flex flex-col items-start justify-start gap-4 max-w-full">
+                        {recipients?.count === 0 && (
+                          <div
+                            onClick={handleModal}
+                            className="flex flex-col justify-center  cursor-pointer items-center w-full h-[250px]"
+                          >
+                            <div style={{ width: 90, height: 90 }}>
+                              <Lottie
+                                animationData={addDocumentAnimation}
+                                loop={true}
+                              />
+                            </div>
+                            <p className="text-[12px] font-sans mt-3">
+                              You have no recipient yet, create New Recipient
+                            </p>
+                          </div>
+                        )}
                         {recipients?.results?.map((item) => {
                           return (
                             <div
@@ -239,6 +308,19 @@ const Recipients = () => {
                     </div>
                     <div className="w-[712px] h-[402px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
                     <div className="flex gap-[15px] w-full flex-wrap">
+                      {keypairs?.count === 0 && (
+                        <div
+                          onClick={() => openModal()}
+                          className="flex flex-col cursor-pointer justify-center items-center w-full h-[200px]"
+                        >
+                          <div style={{ width: 100, height: 100 }}>
+                            <Lottie animationData={keyRotation} loop={true} />
+                          </div>
+                          <p className="text-[12px] font-sans mt-3">
+                            You have no keypair yet, create New Keypair
+                          </p>
+                        </div>
+                      )}
                       {keypairs?.results?.map((item) => (
                         <div
                           key={item.id}
@@ -316,7 +398,10 @@ const Recipients = () => {
                     <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full">
                       <div className="self-stretch flex flex-col items-start justify-start gap-4 max-w-full">
                         {recipients?.count === 0 && (
-                          <div className="flex flex-col justify-center items-center w-full h-[130px]">
+                          <div
+                            onClick={() => handleModal()}
+                            className="flex flex-col justify-center items-center w-full h-[130px]"
+                          >
                             <div style={{ width: 90, height: 90 }}>
                               <Lottie
                                 animationData={addDocumentAnimation}
@@ -372,7 +457,10 @@ const Recipients = () => {
                 <Tabs.Item title={<p className="font-semibold">Keypair</p>}>
                   <div className="flex gap-[10px] h-[220px] pt-2 overflow-y-scroll w-full flex-wrap xs:px-[16px] sm:px-[16px]">
                     {keypairs?.count === 0 && (
-                      <div className="flex flex-col justify-center items-center w-full h-[130px]">
+                      <div
+                        onClick={() => openModal()}
+                        className="flex flex-col justify-center items-center w-full h-[130px]"
+                      >
                         <div style={{ width: 100, height: 100 }}>
                           <Lottie animationData={keyRotation} loop={true} />
                         </div>
@@ -428,23 +516,51 @@ const Recipients = () => {
             </div>
             {(decryptMessageData.message || encryptMessageData.message) && (
               <div className="w-[245px] mx-auto flex-row items-start justify-start gap-3 xs:flex sm:flex md:hidden lg:hidden mt-[7px]">
-                <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
-                  <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                  <div
-                    onClick={handleEncryption}
-                    className="flex-1 relative text-base  text-white text-center z-[1]"
-                  >
+                <button
+                  style={{
+                    background: loadingState.loading ? "#0f2e3f" : "#57CBCC",
+                    cursor: loadingState.loading ? "not-allowed" : "pointer",
+                  }}
+                  disabled={loadingState.loading}
+                  onClick={handleEncryption}
+                  className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
+                >
+                  {/* <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" /> */}
+                  <div className="flex-1 relative text-base  text-white text-center z-[1]">
                     Encrypt
                   </div>
+                  {loadingState.loading && (
+                    <ThreeDots
+                      color="white"
+                      height={5}
+                      width={30}
+                      ariaLabel="loading"
+                      wrapperStyle={{ marginLeft: "5%", marginTop: "11px" }}
+                    />
+                  )}
                 </button>
-                <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
-                  <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                  <div
-                    onClick={handleDecryption}
-                    className="flex-1 relative text-base  text-white text-center z-[1]"
-                  >
+                <button
+                  onClick={handleDecryption}
+                  style={{
+                    background: loadingState.loadingD ? "#0f2e3f" : "#57CBCC",
+                    cursor: loadingState.loadingD ? "not-allowed" : "pointer",
+                  }}
+                  disabled={loadingState.loadingD}
+                  className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
+                >
+                  {/* <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" /> */}
+                  <div className="flex-1 relative text-base  text-white text-center z-[1]">
                     Decrypt
                   </div>
+                  {loadingState.loadingD && (
+                    <ThreeDots
+                      color="white"
+                      height={5}
+                      width={30}
+                      ariaLabel="loading"
+                      wrapperStyle={{ marginLeft: "5%", marginTop: "11px" }}
+                    />
+                  )}
                 </button>
               </div>
             )}
@@ -452,6 +568,7 @@ const Recipients = () => {
         </main>
       </div>
       <CreateRecipientModal />
+      <CreateKeypairModal />
       <Modal show={isOpenTwo} onClose={closeModalTwo} className="bg-black">
         <Modal.Header className="pt-[10px] !pl-[0px] !pb-[2px] bg-[#1B3D4F] border-none"></Modal.Header>
 

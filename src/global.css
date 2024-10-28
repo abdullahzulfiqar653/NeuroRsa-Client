@@ -281,3 +281,32 @@ body {
   transform: translate(-50%, -50%);
   z-index: -1; 
 }
+
+.EmojiPickerReact {
+  z-index: 20;
+  position: absolute !important;
+  background: #0E2E3F !important;
+  border: 1px solid #0E2E3F !important;
+  top: 100% !important;
+  width: 100% !important;
+  height: 320px !important;
+}
+.epr-emoji-category-label {
+  background-color: transparent !important;
+  color: rgb(223 223 223) !important;
+}
+
+.popup-content {
+  margin-left: -40px; /* Move the popup to the left */
+}
+
+.popup-arrow {
+  transform: translateX(20px); 
+}
+
+* {
+  scrollbar-width:thin;
+  scrollbar-color: #888 #ffffff00; 
+}
+
+

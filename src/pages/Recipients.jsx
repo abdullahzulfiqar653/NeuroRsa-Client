@@ -6,20 +6,28 @@ import useGetKeyPairs from "../hooks/useGetKeyPairs";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useGetRecipients from "../hooks/useGetRecipients";
-import useCreateRecipient from "../hooks/useCreateRecipient";
 import useCreateEncryptedMessage from "../hooks/useCreateEncryptedMessage";
 import useCreateDecryptedMessage from "../hooks/useCreateDecryptedMessage";
+import CreateRecipientModal from "../components/CreateRecipientModal";
+import { useAuth } from "../AuthContext";
+import Lottie from "lottie-react";
+import keyRotation from "../animations/keyRotation.json";
+import addDocumentAnimation from "../animations/addDocument.json";
+import { ThreeDots } from "react-loader-spinner";
+import CreateKeypairModal from "../CreateKeypairModal";
 
 const Recipients = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { mutate: mutateCreaterecipient } = useCreateRecipient();
+  const { isOpen, openModal, handleModal } = useAuth();
   const { data: keypairs, refetch: refetchKeypairs } = useGetKeyPairs();
   const { data: recipients, refetch: refetchRecipients } = useGetRecipients();
   const { mutate: mutateCreateEncryptedMessage } = useCreateEncryptedMessage();
   const { mutate: mutateCreateDecryptedMessage } = useCreateDecryptedMessage();
-
-  const [isOpen, setIsOpen] = useState(false);
+  const [loadingState, setLoadingState] = useState({
+    loading: false,
+    loadingD: false,
+  });
   const [isOpenTwo, setIsOpenTwo] = useState(false);
   const [decryptMessageData, setDecryptMessageData] = useState({
     keypair_id: "",
@@ -37,52 +45,43 @@ const Recipients = () => {
   }, [location, refetchKeypairs, refetchRecipients, isOpen]);
 
   const handleEncryption = () => {
+    setLoadingState((prevState) => ({ ...prevState, loading: true }));
     mutateCreateEncryptedMessage(encryptMessageData, {
       onSuccess: (res) => {
         toast.success(`Message Encrypted successfully.`);
         navigate("/key-display", {
           state: { keyType: "Message", keyText: res.message },
         });
+        setLoadingState((prevState) => ({ ...prevState, loading: false }));
       },
       onError: (error) => {
-        toast.error(
-          error.response.data?.recipient_ids
-            ? error.response.data?.recipient_ids[0]
-            : "Message Required."
-        );
+        Object.values(error.response.data).forEach((errorArray) => {
+          toast.error(errorArray[0]);
+        });
+        setLoadingState((prevState) => ({ ...prevState, loading: false }));
       },
     });
   };
-
   const handleDecryption = () => {
+    setLoadingState((prevState) => ({ ...prevState, loadingD: true }));
     mutateCreateDecryptedMessage(decryptMessageData, {
       onSuccess: (res) => {
         setDecryptMessageData((prevState) => ({
           ...prevState,
           message: res.message,
         }));
+        setencryptMessageData((prevState) => ({
+          ...prevState,
+          message: res.message,
+        }));
+        setLoadingState((prevState) => ({ ...prevState, loadingD: false }));
         toast.success(`Message Decrypted successfully.`);
       },
       onError: (error) => {
-        for (const [attribute, errors] of Object.entries(error.response.data)) {
-          toast.error(errors[0]);
-        }
-      },
-    });
-  };
-
-  const handleSubmit = (values) => {
-    mutateCreaterecipient(values, {
-      onSuccess: () => {
-        toast.success(`Recipient Created successfully.`);
-        setIsOpen(false);
-      },
-      onError: (error) => {
-        toast.error(
-          error.response.data?.error
-            ? error.response.data?.error[0]
-            : "Something bad happend while creating recipient please try again."
-        );
+        Object.values(error.response.data).forEach((errorArray) => {
+          toast.error(errorArray[0]);
+        });
+        setLoadingState((prevState) => ({ ...prevState, loadingD: false }));
       },
     });
   };
@@ -96,13 +95,9 @@ const Recipients = () => {
     }));
   };
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
   const openModalTwo = () => {
     setIsOpenTwo(true);
   };
-  const closeModal = () => setIsOpen(false);
   const closeModalTwo = () => setIsOpenTwo(false);
 
   // const notify = () =>
@@ -141,17 +136,15 @@ const Recipients = () => {
                 </a>
               </div>
               <div
-                className="w-full max-w-[177px] flex flex-row items-start justify-start gap-2.5 text-center text-xs cursor-pointer"
-                onClick={openModal}
+                className="w-full max-w-[207px] flex flex-row items-start justify-start gap-3 text-center text-xs cursor-pointer"
+                onClick={() => handleModal()}
               >
                 <div className="flex flex-col items-start justify-start pt-[11px] px-0 pb-0">
-                  <div className="relative z-[1]">Create New Recipient</div>
-                </div>
-                <div className=" relative text-5xl">
-                  <div className="h-9 w-9 rounded-[50%] border-white border-[1px] border-solid box-border flex justify-center items-center">
-                    <div className="text-[24px]">+</div>
+                  <div className="relative z-[1] text-[14px]">
+                    Create New Recipient
                   </div>
                 </div>
+                <PlusWeb className={"mt-3"} />
               </div>
             </div>
             {/* For Web */}
@@ -181,33 +174,95 @@ const Recipients = () => {
                     {/* </div>
                     </div> */}
                   </div>
-                  <div className="w-[304px] flex flex-row items-start justify-start gap-5">
-                    <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
-                      <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                      <div
+                  {(decryptMessageData.message ||
+                    encryptMessageData.message) && (
+                    <div className="w-[304px] flex flex-row items-start justify-start gap-5">
+                      <button
                         onClick={handleEncryption}
-                        className="flex-1 relative text-base  text-white text-center z-[1]"
+                        style={{
+                          background: loadingState.loading
+                            ? "#0f2e3f"
+                            : "#57CBCC",
+                          cursor: loadingState.loading
+                            ? "not-allowed"
+                            : "pointer",
+                        }}
+                        disabled={loadingState.loading}
+                        className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
                       >
-                        Encrypt
-                      </div>
-                    </button>
-                    <button
-                      onClick={handleDecryption}
-                      className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
-                    >
-                      <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                      <div className="flex-1 relative text-base  text-white text-center z-[1]">
-                        {" "}
-                        Decrypt
-                      </div>
-                    </button>
-                  </div>
+                        {/* <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" /> */}
+                        <div className="flex-1 relative text-base  text-white text-center z-[1]">
+                          Encrypt
+                        </div>
+                        {loadingState.loading && (
+                          <ThreeDots
+                            color="white"
+                            height={10}
+                            width={30}
+                            ariaLabel="loading"
+                            wrapperStyle={{
+                              marginLeft: "5%",
+                              marginTop: "8px",
+                            }}
+                          />
+                        )}
+                      </button>
+                      <button
+                        onClick={handleDecryption}
+                        style={{
+                          background: loadingState.loadingD
+                            ? "#0f2e3f"
+                            : "#57CBCC",
+                          cursor: loadingState.loadingD
+                            ? "not-allowed"
+                            : "pointer",
+                        }}
+                        disabled={loadingState.loadingD}
+                        className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
+                      >
+                        {/* <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" /> */}
+                        <div className="flex-1 relative text-base  text-white text-center z-[1]">
+                          {" "}
+                          Decrypt
+                        </div>
+                        {loadingState.loadingD && (
+                          <ThreeDots
+                            color="white"
+                            height={10}
+                            width={30}
+                            ariaLabel="loading"
+                            wrapperStyle={{
+                              marginLeft: "5%",
+                              marginTop: "8px",
+                            }}
+                          />
+                        )}
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <div className="flex-1 flex flex-col items-start justify-start gap-[11px] max-w-[7123px] w-full text-center text-lgi-1 text-steelblue-300">
                   <div className="xs:hidden sm:hidden md:flex lg:flex bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border  flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap h-[338px] overflow-auto">
                     <div className="h-[338px] w-[712px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
                     <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full">
                       <div className="self-stretch flex flex-col items-start justify-start gap-4 max-w-full">
+                        {recipients?.count === 0 && (
+                          <div className="flex flex-col justify-center items-center w-full h-[250px]">
+                            <div
+                              onClick={handleModal}
+                              style={{ width: 90, height: 90 }}
+                              className="cursor-pointer"
+                            >
+                              <Lottie
+                                animationData={addDocumentAnimation}
+                                loop={true}
+                              />
+                            </div>
+                            <p className="text-[12px] font-sans mt-3">
+                              You have no recipient yet, create New Recipient
+                            </p>
+                          </div>
+                        )}
                         {recipients?.results?.map((item) => {
                           return (
                             <div
@@ -218,7 +273,13 @@ const Recipients = () => {
                               <div className="w-full flex flex-row  max-w-full mq800:flex-wrap">
                                 <div className="flex gap-[23.8px] items-center w-full">
                                   <div className="w-[59.1px] h-[51px] rounded-[11.44px] bg-[#0F2E3F] flex items-center justify-center  pt-[14.3px] px-[15px] pb-[14.2px] box-border z-[1]">
-                                    <div className="flex items-center justify-center relative z-[2] text-[#175C83]">{`S`}</div>
+                                    <div className="flex items-center justify-center relative z-[2] text-[#175C83]">
+                                      {item.emoji
+                                        ? String.fromCodePoint(
+                                            parseInt(item.emoji, 16)
+                                          )
+                                        : item.name[0].toUpperCase()}
+                                    </div>
                                   </div>
                                   <p className=" text-[19.06px] text-white font-normal leading-[23px]">
                                     {item.name}
@@ -242,12 +303,26 @@ const Recipients = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="xs:hidden sm:hidden overflow-y-scroll h-[300px] md:flex lg:flex bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border  flex-col items-start justify-start pt-[21px] px-[19px] pb-[18px] gap-[21.1px] max-w-full z-[1] text-left text-3xl text-white font-neue-plak">
+                  <div className="xs:hidden sm:hidden overflow-y-auto h-[300px] md:flex lg:flex bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border  flex-col items-start justify-start pt-[21px] px-[19px] pb-[18px] gap-[21.1px] max-w-full z-[1] text-left text-3xl text-white font-neue-plak">
                     <div className=" relative font-black inline-block text-[22px]">
                       Select Keypair for Decryption
                     </div>
                     <div className="w-[712px] h-[402px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
                     <div className="flex gap-[15px] w-full flex-wrap">
+                      {keypairs?.count === 0 && (
+                        <div className="flex flex-col justify-center items-center w-full h-[200px]">
+                          <div
+                            onClick={() => openModal()}
+                            className="cursor-pointer"
+                            style={{ width: 100, height: 100 }}
+                          >
+                            <Lottie animationData={keyRotation} loop={true} />
+                          </div>
+                          <p className="text-[12px] font-sans mt-3">
+                            You have no keypair yet, create New Keypair
+                          </p>
+                        </div>
+                      )}
                       {keypairs?.results?.map((item) => (
                         <div
                           key={item.id}
@@ -286,11 +361,11 @@ const Recipients = () => {
           </section>
         </main>
         {/* Mobile View */}
-        <main className="mobile-View w-full md:hidden lg:hidden">
+        <main className="mobile-View h-[100vh] w-full md:hidden lg:hidden">
           <div className="bg-[#1B3D4F] py-[7px] px-[28px] text-[14px] md:font-normal font-semibold">
             Notepad
           </div>
-          <div className="overflow-y-auto bg-vector-img xs:min-h-[353px] md:min-h-[400px] lg:min-h-[663px] bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-col items-start justify-start pt-9 pb-[18px] pl-3 pr-[11px] gap-[17px] max-w-full mq800:pt-[23px] mq800:pb-5 mq800:box-border">
+          <div className="overflow-y-auto bg-vector-img xs:min-h-[300px] bg-[#0f2e3f] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-col items-start justify-start pt-1 pb-[18px] pl-3 pr-[11px] gap-[17px] max-w-full mq800:pt-[23px] mq800:pb-5 mq800:box-border">
             <textarea
               placeholder="Enter your message here..."
               value={
@@ -306,169 +381,196 @@ const Recipients = () => {
                   message: e.target.value,
                 }));
               }}
-              className="w-full max-w-3xl h-full p-4 text-white bg-transparent border-none resize-none text-xl focus:outline-none focus:ring-0"
+              className="w-full max-w-3xl h-[280px] text-[14px] p-4 text-white bg-transparent border-none resize-none outline-none focus:outline-none focus:ring-0"
             ></textarea>
           </div>
           <section className="w-full mobile-view-tab">
-            <Tabs
-              aria-label="Default tabs"
-              variant="default"
-              className="justify-center  border-none"
-            >
-              <Tabs.Item active title="Recipients">
-                <div className="custom-scrollbar bg-[#0f2e3f] overflow-y-scroll h-[215px] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[19px] px-[17px] gap-[19px] max-w-full mq800:flex-wrap h-[338px] overflow-auto">
-                  <div className="h-[220px] w-[712px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
-                  <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full">
-                    <div className="self-stretch flex flex-col items-start justify-start gap-4 max-w-full">
-                      {recipients?.results?.map((item) => {
-                        return (
+            <div className="w-full relative">
+              <Tabs
+                aria-label="Default tabs"
+                variant="default"
+                className="justify-arround gap-6 border-none"
+              >
+                <Tabs.Item
+                  active
+                  title={<p className="font-semibold">Recipients</p>}
+                >
+                  <div className="custom-scrollbar bg-[#0f2e3f] overflow-y-scroll h-[220px] self-stretch border-[#1B3D4F] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-2 px-[17px] gap-[19px] max-w-full mq800:flex-wrap md:h-[338px] overflow-auto">
+                    <div className="h-[220px] w-[712px] relative border-[#1B3D4F] border-[1px] border-solid box-border hidden max-w-full" />
+                    <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-[5px] box-border max-w-full mq800:min-w-full">
+                      <div className="self-stretch flex flex-col items-start justify-start gap-4 max-w-full">
+                        {recipients?.count === 0 && (
                           <div
-                            key={item.id}
-                            onClick={() => handleRecipientClick(item.id)}
-                            className="self-stretch shadow-[0px_3.8px_11.44px_rgba(0,_0,_0,_0.32)] rounded-[11.44px] bg-[#113C53] flex flex-row items-center justify-between pt-[5.8px] pb-[6.7px] pl-[5px] pr-3.5 box-border max-w-full gap-5 z-[1]"
+                            onClick={() => handleModal()}
+                            className="flex flex-col justify-center items-center w-full h-[130px]"
                           >
-                            <div className="w-full flex flex-row  max-w-full mq800:flex-wrap">
-                              <div className="flex gap-[23.8px] items-center w-full">
-                                <div className="w-[59.1px] h-[40px] rounded-[11.44px] bg-[#0F2E3F] flex items-center justify-center  pt-[14.3px] px-[15px] pb-[14.2px] box-border z-[1]">
-                                  <div className="flex items-center justify-center relative z-[2] text-[#175C83]">{`K`}</div>
-                                </div>
-                                <p className=" text-[19.06px] text-white font-normal leading-[23px] break-all">
-                                  {item.name}
-                                </p>
-                              </div>
+                            <div style={{ width: 90, height: 90 }}>
+                              <Lottie
+                                animationData={addDocumentAnimation}
+                                loop={true}
+                              />
                             </div>
-                            {encryptMessageData?.recipient_ids?.includes(
-                              item.id
-                            ) && (
-                              <div className="w-[34.3px] h-[34.3px] flex">
-                                <img
-                                  className="w-[34.3px] h-[34.3px] relative z-[3] flex"
-                                  alt=""
-                                  src="/group-1261153225.svg"
-                                />
-                              </div>
-                            )}
+                            <p className="text-[12px] font-sans mt-3">
+                              You have no recipient yet, create New Recipient
+                            </p>
                           </div>
-                        );
-                      })}
+                        )}
+                        {recipients?.results?.map((item) => {
+                          return (
+                            <div
+                              key={item.id}
+                              onClick={() => handleRecipientClick(item.id)}
+                              className="self-stretch shadow-[0px_3.8px_11.44px_rgba(0,_0,_0,_0.32)] rounded-[11.44px] bg-[#113C53] flex flex-row items-center justify-between pt-[5.8px] pb-[6.7px] pl-[5px] pr-3.5 box-border max-w-full gap-5 z-[1]"
+                            >
+                              <div className="w-full flex flex-row  max-w-full mq800:flex-wrap">
+                                <div className="flex gap-[23.8px] items-center w-full">
+                                  <div className="w-[59.1px] h-[40px] rounded-[11.44px] bg-[#0F2E3F] flex items-center justify-center  pt-[14.3px] px-[15px] pb-[14.2px] box-border z-[1]">
+                                    <div className="flex items-center justify-center relative z-[2] text-[#175C83]">
+                                      {item.emoji
+                                        ? String.fromCodePoint(
+                                            parseInt(item.emoji, 16)
+                                          )
+                                        : item.name[0].toUpperCase()}
+                                    </div>
+                                  </div>
+                                  <p className=" text-[13.69px] text-white font-normal leading-[23px] break-all">
+                                    {item.name}
+                                  </p>
+                                </div>
+                              </div>
+                              {encryptMessageData?.recipient_ids?.includes(
+                                item.id
+                              ) && (
+                                <div className="w-[34.3px] h-[34.3px] flex">
+                                  <img
+                                    className="w-[34.3px] h-[34.3px] relative z-[3] flex"
+                                    alt=""
+                                    src="/group-1261153225.svg"
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Tabs.Item>
-              <Tabs.Item title="Keypair">
-                <div className="flex gap-[10px] h-[220px] pt-2 overflow-y-scroll w-full flex-wrap xs:px-[16px] sm:px-[16px]">
-                  {keypairs?.results?.map((item) => {
-                    return (
+                </Tabs.Item>
+                <Tabs.Item title={<p className="font-semibold">Keypair</p>}>
+                  <div className="flex gap-[10px] h-[220px] pt-2 overflow-y-scroll w-full flex-wrap xs:px-[16px] sm:px-[16px]">
+                    {keypairs?.count === 0 && (
                       <div
-                        key={item.id}
-                        className="key-pair xs:w-[46%] sm:w-[173px] md:w-[212px] lg:w-[212px]"
+                        onClick={() => openModal()}
+                        className="flex flex-col justify-center items-center w-full h-[130px]"
                       >
-                        <label className="relative inline-flex items-center w-full">
-                          <input
-                            type="radio"
-                            className="hidden peer"
-                            name="key-pair"
-                            onClick={() =>
-                              setDecryptMessageData((prevState) => ({
-                                ...prevState,
-                                keypair_id: item.id,
-                              }))
-                            }
-                          />
-                          <span className="w-full max-w-full h-[37px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
-                            {item.name}
-                          </span>
-                          <span className="hidden peer-checked:block absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
-                            <img
-                              className="h-[20.2px] w-[20.2px] z-[3]"
-                              alt=""
-                              src="/group-1261153226.svg"
-                            />
-                          </span>
-                        </label>
+                        <div style={{ width: 100, height: 100 }}>
+                          <Lottie animationData={keyRotation} loop={true} />
+                        </div>
+                        <p className="text-[12px] font-sans mt-3">
+                          You have no keypair yet, create New Keypair
+                        </p>
                       </div>
-                    );
-                  })}
+                    )}
+                    {keypairs?.results?.map((item) => {
+                      return (
+                        <div
+                          key={item.id}
+                          className="key-pair xs:w-[46%] sm:w-[173px] md:w-[212px] lg:w-[212px]"
+                        >
+                          <label className="relative inline-flex items-center w-full">
+                            <input
+                              type="radio"
+                              className="hidden peer"
+                              name="key-pair"
+                              onClick={() =>
+                                setDecryptMessageData((prevState) => ({
+                                  ...prevState,
+                                  keypair_id: item.id,
+                                }))
+                              }
+                            />
+                            <span className="w-full max-w-full h-[32px] md:h-[37px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[13.69px] overflow-hidden md:text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
+                              {item.name}
+                            </span>
+                            <span className="hidden peer-checked:block absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
+                              <img
+                                className="h-[20.2px] w-[20.2px] z-[3]"
+                                alt=""
+                                src="/group-1261153226.svg"
+                              />
+                            </span>
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Tabs.Item>
+              </Tabs>
+              <div
+                onClick={() => handleModal()}
+                className="cursor-pointer flex-row absolute bottom-[267px] right-5 mq400:right-3 ml-auto text-white text-[12px] font-sans" // Styled to look clickable
+              >
+                <div className="flex items-center">
+                  Create Recipient
+                  <Plus className={" ml-[3px]"} />
                 </div>
-              </Tabs.Item>
-            </Tabs>
-            <div className="w-[245px] mx-auto flex-row items-start justify-start gap-3 xs:flex sm:flex md:hidden lg:hidden mt-[10px]">
-              <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
-                <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                <div
-                  onClick={handleEncryption}
-                  className="flex-1 relative text-base  text-white text-center z-[1]"
-                >
-                  Encrypt
-                </div>
-              </button>
-              <button className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border">
-                <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" />
-                <div
-                  onClick={handleDecryption}
-                  className="flex-1 relative text-base  text-white text-center z-[1]"
-                >
-                  Decrypt
-                </div>
-              </button>
+              </div>{" "}
             </div>
+            {(decryptMessageData.message || encryptMessageData.message) && (
+              <div className="w-[245px] mx-auto flex-row items-start justify-start gap-3 xs:flex sm:flex md:hidden lg:hidden mt-[7px]">
+                <button
+                  style={{
+                    background: loadingState.loading ? "#0f2e3f" : "#57CBCC",
+                    cursor: loadingState.loading ? "not-allowed" : "pointer",
+                  }}
+                  disabled={loadingState.loading}
+                  onClick={handleEncryption}
+                  className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
+                >
+                  {/* <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" /> */}
+                  <div className="flex-1 relative text-base  text-white text-center z-[1]">
+                    Encrypt
+                  </div>
+                  {loadingState.loading && (
+                    <ThreeDots
+                      color="white"
+                      height={5}
+                      width={30}
+                      ariaLabel="loading"
+                      wrapperStyle={{ marginLeft: "5%", marginTop: "11px" }}
+                    />
+                  )}
+                </button>
+                <button
+                  onClick={handleDecryption}
+                  style={{
+                    background: loadingState.loadingD ? "#0f2e3f" : "#57CBCC",
+                    cursor: loadingState.loadingD ? "not-allowed" : "pointer",
+                  }}
+                  disabled={loadingState.loadingD}
+                  className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
+                >
+                  {/* <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" /> */}
+                  <div className="flex-1 relative text-base  text-white text-center z-[1]">
+                    Decrypt
+                  </div>
+                  {loadingState.loadingD && (
+                    <ThreeDots
+                      color="white"
+                      height={5}
+                      width={30}
+                      ariaLabel="loading"
+                      wrapperStyle={{ marginLeft: "5%", marginTop: "11px" }}
+                    />
+                  )}
+                </button>
+              </div>
+            )}
           </section>
         </main>
       </div>
-      <Modal show={isOpen} onClose={closeModal} className="bg-black">
-        <Modal.Header className="justify-center items-center flex bg-[#0E2E3F] border-none modal-h3">
-          <div className="text-white"> Create New Recipients </div>
-        </Modal.Header>
-        <Formik
-          initialValues={{ name: "", public_key: "" }}
-          onSubmit={handleSubmit}
-        >
-          {({ handleSubmit }) => (
-            <Form onSubmit={handleSubmit}>
-              <Modal.Body className="bg-[#1B3D4F]">
-                <div className="flex flex-col">
-                  <div className="flex">
-                    <label htmlFor="name" className="text-white mb-[6px]">
-                      Enter Nickname
-                    </label>
-                  </div>
-                  <Field
-                    type="text"
-                    id="name"
-                    name="name"
-                    className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] text-white focus:ring-[#57CACC] input-field"
-                  />
-                </div>
-                <div className="flex flex-col mt-[28px]">
-                  <div className="flex">
-                    <label htmlFor="public_key" className="text-white mb-[6px]">
-                      Enter Public Key
-                    </label>
-                  </div>
-                  <Field
-                    as="textarea"
-                    id="public_key"
-                    name="public_key"
-                    rows="4"
-                    cols="50"
-                    className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] text-white focus:ring-[#57CACC] input-field"
-                  />
-                </div>
-              </Modal.Body>
-
-              <Modal.Footer className="bg-[#1B3D4F] justify-center border-[0px] pt-0">
-                <Button
-                  type="submit"
-                  className="!bg-[#57CBCC] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-[5px] save-btn"
-                >
-                  Save
-                </Button>
-              </Modal.Footer>
-            </Form>
-          )}
-        </Formik>
-      </Modal>
-
+      <CreateRecipientModal />
+      <CreateKeypairModal />
       <Modal show={isOpenTwo} onClose={closeModalTwo} className="bg-black">
         <Modal.Header className="pt-[10px] !pl-[0px] !pb-[2px] bg-[#1B3D4F] border-none"></Modal.Header>
 
@@ -492,3 +594,42 @@ const Recipients = () => {
 };
 
 export default Recipients;
+
+const Plus = ({ className }) => (
+  <svg
+    width="20"
+    height="19"
+    viewBox="0 0 20 19"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <circle
+      cx="9.79984"
+      cy="9.37357"
+      r="9.1132"
+      stroke="white"
+      stroke-width="0.520754"
+    />
+    <path
+      d="M9.12083 12.344V7.256H9.87683V12.344H9.12083ZM6.88883 10.16V9.452H12.1088V10.16H6.88883Z"
+      fill="white"
+    />
+  </svg>
+);
+
+const PlusWeb = () => (
+  <svg
+    width="36"
+    height="36"
+    viewBox="0 0 36 36"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle cx="18" cy="18" r="17.5" stroke="white" />
+    <path
+      d="M17.2417 23.688V13.512H18.7537V23.688H17.2417ZM12.7777 19.32V17.904H23.2177V19.32H12.7777Z"
+      fill="white"
+    />
+  </svg>
+);

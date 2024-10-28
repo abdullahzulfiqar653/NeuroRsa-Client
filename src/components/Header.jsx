@@ -1,83 +1,15 @@
-import { toast } from "react-toastify";
-import { useState, useEffect } from "react";
-import { Button, Modal } from "flowbite-react";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-
 import { useAuth } from "../AuthContext";
-import useCreateKeypair from "../hooks/useCreateKeypair";
 
 const Header = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const [step, setStep] = useState(1);
   const { isAuthenticated } = useAuth();
-  const { mutate } = useCreateKeypair();
-  const [errors, setErrors] = useState({});
-  const [isOpen, setIsOpen] = useState(false);
-  const [formValues, setFormValues] = useState({});
-  const [keypair, setKeypair] = useState({});
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpenFile, setIsDropdownOpenFile] = useState(false);
 
-  useEffect(() => {
-    if (step === 2) {
-      const timer = setTimeout(() => {
-        setStep(3);
-      }, 800);
-      return () => clearTimeout(timer);
-    }
-  }, [step]);
 
-  const closeModal = () => setIsOpen(false);
-  const nextStep = () => setStep((prevStep) => Math.min(prevStep + 1, 4));
-  const prevStep = () => setStep((prevStep) => Math.max(prevStep - 1, 1));
-  const openModal = () => {
-    setIsOpen(true);
-    setStep(1);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    if (name === "confirmPassphrase") {
-      if (formValues.passphrase !== formValues.confirmPassphrase) {
-        setErrors({ passphrase: "Passphrases do not match" });
-      } else {
-        setErrors({ passphrase: "" });
-      }
-    }
-    setFormValues({ ...formValues, [name]: value });
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    mutate(formValues, {
-      onSuccess: (response) => {
-        setKeypair(response);
-        setStep(4);
-        toast.success(`Keypair Created successfully.`);
-      },
-      onError: (error) => {
-        setErrors(error.response.data);
-        for (const [attribute, errors] of Object.entries(error.response.data)) {
-          toast.error(errors[0]);
-        }
-      },
-    });
-  };
-
-  const handleBackupOfKeypair = () => {
-    const element = document.createElement("a");
-    const file = new Blob(
-      [`${keypair.public_key}\n\n\n\n${keypair.private_key}`],
-      { type: "text/plain" }
-    );
-    element.href = URL.createObjectURL(file);
-    element.download = "keypair_backup.txt";
-    document.body.appendChild(element);
-    element.click();
-  };
 
   // Handle Dropdown
   const handleMouseEnterDropdown = () => {
@@ -110,7 +42,10 @@ const Header = () => {
             fill="white"
           />
         </svg>
-        <h1 onClick={() => navigate("/")} className="ml-2 text-[22px] leading-[30.62px] cursor-pointer">
+        <h1
+          onClick={() => navigate("/")}
+          className="ml-2 text-[22px] leading-[30.62px] cursor-pointer"
+        >
           neuro.RSA
         </h1>
       </div>
@@ -125,17 +60,22 @@ const Header = () => {
           </Link>
 
           {isDropdownOpenFile && (
-            <div className="origin-top-right top-10  absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-[#1c3d4f]  ring-1 ring-[#345360] ring-opacity-5 focus:outline-none z-20">
+            <div
+              className="origin-top-right top-9 absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-[#1c3d4f] ring-1 ring-[#345360] ring-opacity-5 focus:outline-none z-20 
+           transition-opacity duration-300 hover:opacity-100 hover:delay-300"
+            >
               <div className="py-4">
                 {isAuthenticated && (
-                  <div className="relative group hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
-                    <button
-                      className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
-                      onClick={openModal}
-                    >
-                      New Key Pair
-                    </button>
-                  </div>
+                  <>
+                    <div className="relative group hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
+                      <Link
+                        to={"/what-is-this?"}
+                        className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
+                      >
+                        What is this?
+                      </Link>
+                    </div>{" "}
+                  </>
                 )}
 
                 {/* <button className="block px-4 py-2 text-sm text-white w-full text-left z-20 hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
@@ -157,12 +97,19 @@ const Header = () => {
                   </Link>
                 )}
                 {!isAuthenticated && (
+                  <>
                   <Link
                     to="/login"
                     className="block px-4 py-2 text-sm text-white font-sans text-[10px] md:text-[20px] w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
                   >
                     Login
                   </Link>
+                   <Link
+                   to={"/what-is-this?"}
+                   className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
+                 >
+                   What is this?
+                 </Link></>
                 )}
               </div>
             </div>
@@ -181,6 +128,17 @@ const Header = () => {
           </NavLink>
         </div>
         <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
+          <NavLink
+            to="/recipients-list"
+            className={({ isActive }) =>
+              `py-[10px] cursor-pointer [text-decoration:none] relative text-[inherit]  text-white inline-block max-w-[121px] z-[1] font-sans leading-[21.94px]  xs:text-[10px] sm:text-[10px] md:text-[18px] lg:text-[18px] opacity-[72%] 
+                 ${isActive ? "border-b-2 border-mediumturquoise" : ""}`
+            }
+          >
+            My Recipients
+          </NavLink>
+        </div>
+        <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
           <div
             className="relative inline-block text-left"
             onMouseEnter={handleMouseEnterDropdown}
@@ -193,7 +151,7 @@ const Header = () => {
                  ${isActive ? "border-b-2 border-mediumturquoise" : ""}`
               }
             >
-              My Recipients
+              Notepad
             </NavLink>
 
             {/* {isDropdownOpen && (
@@ -237,281 +195,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <Modal show={isOpen} onClose={closeModal} className="bg-black">
-        <Modal.Header className="justify-center items-center flex bg-[#0E2E3F] border-none modal-h3">
-          <div className="text-white">
-            {" "}
-            Key Pair Creation Wizard - neuro.RSA{" "}
-          </div>
-        </Modal.Header>
-        <Formik>
-          <Form>
-            <Modal.Body className="bg-[#1B3D4F]">
-              {step === 1 && (
-                <div>
-                  <h3 className="text-white text-[24px] font-normal leading-[33px]">
-                    Enter Details
-                  </h3>
-                  <p className="text-[#CCCCCC] text-[16px] font-normal leading-[19px] mt-2">
-                    Please enter your personal details below. If you want more
-                    control over the parameters, click on the advanced Settings
-                    button.
-                  </p>
-                  <div className="block w-90% mx-auto h-[2px] bg-[#0E2E3F] mt-[32px]"></div>
-                  <div className="mt-[32px]">
-                    <div className="flex flex-col">
-                      <div className="flex justify-between">
-                        <label htmlFor="name" className="text-white mb-[6px]">
-                          Name:
-                        </label>
-                        <span className="text-white">(optional)</span>
-                      </div>
-                      <Field
-                        type="text"
-                        id="name"
-                        name="name"
-                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field text-white"
-                        value={formValues.name}
-                        onChange={handleChange}
-                      />
-                      <ErrorMessage name="name" component="div" />
-                    </div>
-                    <div className="flex flex-col mt-[24px]">
-                      <div className="flex justify-between">
-                        <label htmlFor="email" className="text-white mb-[6px]">
-                          Email:
-                        </label>
-                        <span className="text-white">(optional)</span>
-                      </div>
-                      <Field
-                        type="email"
-                        id="email"
-                        name="email"
-                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field text-white"
-                        value={formValues.email}
-                        onChange={handleChange}
-                      />
-                      <ErrorMessage name="email" component="div" />
-                    </div>
-                  </div>
-                  <div className="block w-[98%] mx-auto h-[2px] bg-[#0E2E3F] mt-[20px]"></div>
-                </div>
-              )}
-
-              {step === 2 && (
-                <div>
-                  <h3 className="text-white text-[24px] font-normal leading-[33px]">
-                    Creating Key Pair...
-                  </h3>
-                  <p className="text-[#CCCCCC] text-[16px] font-normal leading-[19px] mt-2">
-                    The process of creating a key requires large amounts of
-                    random numbers. This may require several minutes...
-                  </p>
-                  <div className="mt-4 flex justify-center h-[250px]">
-                    <img
-                      src="/loader.svg" // Update path as necessary
-                      alt="Loading..."
-                      width={50} // Adjust size as needed
-                      height={50}
-                      className="animate-spin"
-                      style={{ animationDuration: "2s" }} // Set spin duration to 2 seconds
-                    />
-                  </div>
-                </div>
-              )}
-
-              {step === 3 && (
-                <div>
-                  <div className="flex gap-[18px]">
-                    <img
-                      src="./Group-1261153253.svg"
-                      className="w-[35px] h-[24px] object-contain object-top mt-[10px]"
-                    />
-                    <div className="">
-                      <h3 className="text-white text-[24px] font-normal leading-[33px]">
-                        Creating Key Pair...
-                      </h3>
-                      <p className="text-[#CCCCCC] text-[16px] font-normal leading-[19px] mt-2">
-                        Please enter the passphrase to protect your new key.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="block w-90% mx-auto h-[2px] bg-[#0E2E3F] mt-[32px]"></div>
-                  <div className="mt-[46px]">
-                    <div className="flex flex-col">
-                      <div className="">
-                        <label
-                          htmlFor="passphrase"
-                          className="text-white mb-[6px] flex w-full"
-                        >
-                          Passphrase (Optional):
-                        </label>
-                      </div>
-                      <Field
-                        type="password"
-                        id="passphrase"
-                        name="passphrase"
-                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field text-white"
-                        value={formValues.passphrase}
-                        onChange={handleChange}
-                      />
-                      {errors.passphrase && (
-                        <div className="text-red-500">{errors.passphrase}</div>
-                      )}
-                    </div>
-                    <div className="flex flex-col mt-[24px]">
-                      <label
-                        htmlFor="confirmPassphrase"
-                        className="text-white mb-[6px] flex w-full"
-                      >
-                        Repeat Passphrase:
-                      </label>
-                      <Field
-                        type="password"
-                        id="confirmPassphrase"
-                        name="confirmPassphrase"
-                        className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] input-field text-white"
-                        value={formValues.confirmPassphrase}
-                        onChange={handleChange}
-                      />
-                      {errors.passphrase && (
-                        <div className="text-red-500">{errors.passphrase}</div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {step === 4 && (
-                <div>
-                  <div className="flex gap-[18px]">
-                    <img
-                      src="./Group-1261153253.svg"
-                      className="w-[35px] h-[24px] object-contain object-top mt-[10px]"
-                    />
-                    <div className="">
-                      <h3 className="text-white text-[24px] font-normal leading-[33px]">
-                        Key Pair Successfully Created
-                      </h3>
-                      <p className="text-[#CCCCCC] text-[16px] font-normal leading-[19px] mt-2">
-                        You new key pair was created successfully. Please find
-                        details on this result and some suggested next steps
-                        below.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="block w-90% mx-auto h-[2px] bg-[#0E2E3F] my-[32px]"></div>
-                  <div className="flex flex-col">
-                    <label
-                      htmlFor="message"
-                      className="text-white text-[24px] font-normal leading-[33px] mb-[6px] flex w-full"
-                    >
-                      Result
-                    </label>
-                    <Field
-                      as="textarea"
-                      name="message"
-                      className="!bg-[#0E2E3F] !rounded-[5px]  text-white input-field"
-                      rows="6"
-                      col="40"
-                      disabled
-                      value={`Key Pair created successfully. Fingerprint: ${Array(
-                        5
-                      )
-                        .fill()
-                        .map(() => Math.random().toString(36).substring(2, 15))
-                        .join("")
-                        .toUpperCase()}`}
-                    />
-                    <label
-                      htmlFor="NextSteps"
-                      className="text-white text-[24px] font-normal leading-[33px] mt-[32px] mb-[6px] flex w-full"
-                    >
-                      Next Steps
-                    </label>
-                    <Button
-                      type="button"
-                      id="passphrase"
-                      name="passphrase"
-                      className="!bg-[#0E2E3F] !rounded-[5px] border-[#0E2E3F] text-white input-field input-field"
-                      onClick={handleBackupOfKeypair}
-                    >
-                      Make a Backup Of Your Key Pair...
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </Modal.Body>
-
-            <Modal.Footer className="bg-[#1B3D4F] justify-end border-[0px] pt-0 footer-btn">
-              {step === 1 && (
-                <>
-                  <Button
-                    onClick={nextStep}
-                    className="!bg-[#57CBCC] hover:bg-red-700 text-white font-sans font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    Next
-                  </Button>
-                  <Button
-                    onClick={closeModal}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    Cancel
-                  </Button>
-                </>
-              )}
-
-              {step === 2 && (
-                <>
-                  <Button
-                    onClick={closeModal}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    Cancel
-                  </Button>
-                </>
-              )}
-
-              {step === 3 && (
-                <>
-                  <Button
-                    onClick={closeModal}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={handleSubmit}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
-                  >
-                    OK
-                  </Button>
-                </>
-              )}
-
-              {step === 4 && (
-                <>
-                  <Button
-                    onClick={() => {
-                      navigate(-1);
-                      closeModal();
-                    }}
-                    className="!bg-[#57CBCC] hover:bg-red-700 text-white font-sans font-bold py-2 px-4 rounded-[5px]"
-                  >
-                    Finish
-                  </Button>
-                  <Button
-                    onClick={closeModal}
-                    className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px]"
-                  >
-                    Cancel
-                  </Button>
-                </>
-              )}
-            </Modal.Footer>
-          </Form>
-        </Formik>
-      </Modal>
+    
     </div>
   );
 };

@@ -34,23 +34,25 @@ const KeyDisplay = () => {
                     ----- BEGIN PGP {keyType} {!keyType === "Message" && "KEY"}{" "}
                     BLOCK -----
                   </p>
-                  <div className="flex gap-[10px] items-center">
-                    {copied && (
-                      <span style={{ color: "white", fontSize: "12px" }}>
-                        Copied!
-                      </span>
-                    )}
-                    <CopyToClipboard
-                      text={keyText}
-                      onCopy={() => setCopied(true)}
-                    >
-                      <img
-                        src="/copy-icon.svg"
-                        alt="copy-icon"
-                        className="cursor-pointer"
-                      />
-                    </CopyToClipboard>
-                  </div>
+                  {keyType === "Private" ? "" : (
+                    <div className="flex gap-[10px] items-center">
+                      {copied && (
+                        <span style={{ color: "white", fontSize: "12px" }}>
+                          Copied!
+                        </span>
+                      )}
+                      <CopyToClipboard
+                        text={keyText}
+                        onCopy={() => setCopied(true)}
+                      >
+                        <img
+                          src="/copy-icon.svg"
+                          alt="copy-icon"
+                          className="cursor-pointer"
+                        />
+                      </CopyToClipboard>
+                    </div>
+                  )}
                 </div>
 
                 <Formik>
@@ -69,14 +71,16 @@ const KeyDisplay = () => {
               </div>
             </div>
             <div className="items-center flex flex-row justify-start gap-5 px-[32px] bg-[#0f2e3f]">
-              <CopyToClipboard text={keyText} onCopy={() => setCopied(true)}>
-                <button className="w-[100%] max-w-[151px] h-[47px] items-center cursor-pointer border-[#57CBCC] border-[1px] border-solid bg-transparent flex-1 rounded-[4.38px] flex  justify-center  text-[#57CBCC]">
-                  Copy
-                </button>
-              </CopyToClipboard>
+              {keyType === "Private" ? "" : (
+                <CopyToClipboard text={keyText} onCopy={() => setCopied(true)}>
+                  <button className="w-[100%] max-w-[151px] h-[47px] items-center cursor-pointer border-[#57CBCC] border-[1px] border-solid bg-transparent flex-1 rounded-[4.38px] flex  justify-center  text-[#57CBCC]">
+                    Copy
+                  </button>
+                </CopyToClipboard>
+              )}
               <button
                 onClick={handleHideKey}
-                className="md:text-[16px] text-[14px] font-normal leading-[19px] text-white w-[100%] max-w-[151px] h-[47px] items-center cursor-pointer border-[#57CBCC] border-[1px] border-solid  bg-[#57CBCC] hover:bg-[#47b0b2] flex-1 rounded-[4.38px] flex  justify-center"
+                className="md:text-[16px] text-[15px] leading-[19px] text-white w-[100%] max-w-[151px] h-[47px] items-center cursor-pointer border-[#57CBCC] border-[1px] border-solid  bg-[#57CBCC] hover:bg-[#47b0b2] flex-1 rounded-[4.38px] flex  justify-center "
               >
                 Hide
               </button>

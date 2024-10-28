@@ -21,6 +21,34 @@ export const AuthProvider = ({ children }) => {
   const [showGeneratePassModal, setShowGeneratePassModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [generatorPassword, setGeneratorPassword] = useState("");
+  const [search, setSearch] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [step, setStep] = useState(1);
+  const [errors, setErrors] = useState({});
+  const [formValues, setFormValues] = useState({});
+  const [isOpenKeyPair, setIsOpenKeypair] = useState(false);
+  const [recipientData, setRecipientData] = useState("");
+
+  useEffect(() => {
+    if (step === 2) {
+      const timer = setTimeout(() => {
+        setStep(3);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [step]);
+
+  const closeModal = () => {
+    setIsOpenKeypair(false);
+    setFormValues({});
+    setErrors({});
+  };
+  const nextStep = () => setStep((prevStep) => Math.min(prevStep + 1, 4));
+  const prevStep = () => setStep((prevStep) => Math.max(prevStep - 1, 1));
+  const openModal = () => {
+    setIsOpenKeypair(true);
+    setStep(1);
+  };
 
   useEffect(() => {
     if (isTokenValid()) {
@@ -54,13 +82,35 @@ export const AuthProvider = ({ children }) => {
     setShowGeneratePassModal((prev) => !prev);
   };
 
+  const handleModal = (item = null) => {
+    setRecipientData(item);
+    setIsOpen((prev) => !prev);
+  };
+
   return (
     <AuthContext.Provider
       value={{
         login,
         signup,
         logout,
+        search,
+        setSearch,
         isDesktop,
+        isOpen,
+        step,
+        isOpenKeyPair,
+        setStep,
+        closeModal,
+        errors,
+        setErrors,
+        formValues,
+        setFormValues,
+        nextStep,
+        prevStep,
+        openModal,
+        recipientData,
+        setRecipientData,
+        handleModal,
         isAuthenticated,
         generatorPassword,
         setGeneratorPassword,

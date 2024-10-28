@@ -5,11 +5,9 @@ import { useAuth } from "../AuthContext";
 const Header = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, setSearch } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpenFile, setIsDropdownOpenFile] = useState(false);
-
-
 
   // Handle Dropdown
   const handleMouseEnterDropdown = () => {
@@ -91,32 +89,39 @@ const Header = () => {
                   <Link
                     to="/login"
                     className="block px-4 py-2 text-sm text-white font-sans text-[10px] md:text-[20px] w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
-                    onClick={logout}
+                    onClick={() => {
+                      logout();
+                      setSearch("");
+                    }}
                   >
                     Logout
                   </Link>
                 )}
                 {!isAuthenticated && (
                   <>
-                  <Link
-                    to="/login"
-                    className="block px-4 py-2 text-sm text-white font-sans text-[10px] md:text-[20px] w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
-                  >
-                    Login
-                  </Link>
-                   <Link
-                   to={"/what-is-this?"}
-                   className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
-                 >
-                   What is this?
-                 </Link></>
+                    <Link
+                      to="/login"
+                      className="block px-4 py-2 text-sm text-white font-sans text-[10px] md:text-[20px] w-full text-left hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to={"/what-is-this?"}
+                      className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
+                    >
+                      What is this?
+                    </Link>
+                  </>
                 )}
               </div>
             </div>
           )}
         </div>
 
-        <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
+        <div
+          onClick={() => setSearch("")}
+          className="flex flex-col items-start justify-start pt-px px-0 pb-0"
+        >
           <NavLink
             to="/main-home"
             className={({ isActive }) =>
@@ -127,7 +132,10 @@ const Header = () => {
             My KeyPairs
           </NavLink>
         </div>
-        <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
+        <div
+          onClick={() => setSearch("")}
+          className="flex flex-col items-start justify-start pt-px px-0 pb-0"
+        >
           <NavLink
             to="/recipients-list"
             className={({ isActive }) =>
@@ -195,7 +203,6 @@ const Header = () => {
           </div>
         </div>
       </div>
-    
     </div>
   );
 };

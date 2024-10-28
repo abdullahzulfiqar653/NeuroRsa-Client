@@ -9,7 +9,7 @@ function InfoAboutWebsite() {
         <div className="bg-[#0B2837] w-full items-center">
           <Header />
           <div className="flex flex-col relative justify-center items-center text-center  bg-[#0f2e3f] w-full h-full">
-          <div className="text-[#E5E5E5B8] relative z-10 flex flex-col justify-start text-start items-start px-[16px] py-5 sm:px-24 sm:py-16">
+            <div className="text-[#E5E5E5B8] relative z-10 flex flex-col justify-start text-start items-start px-[16px] py-5 sm:px-24 sm:py-16">
               <h1 className="text-[#f7f7f7] text-[22px] leading-[30.73px]">
                 What is neuro.RSA
               </h1>
@@ -176,9 +176,7 @@ function InfoAboutWebsite() {
               <div className="w-full h-full flex flex-col text-[13px] sm:text-[16px] text-start items-start bg-[#0B2837] px-6 py-4 mt-5">
                 <ul>
                   <li>
-                    <span className="text-white">
-                      Quick Summary:Generate your keys:
-                    </span>
+                    <span className="text-white">Quick Summary:</span>
                   </li>
                   <li>
                     Generate your keys: You get a Private Key (keep it secret)
@@ -214,8 +212,14 @@ function InfoAboutWebsite() {
                 </ul>
               </div>
             </div>
-            <img src="/InfoBg.svg" className="absolute hidden sm:block bottom-[10px] z-0"/>
-            <img src="/InfoBgMobile.svg" className="absolute sm:hidden  bottom-[10px] right-4 z-0"/>
+            <img
+              src="/InfoBg.svg"
+              className="absolute hidden sm:block bottom-[10px] z-0"
+            />
+            <img
+              src="/InfoBgMobile.svg"
+              className="absolute sm:hidden  bottom-[10px] right-4 z-0"
+            />
           </div>
         </div>
       </div>

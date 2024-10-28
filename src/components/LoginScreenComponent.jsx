@@ -21,7 +21,7 @@ const GroupComponent = ({ className = "" }) => {
         toast.success("Logged In Successfully.");
       },
       onError: (error) => {
-        toast.error(error.response.data.detail, { className: "toast-message" });
+        toast.error(error.response.data.detail);
         // setError("Login failed. Please check your credentials.", error);
       },
     });

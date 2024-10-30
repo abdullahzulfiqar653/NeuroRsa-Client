@@ -408,6 +408,7 @@ const Recipients = () => {
                               <Lottie
                                 animationData={addDocumentAnimation}
                                 loop={true}
+                                playsInline
                               />
                             </div>
                             <p className="text-[12px] font-sans mt-3">
@@ -464,7 +465,11 @@ const Recipients = () => {
                         className="flex flex-col justify-center items-center w-full h-[130px]"
                       >
                         <div style={{ width: 100, height: 100 }}>
-                          <Lottie animationData={keyRotation} loop={true} />
+                          <Lottie
+                            animationData={keyRotation}
+                            loop={true}
+                            playsInline
+                          />
                         </div>
                         <p className="text-[12px] font-sans mt-3">
                           You have no keypair yet, create New Keypair

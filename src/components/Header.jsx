@@ -34,8 +34,8 @@ const Header = () => {
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M12.5516 7.62063V0L25.1033 8.96545V16.5861L12.5516 7.62063ZM0 16.586V8.96534L12.5516 17.9308V25.5514L0 16.586ZM0 0.448385V7.62075L25.1033 25.5516V17.931L0 0.448385Z"
             fill="white"
           />

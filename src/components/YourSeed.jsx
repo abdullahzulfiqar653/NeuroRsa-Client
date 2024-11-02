@@ -112,7 +112,7 @@ const GroupComponent = ({ seedsData = "" }) => {
           Please write these down incase you lose your seed
         </p>
       </div>
-      <div className="w-full max-w-[223px] mx-auto mt-3 md:mt-[68px] flex flex-col items-center justify-center pt-0 px-0 text-center text-base font-montserrat">
+      <div className="w-full max-w-[223px] mx-auto mt-4 md:mt-[68px] flex flex-col items-center justify-center pt-0 px-0 text-center text-base font-montserrat">
         <div className="w-full flex flex-col items-start justify-start gap-[10.8px] mb-[1px]">
           <div
             onClick={handleLogin}

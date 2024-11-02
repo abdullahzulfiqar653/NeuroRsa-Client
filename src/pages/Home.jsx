@@ -12,7 +12,7 @@ const Home = ({ className = "" }) => {
     >
       
       <div className="absolute inset-0 bg-[#0B2837] bg-opacity-[70%]"></div>
-      <video autoPlay muted loop id="background-video">
+      <video autoPlay muted loop playsInline id="background-video">
         <source src="./bg-video.mp4" type="video/mp4" />
       </video>
       <div className="bg-[#0B2837] absolute z-40 w-full">

@@ -57,7 +57,7 @@ module.exports = {
         md: '768px',
         sm: '600px',
         xs: '320px',
-        mq400px: '400px',
+        mq400: '400px',
       },
     },
   },

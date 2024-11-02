@@ -15,10 +15,6 @@ const KeyDisplay = () => {
     setCopied(false);
   }
 
-  function sharePublicKey() {
-    navigator.clipboard.writeText(keyText);
-  }
-
   return (
     <div>
       <div className="bg-[#0f2e3f] h-[100vh]">
@@ -34,7 +30,9 @@ const KeyDisplay = () => {
                     ----- BEGIN PGP {keyType} {!keyType === "Message" && "KEY"}{" "}
                     BLOCK -----
                   </p>
-                  {keyType === "Private" ? "" : (
+                  {keyType === "Private" ? (
+                    ""
+                  ) : (
                     <div className="flex gap-[10px] items-center">
                       {copied && (
                         <span style={{ color: "white", fontSize: "12px" }}>
@@ -71,7 +69,9 @@ const KeyDisplay = () => {
               </div>
             </div>
             <div className="items-center flex flex-row justify-start gap-5 px-[32px] bg-[#0f2e3f]">
-              {keyType === "Private" ? "" : (
+              {keyType === "Private" ? (
+                ""
+              ) : (
                 <CopyToClipboard text={keyText} onCopy={() => setCopied(true)}>
                   <button className="w-[100%] max-w-[151px] h-[47px] items-center cursor-pointer border-[#57CBCC] border-[1px] border-solid bg-transparent flex-1 rounded-[4.38px] flex  justify-center  text-[#57CBCC]">
                     Copy
@@ -84,17 +84,6 @@ const KeyDisplay = () => {
               >
                 Hide
               </button>
-              {keyType === "Public" && (
-                <button
-                  onClick={sharePublicKey}
-                  className="w-[100%] max-w-[151px] xs:px-2 h-[47px] items-center cursor-pointer border-darkslategray-100 border-[1px] border-solid  bg-mediumturquoise hover:bg-[#47b0b2]  flex-1 rounded-[4.38px] flex  justify-center"
-                >
-                  <div className="md:text-[16px] text-[14px] whitespace-nowrap font-normal leading-[19px] text-white">
-                    {" "}
-                    Share Public Key
-                  </div>
-                </button>
-              )}
             </div>
           </div>
         </main>

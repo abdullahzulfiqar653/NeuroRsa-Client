@@ -5,7 +5,7 @@ const GroupComponent = ({ className = "", onShowSeed }) => {
       <h2 className="text-white text-[20px] md:text-[32px] leading-[30px] md:leading-[64px] font-medium text-center w-full mb-[15px] md:mb-[5px] mt-[35px] md:mt-[44px]">
         Important Note
       </h2>
-      <div className="self-stretch flex flex-col items-start justify-start gap-[5px] text-mini-1 font-montserrat">
+      <div className="self-stretch flex flex-col items-start justify-start gap-[5px] text-mini-1 font-sans">
         <div className="flex flex-row items-start justify-start py-0 px-px">
           <p className="text-[14px] leading-[22px] text-center mt-[0px] mb-[30px] font-sans">
             On the next page you will see a series of 16 words. This is your

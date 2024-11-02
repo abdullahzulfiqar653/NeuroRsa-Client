@@ -14,7 +14,7 @@ import Lottie from "lottie-react";
 import keyRotation from "../animations/keyRotation.json";
 import addDocumentAnimation from "../animations/addDocument.json";
 import { ThreeDots } from "react-loader-spinner";
-import CreateKeypairModal from "../CreateKeypairModal";
+import CreateKeypairModal from "../components/CreateKeypairModal";
 
 const Recipients = () => {
   const location = useLocation();
@@ -281,7 +281,7 @@ const Recipients = () => {
                                         : item.name[0].toUpperCase()}
                                     </div>
                                   </div>
-                                  <p className=" text-[19.06px] text-white font-normal leading-[23px]">
+                                  <p className=" text-[19.06px] text-white font-normal w-[422.16px] overflow-hidden flex justify-start leading-[23px]">
                                     {item.name}
                                   </p>
                                 </div>
@@ -341,7 +341,7 @@ const Recipients = () => {
                               }
                             />
                             <span className="w-full max-w-full h-[47px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
-                              {item.name}
+                              <p className="w-[123px] overflow-hidden">{item.name}</p>
                             </span>
                             <span className="hidden peer-checked:block absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
                               <img
@@ -434,7 +434,7 @@ const Recipients = () => {
                                         : item.name[0].toUpperCase()}
                                     </div>
                                   </div>
-                                  <p className=" text-[13.69px] text-white font-normal leading-[23px] break-all">
+                                  <p className=" text-[13.69px] w-[270px] overflow-hidden text-white font-normal leading-[23px] break-all">
                                     {item.name}
                                   </p>
                                 </div>
@@ -461,7 +461,7 @@ const Recipients = () => {
                   <div className="flex gap-[10px] h-[220px] pt-2 overflow-y-scroll w-full flex-wrap xs:px-[16px] sm:px-[16px]">
                     {keypairs?.count === 0 && (
                       <div
-                        onClick={() => openModal()}
+                        onClick={openModal}
                         className="flex flex-col justify-center items-center w-full h-[130px]"
                       >
                         <div style={{ width: 100, height: 100 }}>
@@ -495,7 +495,7 @@ const Recipients = () => {
                               }
                             />
                             <span className="w-full max-w-full h-[32px] md:h-[37px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[13.69px] overflow-hidden md:text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
-                              {item.name}
+                            <p className="w-[100px] overflow-hidden">{item.name}</p>
                             </span>
                             <span className="hidden peer-checked:block absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
                               <img

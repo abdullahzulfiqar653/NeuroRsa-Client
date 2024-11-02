@@ -13,7 +13,7 @@ import useDeleteKeyPairs from "../hooks/useDeleteKeyPairs";
 import useGetKeyPairs from "../hooks/useGetKeyPairs";
 import { debounce } from "lodash";
 import { ThreeDots } from "react-loader-spinner";
-import CreateKeypairModal from "../CreateKeypairModal";
+import CreateKeypairModal from "../components/CreateKeypairModal";
 
 const MainHome = () => {
   const navigate = useNavigate();
@@ -29,13 +29,17 @@ const MainHome = () => {
   const { mutate: deleteKeyPair } = useDeleteKeyPairs();
   const [loading, setLoading] = useState(false);
   const { data, refetch } = useGetKeyPairs(search, currentPage, itemPerPage);
-  const totalPages = Math.ceil(data?.count / itemPerPage);
+  const [totalPages, setTotalPages] = useState(
+    Math.ceil(data?.count / itemPerPage)
+  );
 
   const debouncedRefetch = debounce(() => {
     refetch();
   }, 500);
   useEffect(() => {
+    setTotalPages(Math.ceil(data?.count / itemPerPage));
     if (search) {
+      setCurrentPage(1);
       debouncedRefetch();
     } else {
       refetch();
@@ -178,10 +182,10 @@ const MainHome = () => {
           <div className="border-[1px] border-[#1B3D4F] p-[24px] min-h-[450px] h-full overflow-y-auto">
             <Table className="bg-[#1c3d4f] rounded-t-[12px]">
               <Table.Head className="bg-[#0f2e3f]">
-                <Table.HeadCell className="bg-[#1c3d4f] text-white border-r-[5px] border-[#0f2e3f] rounded-t-[12px]">
+                <Table.HeadCell className="bg-[#1c3d4f] normal-case text-[22px] text-white border-r-[5px] border-[#0f2e3f] rounded-t-[12px]">
                   Name
                 </Table.HeadCell>
-                <Table.HeadCell className="bg-[#1c3d4f] text-white">
+                <Table.HeadCell className="bg-[#1c3d4f] normal-case text-[22px] text-white">
                   Key Type
                 </Table.HeadCell>
                 <Table.HeadCell className="bg-[#1c3d4f]"></Table.HeadCell>
@@ -353,7 +357,7 @@ const MainHome = () => {
                 value={itemPerPage}
                 onChange={(e) => setItemPerPage(e.target.value)}
                 id="per-page"
-                className="px-2 py-1  bg-gray-700 text-white rounded-md hover:bg-gray-600 border-none focus:ring focus:ring-teal-500 input-field"
+                className="px-2 py-1  bg-[#0B2837] text-white rounded-md hover:bg-gray-600 border-none focus:ring focus:ring-teal-500 input-field"
               >
                 <option value={10}>10 per page</option>
                 <option value={20}>20 per page</option>
@@ -490,7 +494,7 @@ const MainHome = () => {
               <button
                 disabled={data?.previous === null}
                 onClick={() => setCurrentPage(currentPage - 1)}
-                className="text-[7.6px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
+                className="text-[9px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
               >
                 ← Prev
               </button>
@@ -499,7 +503,7 @@ const MainHome = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentPage(index + 1)}
-                  className={`text-[7.6px] px-3 py-1 rounded-md ${
+                  className={`text-[9px] px-3 py-1 rounded-md ${
                     currentPage === index + 1
                       ? "bg-teal-500 text-white"
                       : "bg-gray-700 text-white hover:bg-gray-600"
@@ -512,7 +516,7 @@ const MainHome = () => {
               <button
                 disabled={data?.next === null}
                 onClick={() => setCurrentPage(currentPage + 1)}
-                className="text-[7.6px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
+                className="text-[9px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
               >
                 Next →
               </button>
@@ -523,7 +527,7 @@ const MainHome = () => {
                 value={itemPerPage}
                 onChange={(e) => setItemPerPage(e.target.value)}
                 id="per-page"
-                className="!px-2 py-1 text-[7.6px] bg-[#0B2837] text-white rounded-md hover:bg-gray-600 border-none focus:ring focus:ring-teal-500 input-field"
+                className="!px-4 py-1 text-[9px] bg-[#0B2837] text-white rounded-md border-none focus:ring focus:ring-teal-500 input-field"
               >
                 <option value={10}>10 per page</option>
                 <option value={20}>20 per page</option>

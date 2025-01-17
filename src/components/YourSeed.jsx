@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import { useAuth } from "../AuthContext";
 import useCreateToken from "../hooks/useCreateToken";
@@ -7,6 +8,7 @@ import useCreateToken from "../hooks/useCreateToken";
 const GroupComponent = ({ seedsData = "" }) => {
   const { signup } = useAuth();
   const { mutate } = useCreateToken();
+  const [loading, setLoading] = useState(false);
   const [copytext, setCopyText] = useState(false);
 
   const copyToClipBoard = () => {
@@ -18,10 +20,12 @@ const GroupComponent = ({ seedsData = "" }) => {
   };
 
   const handleLogin = () => {
+    setLoading(true);
     mutate(seedsData, {
-      onSuccess: (res) => {
+      onSuccess: () => {
         toast.success("Logged In Successfully.");
         signup();
+        setLoading(false);
       },
 
       onError: (error) => {
@@ -116,11 +120,21 @@ const GroupComponent = ({ seedsData = "" }) => {
         <div className="w-full flex flex-col items-start justify-start gap-[10.8px] mb-[1px]">
           <div
             onClick={handleLogin}
-            className="self-stretch h-[25px] rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-1 pb-7 md:pb-[2rem] md:pl-[50px] md:pr-[49px] shrink-0 z-[1] hover:cursor-pointer"
+            className="self-stretch h-[25px] rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-center pt-1 pb-7 md:pb-[2rem] md:pl-[50px] md:pr-[49px] shrink-0 z-[1] hover:cursor-pointer"
           >
             {/* <div className="h-[47.2px] w-full relative rounded-[4.38px] bg-mediumturquoise hidden" /> */}
-            <div className="flex-1 relative z-[1]">Next</div>
-         
+            <div className="flex items-center justify-center gap-2 relative z-[1]">
+              Next
+              {loading && (
+                <ThreeDots
+                  color="white"
+                  height={10}
+                  width={35}
+                  ariaLabel="loading"
+                  wrapperStyle={{ marginLeft: "5%" }}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -1,10 +1,6 @@
-import { Button, Modal, Table } from "flowbite-react";
-import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import CopyToClipboard from "react-copy-to-clipboard";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useAuth } from "../AuthContext";
 import BottomSheet from "../components/BottomSheet";
@@ -12,8 +8,13 @@ import Header from "../components/Header";
 import useDeleteKeyPairs from "../hooks/useDeleteKeyPairs";
 import useGetKeyPairs from "../hooks/useGetKeyPairs";
 import { debounce } from "lodash";
-import { ThreeDots } from "react-loader-spinner";
 import CreateKeypairModal from "../components/CreateKeypairModal";
+import SearchBar from "../components/MainHone/SearchBar";
+import KeyPairTable from "../components/MainHone/KeyPairTable";
+import Pagination from "../components/MainHone/Pagination";
+import MobileViewTable from "../components/MainHone/MobileViewTable";
+import PrivateKeyModal from "../components/MainHone/PrivateKeyModal";
+import DeleteKeyModal from "../components/MainHone/DeleteKeyModal";
 
 const MainHome = () => {
   const navigate = useNavigate();
@@ -93,7 +94,7 @@ const MainHome = () => {
   const handleDelete = () => {
     setLoading(true);
     deleteKeyPair(selectedUserId, {
-      onSuccess: (response) => {
+      onSuccess: () => {
         toast.success(`Keypair Deleted successfully.`);
         setLoading(false);
         setIsOpenTwo(false);
@@ -131,412 +132,51 @@ const MainHome = () => {
         <div className="bg-[#0B2837] w-full items-center">
           <Header />
         </div>
+
         <div className="overflow-x-auto px-[32px] bg-[#0f2e3f] pb-4 desktop-view-table xs:hidden sm:hidden md:block lg:block">
-          <div className="flex justify-around w-full h-[53px] mb-[30px] mt-[40px]">
-            <div className="w-[90%]">
-              <Formik
-                initialValues={{ search: "" }}
-                onSubmit={(values) => {
-                  console.log(values);
-                }}
-              >
-                {() => (
-                  <Form className="relative">
-                    <div className="flex items-center">
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <svg
-                          className="h-5 w-5 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                          />
-                        </svg>
-                      </span>
-                      <Field
-                        name="search"
-                        type="text"
-                        placeholder="Search..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="w-full md:max-w-[500px] lg:max-w-[903px] h-[53px] input-field block  pl-10 pr-4 py-2 border border-gray-700 rounded-md bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
-                      />
-                    </div>
-                  </Form>
-                )}
-              </Formik>
-            </div>
-            <button
-              onClick={openModalThree}
-              className="w-[212px] bg-[#57CBCC] hover:bg-[#43a5a7] text-white rounded-[4.38px]"
-            >
-              New Key Pair
-            </button>
-          </div>
-          <div className="border-[1px] border-[#1B3D4F] p-[24px] min-h-[450px] h-full overflow-y-auto">
-            <Table className="bg-[#1c3d4f] rounded-t-[12px]">
-              <Table.Head className="bg-[#0f2e3f]">
-                <Table.HeadCell className="bg-[#1c3d4f] normal-case text-[22px] text-white border-r-[5px] border-[#0f2e3f] rounded-t-[12px]">
-                  Name
-                </Table.HeadCell>
-                <Table.HeadCell className="bg-[#1c3d4f] normal-case text-[22px] text-white">
-                  Key Type
-                </Table.HeadCell>
-                <Table.HeadCell className="bg-[#1c3d4f]"></Table.HeadCell>
-                <Table.HeadCell className="bg-[#1c3d4f] rounded-tr-[12px]"></Table.HeadCell>
-              </Table.Head>
-              <Table.Body className="divide-y">
-                {data?.results?.map((item, index) => (
-                  <Table.Row
-                    key={index}
-                    className="border-b-[5px] !border-t-[5px] border-[#0f2e3f] bg-[#1c3d4f]"
-                  >
-                    <Table.Cell className="text-white  border-r-[5px] border-[#0f2e3f]">
-                      {item.name}
-                    </Table.Cell>
-                    <Table.Cell className="flex gap-[40px] justify-between text-white  border-r-[5px] border-[#0f2e3f]">
-                      Public key
-                      <div className="flex gap-[15px] items-center">
-                        <img
-                          src="/eye-icon.svg"
-                          alt="copy-icon"
-                          onClick={() =>
-                            handleShowPublicKey("Public", item.public_key)
-                          }
-                          className="cursor-pointer"
-                        />
-                        <CopyToClipboard
-                          text={item.public_key}
-                          onCopy={() => handleCopyPublic(item.id)}
-                        >
-                          <div>
-                            {copiedPublic[item.id] ? (
-                              <TickIcon />
-                            ) : (
-                              <CopyIcon />
-                            )}
-                          </div>
-                        </CopyToClipboard>
-                        <Popup
-                          trigger={
-                            <div>
-                              <Info />
-                            </div>
-                          }
-                          position="bottom left"
-                          arrowStyle={{
-                            color: "#0F2E3F",
-                            transform: "translateX(20px)",
-                          }}
-                          contentStyle={{
-                            marginLeft: "-20px",
-                            padding: "10px",
-                            borderRadius: "8px",
-                            backgroundColor: "#0F2E3F",
-                            color: "white",
-                            borderColor: "#0F2E3F",
-                            border: "none",
-                            width: "334px",
-                          }}
-                          arrowClassName="popup-arrow"
-                          className="popup-content"
-                        >
-                          <div className="font-sans text-[14px]">
-                            Your public key is safe to share with others. It
-                            allows senders to encrypt messages that can only be
-                            decrypted by you using your private key. You can
-                            freely distribute your public key so others can send
-                            you encrypted messages.
-                          </div>
-                        </Popup>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell className="text-white">
-                      <div className="flex justify-between">Private key</div>
-                    </Table.Cell>
-                    <Table.Cell>
-                      <div className="flex gap-[15px] justify-start">
-                        <img
-                          src="/eye-icon.svg"
-                          alt="copy-icon"
-                          className="cursor-pointer"
-                          onClick={() => openModal(item.private_key)}
-                        />
-                        <Popup
-                          trigger={
-                            <div>
-                              <Info />
-                            </div>
-                          }
-                          position="bottom left"
-                          arrowStyle={{
-                            color: "#0F2E3F",
-                            transform: "translateX(20px)",
-                          }}
-                          contentStyle={{
-                            marginLeft: "-20px",
-                            padding: "10px",
-                            borderRadius: "8px",
-                            backgroundColor: "#0F2E3F",
-                            color: "white",
-                            borderColor: "#0F2E3F",
-                            border: "none",
-                            width: "230px",
-                          }}
-                          arrowClassName="popup-arrow"
-                          className="popup-content"
-                        >
-                          <div className="font-sans text-[14px]">
-                            Your private key is the most important aspect of
-                            your security. It must be kept secret – if someone
-                            gains access to it, they will be able to decrypt all
-                            of your messages. As long as your private key is in
-                            your possession, your data remains safe. Never share
-                            your private key with anyone.
-                          </div>
-                        </Popup>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell>
-                      <a href="#" className="flex justify-end">
-                        <img
-                          src="/delete-icon.svg"
-                          alt="delete-icon"
-                          onClick={() => openModalTwo(item.id)}
-                        />
-                      </a>
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table>
-          </div>
-          <div className="flex justify-between bg-[#0f2e3f] items-center space-x-4 mt-[64px] mb-[64px]">
-            <div className="flex items-center space-x-2">
-              <button
-                disabled={data?.previous === null}
-                onClick={() => setCurrentPage(currentPage - 1)}
-                className="px-3 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
-              >
-                ← Prev
-              </button>
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentPage(index + 1)}
-                  className={`px-3 py-1 rounded-md ${
-                    currentPage === index + 1
-                      ? "bg-teal-500 text-white"
-                      : "bg-gray-700 text-white hover:bg-gray-600"
-                  }`}
-                >
-                  {index + 1}
-                </button>
-              ))}
+          <SearchBar
+            search={search}
+            setSearch={setSearch}
+            openModalThree={openModalThree}
+          />
 
-              <button
-                disabled={data?.next === null}
-                onClick={() => setCurrentPage(currentPage + 1)}
-                className="px-3 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
-              >
-                Next →
-              </button>
-            </div>
+          <KeyPairTable
+            data={data}
+            handleShowPublicKey={handleShowPublicKey}
+            handleCopyPublic={handleCopyPublic}
+            openModal={openModal}
+            openModalTwo={openModalTwo}
+            copiedPublic={copiedPublic}
+          />
 
-            <div className="flex items-center space-x-2 text-white">
-              <label htmlFor="per-page" className="text-sm">
-                Per page:
-              </label>
-              <select
-                value={itemPerPage}
-                onChange={(e) => setItemPerPage(e.target.value)}
-                id="per-page"
-                className="px-2 py-1  bg-[#0B2837] text-white rounded-md hover:bg-gray-600 border-none focus:ring focus:ring-teal-500 input-field"
-              >
-                <option value={10}>10 per page</option>
-                <option value={20}>20 per page</option>
-                <option value={50}>50 per page</option>
-                <option value={100}>100 per page</option>
-              </select>
-            </div>
-          </div>
+          <Pagination
+            data={data}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+            itemPerPage={itemPerPage}
+            setItemPerPage={setItemPerPage}
+          />
         </div>
-        <div className="mobile-view-table xs:block sm:block md:hidden lg:hidden px-[16px] pb-4">
-          <div className="flex justify-around items-center w-full mb-[12px] mt-[14px]">
-            <Formik
-              initialValues={{ search: "" }}
-              onSubmit={(values) => {
-                console.log(values);
-              }}
-            >
-              {() => (
-                <Form className="relative">
-                  <div className="flex items-center">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                      <svg
-                        className="h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        />
-                      </svg>
-                    </span>
-                    <Field
-                      name="search"
-                      type="text"
-                      placeholder="Search..."
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                      className="input-field block w-full pl-10 pr-4 py-2 border border-gray-700 rounded-md bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
-                    />
-                  </div>
-                </Form>
-              )}
-            </Formik>
-            <button
-              onClick={openModalThree}
-              className="w-[130px] ml-1 text-[12px] bg-[#57CBCC] hover:bg-[#43a5a7] h-[30px] text-white rounded-[4.38px]"
-            >
-              New Key Pair
-            </button>
-          </div>
 
-          <div className="border-[1px] border-[#1B3D4F] p-[12px]">
-            <div className="text-white bg-[#1B3D4F] rounded-t-[8px] px-[16px] py-[8px] text-[12px] font-normal leading-[16.7px] mb-[15px]">
-              Key Types
-            </div>
-
-            <div className="flex flex-col  w-full h-[530px] overflow-y-auto">
-              {data?.results?.map((item, index) => (
-                <div
-                  key={index}
-                  className="key-item bg-[#1B3D4F] px-[6px] pt-[11px] w-full mb-[6px]"
-                >
-                  <div className="flex justify-between border-b-[#0F2E3F] border-b-[1px] px-2 pb-[12px]">
-                    <p className="text-white text-[14px] font-normal leading-[14px]">
-                      {item.name}
-                    </p>
-                    <img
-                      src="/delete-icon.svg"
-                      alt="delete-icon"
-                      className="key-icons cursor-pointer"
-                      onClick={() => openModalTwo(item.id)}
-                    />
-                  </div>
-                  <div className="flex justify-between ">
-                    <div className="flex justify-between  py-[11px] ml-2 gap-[20px] items-center ">
-                      <span className="text-white text-[12px]">Public key</span>
-                      <div className="flex gap-[10px] items-center">
-                        <img
-                          src="/eye-icon.svg"
-                          alt="copy-icon"
-                          className="key-icons cursor-pointer"
-                          onClick={() =>
-                            handleShowPublicKey("Public", item.public_key)
-                          }
-                        />
-                        <CopyToClipboard
-                          text={item.public_key}
-                          onCopy={() => handleCopyPublic(item.id)}
-                        >
-                          <div>
-                            {copiedPublic[item.id] ? (
-                              <TickIcon />
-                            ) : (
-                              <CopyIcon />
-                            )}
-                          </div>
-                        </CopyToClipboard>
-                        <span onClick={() => openSheet("Public")}>
-                          <InfoMobile className={"cursor-pointer"} />
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <VerticalLine />
-                    </div>
-                    <div className="flex justify-between  py-[11px] gap-[20px] mr-2 items-center">
-                      <span className="text-white text-[12px]">
-                        Private key
-                      </span>
-                      <div className="flex gap-[10px] items-center">
-                        <img
-                          src="/eye-icon.svg"
-                          alt="copy-icon"
-                          className="key-icons cursor-pointer"
-                          onClick={() => openModal(item.private_key)}
-                        />
-                        <span onClick={() => openSheet("Private")}>
-                          <InfoMobile className={"cursor-pointer"} />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}{" "}
-            </div>
-          </div>
-          <div className="flex justify-between items-center space-x-4 mt-[26px]">
-            <div className="flex items-center space-x-1">
-              <button
-                disabled={data?.previous === null}
-                onClick={() => setCurrentPage(currentPage - 1)}
-                className="text-[9px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
-              >
-                ← Prev
-              </button>
-
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentPage(index + 1)}
-                  className={`text-[9px] px-3 py-1 rounded-md ${
-                    currentPage === index + 1
-                      ? "bg-teal-500 text-white"
-                      : "bg-gray-700 text-white hover:bg-gray-600"
-                  }`}
-                >
-                  {index + 1}
-                </button>
-              ))}
-
-              <button
-                disabled={data?.next === null}
-                onClick={() => setCurrentPage(currentPage + 1)}
-                className="text-[9px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
-              >
-                Next →
-              </button>
-            </div>
-
-            <div className="flex items-center space-x-2 text-white">
-              <select
-                value={itemPerPage}
-                onChange={(e) => setItemPerPage(e.target.value)}
-                id="per-page"
-                className="!px-4 py-1 text-[9px] bg-[#0B2837] text-white rounded-md border-none focus:ring focus:ring-teal-500 input-field"
-              >
-                <option value={10}>10 per page</option>
-                <option value={20}>20 per page</option>
-                <option value={50}>50 per page</option>
-                <option value={100}>100 per page</option>
-              </select>
-            </div>
-          </div>
-        </div>
+        {/* For moblie view */}
+        <MobileViewTable
+          data={data}
+          search={search}
+          setSearch={setSearch}
+          openModalThree={openModalThree}
+          handleShowPublicKey={handleShowPublicKey}
+          handleCopyPublic={handleCopyPublic}
+          openModal={openModal}
+          openModalTwo={openModalTwo}
+          copiedPublic={copiedPublic}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          openSheet={openSheet}
+          setCurrentPage={setCurrentPage}
+          itemPerPage={itemPerPage}
+          setItemPerPage={setItemPerPage}
+        />
       </div>
 
       <CreateKeypairModal />
@@ -556,70 +196,20 @@ const MainHome = () => {
         </div>
       </BottomSheet>
 
-      <Modal show={isOpen} onClose={closeModal} className="bg-black">
-        <Modal.Header className="pt-[10px] !pl-[0px] !pb-[2px] bg-[#1B3D4F] border-none"></Modal.Header>
+      <PrivateKeyModal
+        isOpen={isOpen}
+        closeModal={() => setIsOpen(false)}
+        privateKey={privateKey}
+        handleShowPrivateKey={handleShowPrivateKey}
+      />
 
-        <Modal.Body className="bg-[#1B3D4F] !pt-[0px] !pb-[50px]">
-          <img
-            src="/alert-icon.svg"
-            alt="alert-icon"
-            className="mx-auto mb-[30px]"
-          />
-          <p className="text-white text-center text-[16px] md:text-[22px] leading-[30px]">
-            Please make sure no body around you, keep your private key save and
-            confidential.
-          </p>
-          <button
-            onClick={handleShowPrivateKey}
-            className="bg-[#57CBCC] rounded-[4px] text-[12px] md:text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-white mt-[37px] mx-auto"
-          >
-            Show me Private Key
-          </button>
-        </Modal.Body>
-      </Modal>
-
-      <Modal show={isOpenTwo} onClose={closeModalTwo} className="bg-black">
-        <Modal.Header className="pt-[10px] !pl-[0px] !pb-[2px] bg-[#1B3D4F] border-none"></Modal.Header>
-
-        <Modal.Body className="bg-[#1B3D4F] !pt-[0px] !pb-[50px]">
-          <img
-            src="/alert-icon.svg"
-            alt="alert-icon"
-            className="mx-auto mb-[30px]"
-          />
-          <p className="text-white text-center text-[16px] md:text-[22px] leading-[30px] w-full max-w-[499px] mx-auto">
-            Are you sure you want to delete this key passcode?
-          </p>
-          <div className="flex gap-[15px] mt-[37px] justify-center max-w-[328px] w-full mx-auto">
-            <button
-              className="bg-transparent rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-[#57CBCC] border-[1px] border-[#57CBCC]"
-              onClick={() => closeModalTwo(false)}
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleDelete}
-              style={{
-                background: loading ? "#0f2e3f" : "#57CBCC",
-                cursor: loading ? "not-allowed" : "pointer",
-              }}
-              disabled={loading}
-              className="bg-[#57CBCC] rounded-[4px] text-[16px] font-normal leading-[19.5px] w-full max-w-[250px] h-[47px] flex justify-center items-center text-white"
-            >
-              Delete
-              {loading && (
-                <ThreeDots
-                  color="white"
-                  height={10}
-                  width={35}
-                  ariaLabel="loading"
-                  wrapperStyle={{ marginLeft: "5%" }}
-                />
-              )}
-            </button>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <DeleteKeyModal
+        isOpen={isOpenTwo}
+        loading={loading}
+        closeModal={closeModal}
+        closeModalTwo={closeModalTwo}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };

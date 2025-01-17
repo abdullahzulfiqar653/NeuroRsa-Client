@@ -4,6 +4,7 @@ import Words from "../data/Seeds";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
 import { useAuth } from "../AuthContext";
 import useCreateToken from "../hooks/useCreateToken";
 
@@ -11,14 +12,17 @@ const GroupComponent = ({ className = "" }) => {
   const { login } = useAuth();
   const { mutate } = useCreateToken();
   const [inputValue, setInputValue] = useState("");
+  const [loading, setloading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [seedsValue, setSeedsValue] = useState([]);
 
   const handleSubmit = () => {
+    setloading(true);
     mutate(seedsValue.join(" "), {
       onSuccess: () => {
         login();
         toast.success("Logged In Successfully.");
+        setloading(false);
       },
       onError: (error) => {
         toast.error(error.response.data.detail);
@@ -147,7 +151,18 @@ const GroupComponent = ({ className = "" }) => {
             onClick={handleSubmit}
             className="cursor-pointer self-stretch h-[35px] w-[182px]  sm:h-[42.2px] sm:w-[223px] rounded-[4.38px] bg-mediumturquoise flex flex-row items-center justify-center text-center shrink-0 z-[1]"
           >
-            <div className="flex-1 relative z-[1]">Next</div>
+            <div className="flex items-center gap-2 justify-center relative z-[1]">
+              Next
+              {loading && (
+                <ThreeDots
+                  color="white"
+                  height={10}
+                  width={35}
+                  ariaLabel="loading"
+                  wrapperStyle={{ marginLeft: "5%" }}
+                />
+              )}
+            </div>
           </div>
           {/* </Link> */}
           <div className="flex flex-row items-start justify-start px-[5px] py-0 md:px-[25px] text-xs text-gainsboro-200">

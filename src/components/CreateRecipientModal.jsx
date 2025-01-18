@@ -14,10 +14,11 @@ const CreateRecipientModal = () => {
   const { isOpen, handleModal, recipientData } = useAuth();
   const [error, setErrors] = useState(false);
   const [inputStr, setInputStr] = useState("");
-  const [loading, setLoading] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
-  const { mutate: createRecipients } = useCreateRecipient();
-  const { mutate: updateRecipients } = useUpdateRecipients();
+  const { mutate: createRecipients, isPending: isLoadingC } =
+    useCreateRecipient();
+  const { mutate: updateRecipients, isPending: isLoadingU } =
+    useUpdateRecipients();
   const [formValues, setFormValues] = useState({
     emoji: "",
     name: "",
@@ -66,13 +67,11 @@ const CreateRecipientModal = () => {
     const dataToSubmit = isUpdating
       ? { ...formValues, id: recipientData.id }
       : formValues;
-    setLoading(true);
     mutationFn(dataToSubmit, {
       onSuccess: () => {
         toast.success(
           `Recipient ${isUpdating ? "Updated" : "Created"} successfully.`
         );
-        setLoading(false);
         handleModal();
         refetch();
         setFormValues({ emoji: "", name: "", public_key: "" });
@@ -80,7 +79,6 @@ const CreateRecipientModal = () => {
       },
       onError: (error) => {
         setErrors(error.response?.data || {});
-        setLoading(false);
         for (const [attribute, errorMsg] of Object.entries(
           error.response?.data || {}
         )) {
@@ -190,23 +188,26 @@ const CreateRecipientModal = () => {
               <div className="flex justify-center mt-4">
                 <Button
                   style={{
-                    background: loading ? "#0f2e3f" : "#57CBCC",
-                    cursor: loading ? "not-allowed" : "pointer",
+                    background:
+                      isLoadingC || isLoadingU ? "#0f2e3f" : "#57CBCC",
+                    cursor:
+                      isLoadingC || isLoadingU ? "not-allowed" : "pointer",
                   }}
-                  disabled={loading}
+                  // isPending
                   type="submit"
                   className="w-[142px] font-sans hover:bg-red-700 text-white font-bold sm:py-2 px-4 rounded-[5px] save-btn"
                 >
                   Save
-                  {loading && (
-                    <ThreeDots
-                      color="white"
-                      height={10}
-                      width={35}
-                      ariaLabel="loading"
-                      wrapperStyle={{ marginLeft: "5%", marginTop: "7px" }}
-                    />
-                  )}
+                  {isLoadingC ||
+                    (isLoadingU && (
+                      <ThreeDots
+                        color="white"
+                        height={10}
+                        width={35}
+                        ariaLabel="loading"
+                        wrapperStyle={{ marginLeft: "5%", marginTop: "7px" }}
+                      />
+                    ))}
                 </Button>
               </div>
             </Modal.Body>

@@ -27,8 +27,7 @@ const MainHome = () => {
   const [privateKey, setPrivateKey] = useState(null);
   const [itemPerPage, setItemPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const { mutate: deleteKeyPair } = useDeleteKeyPairs();
-  const [loading, setLoading] = useState(false);
+  const { mutate: deleteKeyPair, isPending } = useDeleteKeyPairs();
   const { data, refetch } = useGetKeyPairs(search, currentPage, itemPerPage);
   const [totalPages, setTotalPages] = useState(
     Math.ceil(data?.count / itemPerPage)
@@ -92,17 +91,14 @@ const MainHome = () => {
   };
 
   const handleDelete = () => {
-    setLoading(true);
     deleteKeyPair(selectedUserId, {
       onSuccess: () => {
         toast.success(`Keypair Deleted successfully.`);
-        setLoading(false);
         setIsOpenTwo(false);
         refetch();
       },
       onError: (error) => {
         setErrors(error.response.data);
-        setLoading(false);
         toast.error(
           error.response.data?.error
             ? error.response.data?.error[0]
@@ -205,7 +201,7 @@ const MainHome = () => {
 
       <DeleteKeyModal
         isOpen={isOpenTwo}
-        loading={loading}
+        loading={isPending}
         closeModal={closeModal}
         closeModalTwo={closeModalTwo}
         handleDelete={handleDelete}

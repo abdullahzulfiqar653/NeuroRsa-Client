@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
-import { Formik, Form, Field } from "formik";
-import { Tabs, Modal, Button } from "flowbite-react";
+import { Tabs, Modal } from "flowbite-react";
 import useGetKeyPairs from "../hooks/useGetKeyPairs";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -341,7 +340,9 @@ const Recipients = () => {
                               }
                             />
                             <span className="w-full max-w-full h-[47px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
-                              <p className="w-[123px] overflow-hidden">{item.name}</p>
+                              <p className="w-[123px] overflow-hidden">
+                                {item.name}
+                              </p>
                             </span>
                             <span className="hidden peer-checked:block absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
                               <img
@@ -495,7 +496,9 @@ const Recipients = () => {
                               }
                             />
                             <span className="w-full max-w-full h-[32px] md:h-[37px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[13.69px] overflow-hidden md:text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
-                            <p className="w-[100px] overflow-hidden">{item.name}</p>
+                              <p className="w-[100px] overflow-hidden">
+                                {item.name}
+                              </p>
                             </span>
                             <span className="hidden peer-checked:block absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
                               <img

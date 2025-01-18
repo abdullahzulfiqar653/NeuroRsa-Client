@@ -7,8 +7,7 @@ import useCreateToken from "../hooks/useCreateToken";
 
 const GroupComponent = ({ seedsData = "" }) => {
   const { signup } = useAuth();
-  const { mutate } = useCreateToken();
-  const [loading, setLoading] = useState(false);
+  const { mutate, isPending } = useCreateToken();
   const [copytext, setCopyText] = useState(false);
 
   const copyToClipBoard = () => {
@@ -18,14 +17,11 @@ const GroupComponent = ({ seedsData = "" }) => {
       setCopyText(false);
     }, [700]);
   };
-
   const handleLogin = () => {
-    setLoading(true);
     mutate(seedsData, {
       onSuccess: () => {
         toast.success("Logged In Successfully.");
         signup();
-        setLoading(false);
       },
 
       onError: (error) => {
@@ -118,14 +114,19 @@ const GroupComponent = ({ seedsData = "" }) => {
       </div>
       <div className="w-full max-w-[223px] mx-auto mt-4 md:mt-[68px] flex flex-col items-center justify-center pt-0 px-0 text-center text-base font-montserrat">
         <div className="w-full flex flex-col items-start justify-start gap-[10.8px] mb-[1px]">
-          <div
+          <button
+            disabled={isPending}
             onClick={handleLogin}
-            className="self-stretch h-[25px] rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-center pt-1 pb-7 md:pb-[2rem] md:pl-[50px] md:pr-[49px] shrink-0 z-[1] hover:cursor-pointer"
+            className={`self-stretch h-[25px] rounded-[4.38px]   ${
+              isPending
+                ? "cursor-not-allowed"
+                : "bg-mediumturquoise cursor-pointer"
+            } bg-mediumturquoise flex flex-row items-start justify-center pt-1 pb-7 md:pb-[2rem] md:pl-[50px] md:pr-[49px] shrink-0 z-[1]`}
           >
             {/* <div className="h-[47.2px] w-full relative rounded-[4.38px] bg-mediumturquoise hidden" /> */}
             <div className="flex items-center justify-center gap-2 relative z-[1]">
               Next
-              {loading && (
+              {isPending && (
                 <ThreeDots
                   color="white"
                   height={10}
@@ -135,7 +136,7 @@ const GroupComponent = ({ seedsData = "" }) => {
                 />
               )}
             </div>
-          </div>
+          </button>
         </div>
       </div>
     </>

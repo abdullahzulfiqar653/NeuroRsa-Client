@@ -1,6 +1,6 @@
 import React from "react";
 import { toast } from "react-toastify";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button, Modal } from "flowbite-react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import useCreateKeypair from "../hooks/useCreateKeypair";
@@ -20,14 +20,12 @@ function CreateKeypairModal() {
     formValues,
     setFormValues,
   } = useAuth();
-  const { mutate } = useCreateKeypair();
+  const { mutate, isPending } = useCreateKeypair();
   const { refetch } = useGetKeyPairs();
   const [keypair, setKeypair] = useState({});
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setLoading(false);
     setFormValues((prevValues) => {
       let updatedValues = { ...prevValues, [name]: value };
       if (value === "") {
@@ -54,24 +52,22 @@ function CreateKeypairModal() {
       return;
     }
 
-    setLoading(true);
     if (!errors.passphrase) {
       mutate(formValues, {
         onSuccess: (response) => {
           setKeypair(response);
           setStep(4);
-          setLoading(false);
           toast.success(`Keypair Created successfully.`);
           refetch();
         },
         onError: (error) => {
           setErrors(error.response.data);
-          setLoading(false);
           for (const [attribute, errors] of Object.entries(
             error.response.data
           )) {
             toast.error(errors[0]);
           }
+          VisualViewport;
         },
       });
       setFormValues({});
@@ -333,7 +329,6 @@ function CreateKeypairModal() {
                 <Button
                   onClick={() => {
                     closeModal();
-                    setLoading(false);
                   }}
                   className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                 >
@@ -341,11 +336,11 @@ function CreateKeypairModal() {
                 </Button>
                 <Button
                   onClick={handleSubmit}
-                  disabled={loading}
+                  disabled={isPending}
                   className="bg-[#13425c] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                 >
                   OK
-                  {loading && (
+                  {isPending && (
                     <ThreeDots
                       color="white"
                       height={10}

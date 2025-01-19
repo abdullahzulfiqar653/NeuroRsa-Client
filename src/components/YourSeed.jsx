@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import { useAuth } from "../AuthContext";
 import useCreateToken from "../hooks/useCreateToken";
 
 const GroupComponent = ({ seedsData = "" }) => {
   const { signup } = useAuth();
-  const { mutate } = useCreateToken();
+  const { mutate, isPending } = useCreateToken();
   const [copytext, setCopyText] = useState(false);
 
   const copyToClipBoard = () => {
@@ -16,10 +17,9 @@ const GroupComponent = ({ seedsData = "" }) => {
       setCopyText(false);
     }, [700]);
   };
-
   const handleLogin = () => {
     mutate(seedsData, {
-      onSuccess: (res) => {
+      onSuccess: () => {
         toast.success("Logged In Successfully.");
         signup();
       },
@@ -114,14 +114,29 @@ const GroupComponent = ({ seedsData = "" }) => {
       </div>
       <div className="w-full max-w-[223px] mx-auto mt-4 md:mt-[68px] flex flex-col items-center justify-center pt-0 px-0 text-center text-base font-montserrat">
         <div className="w-full flex flex-col items-start justify-start gap-[10.8px] mb-[1px]">
-          <div
+          <button
+            disabled={isPending}
             onClick={handleLogin}
-            className="self-stretch h-[25px] rounded-[4.38px] bg-mediumturquoise flex flex-row items-start justify-start pt-1 pb-7 md:pb-[2rem] md:pl-[50px] md:pr-[49px] shrink-0 z-[1] hover:cursor-pointer"
+            className={`self-stretch h-[25px] rounded-[4.38px]   ${
+              isPending
+                ? "cursor-not-allowed"
+                : "bg-mediumturquoise cursor-pointer"
+            } bg-mediumturquoise flex flex-row items-start justify-center pt-1 pb-7 md:pb-[2rem] md:pl-[50px] md:pr-[49px] shrink-0 z-[1]`}
           >
             {/* <div className="h-[47.2px] w-full relative rounded-[4.38px] bg-mediumturquoise hidden" /> */}
-            <div className="flex-1 relative z-[1]">Next</div>
-         
-          </div>
+            <div className="flex items-center justify-center gap-2 relative z-[1]">
+              Next
+              {isPending && (
+                <ThreeDots
+                  color="white"
+                  height={10}
+                  width={35}
+                  ariaLabel="loading"
+                  wrapperStyle={{ marginLeft: "5%" }}
+                />
+              )}
+            </div>
+          </button>
         </div>
       </div>
     </>

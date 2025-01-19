@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
-import { Formik, Form, Field } from "formik";
-import { Tabs, Modal, Button } from "flowbite-react";
+import { Tabs, Modal } from "flowbite-react";
 import useGetKeyPairs from "../hooks/useGetKeyPairs";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -22,12 +21,11 @@ const Recipients = () => {
   const { isOpen, openModal, handleModal } = useAuth();
   const { data: keypairs, refetch: refetchKeypairs } = useGetKeyPairs();
   const { data: recipients, refetch: refetchRecipients } = useGetRecipients();
-  const { mutate: mutateCreateEncryptedMessage } = useCreateEncryptedMessage();
-  const { mutate: mutateCreateDecryptedMessage } = useCreateDecryptedMessage();
-  const [loadingState, setLoadingState] = useState({
-    loading: false,
-    loadingD: false,
-  });
+  const { mutate: mutateCreateEncryptedMessage, isPending: loadingCE } =
+    useCreateEncryptedMessage();
+  const { mutate: mutateCreateDecryptedMessage, isPending: loadingCD } =
+    useCreateDecryptedMessage();
+
   const [isOpenTwo, setIsOpenTwo] = useState(false);
   const [decryptMessageData, setDecryptMessageData] = useState({
     keypair_id: "",
@@ -45,25 +43,21 @@ const Recipients = () => {
   }, [location, refetchKeypairs, refetchRecipients, isOpen]);
 
   const handleEncryption = () => {
-    setLoadingState((prevState) => ({ ...prevState, loading: true }));
     mutateCreateEncryptedMessage(encryptMessageData, {
       onSuccess: (res) => {
         toast.success(`Message Encrypted successfully.`);
         navigate("/key-display", {
           state: { keyType: "Message", keyText: res.message },
         });
-        setLoadingState((prevState) => ({ ...prevState, loading: false }));
       },
       onError: (error) => {
         Object.values(error.response.data).forEach((errorArray) => {
           toast.error(errorArray[0]);
         });
-        setLoadingState((prevState) => ({ ...prevState, loading: false }));
       },
     });
   };
   const handleDecryption = () => {
-    setLoadingState((prevState) => ({ ...prevState, loadingD: true }));
     mutateCreateDecryptedMessage(decryptMessageData, {
       onSuccess: (res) => {
         setDecryptMessageData((prevState) => ({
@@ -74,14 +68,12 @@ const Recipients = () => {
           ...prevState,
           message: res.message,
         }));
-        setLoadingState((prevState) => ({ ...prevState, loadingD: false }));
         toast.success(`Message Decrypted successfully.`);
       },
       onError: (error) => {
         Object.values(error.response.data).forEach((errorArray) => {
           toast.error(errorArray[0]);
         });
-        setLoadingState((prevState) => ({ ...prevState, loadingD: false }));
       },
     });
   };
@@ -180,21 +172,17 @@ const Recipients = () => {
                       <button
                         onClick={handleEncryption}
                         style={{
-                          background: loadingState.loading
-                            ? "#0f2e3f"
-                            : "#57CBCC",
-                          cursor: loadingState.loading
-                            ? "not-allowed"
-                            : "pointer",
+                          background: loadingCE ? "#0f2e3f" : "#57CBCC",
+                          cursor: loadingCE ? "not-allowed" : "pointer",
                         }}
-                        disabled={loadingState.loading}
+                        disabled={loadingCE}
                         className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
                       >
                         {/* <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" /> */}
                         <div className="flex-1 relative text-base  text-white text-center z-[1]">
                           Encrypt
                         </div>
-                        {loadingState.loading && (
+                        {loadingCE && (
                           <ThreeDots
                             color="white"
                             height={10}
@@ -210,14 +198,10 @@ const Recipients = () => {
                       <button
                         onClick={handleDecryption}
                         style={{
-                          background: loadingState.loadingD
-                            ? "#0f2e3f"
-                            : "#57CBCC",
-                          cursor: loadingState.loadingD
-                            ? "not-allowed"
-                            : "pointer",
+                          background: loadingCD ? "#0f2e3f" : "#57CBCC",
+                          cursor: loadingCD ? "not-allowed" : "pointer",
                         }}
-                        disabled={loadingState.loadingD}
+                        disabled={loadingCD}
                         className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[13px] pl-8 pr-[31px] bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
                       >
                         {/* <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" /> */}
@@ -225,7 +209,7 @@ const Recipients = () => {
                           {" "}
                           Decrypt
                         </div>
-                        {loadingState.loadingD && (
+                        {loadingCD && (
                           <ThreeDots
                             color="white"
                             height={10}
@@ -341,7 +325,9 @@ const Recipients = () => {
                               }
                             />
                             <span className="w-full max-w-full h-[47px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
-                              <p className="w-[123px] overflow-hidden">{item.name}</p>
+                              <p className="w-[123px] overflow-hidden">
+                                {item.name}
+                              </p>
                             </span>
                             <span className="hidden peer-checked:block absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
                               <img
@@ -495,7 +481,9 @@ const Recipients = () => {
                               }
                             />
                             <span className="w-full max-w-full h-[32px] md:h-[37px] flex justify-center items-center px-2 py-2 bg-[#113C53] text-white text-[13.69px] overflow-hidden md:text-[20.24px] border-[#05496D] border-[1px] border-solid rounded-md cursor-pointer peer-checked:bg-[#57CBCC] peer-checked:text-white transition-colors duration-200">
-                            <p className="w-[100px] overflow-hidden">{item.name}</p>
+                              <p className="w-[100px] overflow-hidden">
+                                {item.name}
+                              </p>
                             </span>
                             <span className="hidden peer-checked:block absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
                               <img
@@ -525,10 +513,10 @@ const Recipients = () => {
               <div className="w-[245px] mx-auto flex-row items-start justify-start gap-3 xs:flex sm:flex md:hidden lg:hidden mt-[7px]">
                 <button
                   style={{
-                    background: loadingState.loading ? "#0f2e3f" : "#57CBCC",
-                    cursor: loadingState.loading ? "not-allowed" : "pointer",
+                    background: loadingCE ? "#0f2e3f" : "#57CBCC",
+                    cursor: loadingCE ? "not-allowed" : "pointer",
                   }}
-                  disabled={loadingState.loading}
+                  disabled={loadingCE}
                   onClick={handleEncryption}
                   className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
                 >
@@ -536,7 +524,7 @@ const Recipients = () => {
                   <div className="flex-1 relative text-base  text-white text-center z-[1]">
                     Encrypt
                   </div>
-                  {loadingState.loading && (
+                  {loadingCE && (
                     <ThreeDots
                       color="white"
                       height={5}
@@ -549,17 +537,17 @@ const Recipients = () => {
                 <button
                   onClick={handleDecryption}
                   style={{
-                    background: loadingState.loadingD ? "#0f2e3f" : "#57CBCC",
-                    cursor: loadingState.loadingD ? "not-allowed" : "pointer",
+                    background: loadingCD ? "#0f2e3f" : "#57CBCC",
+                    cursor: loadingCD ? "not-allowed" : "pointer",
                   }}
-                  disabled={loadingState.loadingD}
+                  disabled={loadingCD}
                   className="cursor-pointer border-darkslategray-100 border-[0.7px] border-solid py-[10px] pl-8 pr-10 bg-mediumturquoise flex-1 rounded-[4.38px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-darkcyan hover:border-slategray-100 hover:border-[0.7px] hover:border-solid hover:box-border"
                 >
                   {/* <div className="h-[47.2px] w-[142px] relative rounded-[4.38px] bg-mediumturquoise border-darkslategray-100 border-[0.7px] border-solid box-border hidden" /> */}
                   <div className="flex-1 relative text-base  text-white text-center z-[1]">
                     Decrypt
                   </div>
-                  {loadingState.loadingD && (
+                  {loadingCD && (
                     <ThreeDots
                       color="white"
                       height={5}

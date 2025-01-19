@@ -4,15 +4,18 @@ import Words from "../data/Seeds";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
+
 import { useAuth } from "../AuthContext";
 import useCreateToken from "../hooks/useCreateToken";
 
 const GroupComponent = ({ className = "" }) => {
   const { login } = useAuth();
-  const { mutate } = useCreateToken();
+  const { mutate, isPending } = useCreateToken();
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [seedsValue, setSeedsValue] = useState([]);
+  console.log(isPending);
 
   const handleSubmit = () => {
     mutate(seedsValue.join(" "), {
@@ -143,12 +146,30 @@ const GroupComponent = ({ className = "" }) => {
       </div>
       <div className="self-stretch flex flex-row items-start justify-center pt-0 px-0 pb-[59px] text-center text-base font-montserrat">
         <div className="w-[182px] md:w-[223px]  flex flex-col items-start justify-start gap-[5.8px]">
-          <div
+          <button
+            disabled={isPending}
             onClick={handleSubmit}
-            className="cursor-pointer self-stretch h-[35px] w-[182px]  sm:h-[42.2px] sm:w-[223px] rounded-[4.38px] bg-mediumturquoise flex flex-row items-center justify-center text-center shrink-0 z-[1]"
+            className={` self-stretch h-[35px] w-[182px] sm:h-[42.2px] sm:w-[223px] rounded-[4.38px]
+              ${
+                isPending
+                  ? "bg-[#85d6d7] cursor-not-allowed"
+                  : "bg-mediumturquoise cursor-pointer"
+              }
+            flex flex-row items-center justify-center cur text-center shrink-0 z-[1]`}
           >
-            <div className="flex-1 relative z-[1]">Next</div>
-          </div>
+            <div className="flex items-center gap-2 justify-center relative z-[1]">
+              Next
+              {isPending && (
+                <ThreeDots
+                  color="white"
+                  height={10}
+                  width={35}
+                  ariaLabel="loading"
+                  wrapperStyle={{ marginLeft: "5%" }}
+                />
+              )}
+            </div>
+          </button>
           {/* </Link> */}
           <div className="flex flex-row items-start justify-start px-[5px] py-0 md:px-[25px] text-xs text-gainsboro-200">
             <div className="flex flex-row items-start justify-start gap-[9px] shrink-0">

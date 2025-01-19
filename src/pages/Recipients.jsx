@@ -25,10 +25,7 @@ const Recipients = () => {
     useCreateEncryptedMessage();
   const { mutate: mutateCreateDecryptedMessage, isPending: loadingCD } =
     useCreateDecryptedMessage();
-  const [loadingState, setLoadingState] = useState({
-    loading: false,
-    loadingD: false,
-  });
+
   const [isOpenTwo, setIsOpenTwo] = useState(false);
   const [decryptMessageData, setDecryptMessageData] = useState({
     keypair_id: "",
@@ -46,25 +43,21 @@ const Recipients = () => {
   }, [location, refetchKeypairs, refetchRecipients, isOpen]);
 
   const handleEncryption = () => {
-    setLoadingState((prevState) => ({ ...prevState, loading: true }));
     mutateCreateEncryptedMessage(encryptMessageData, {
       onSuccess: (res) => {
         toast.success(`Message Encrypted successfully.`);
         navigate("/key-display", {
           state: { keyType: "Message", keyText: res.message },
         });
-        setLoadingState((prevState) => ({ ...prevState, loading: false }));
       },
       onError: (error) => {
         Object.values(error.response.data).forEach((errorArray) => {
           toast.error(errorArray[0]);
         });
-        setLoadingState((prevState) => ({ ...prevState, loading: false }));
       },
     });
   };
   const handleDecryption = () => {
-    setLoadingState((prevState) => ({ ...prevState, loadingD: true }));
     mutateCreateDecryptedMessage(decryptMessageData, {
       onSuccess: (res) => {
         setDecryptMessageData((prevState) => ({
@@ -75,14 +68,12 @@ const Recipients = () => {
           ...prevState,
           message: res.message,
         }));
-        setLoadingState((prevState) => ({ ...prevState, loadingD: false }));
         toast.success(`Message Decrypted successfully.`);
       },
       onError: (error) => {
         Object.values(error.response.data).forEach((errorArray) => {
           toast.error(errorArray[0]);
         });
-        setLoadingState((prevState) => ({ ...prevState, loadingD: false }));
       },
     });
   };

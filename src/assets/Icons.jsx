@@ -1,4 +1,4 @@
-const Info = () => (
+export const Info = () => (
   <svg
     width="21"
     height="21"
@@ -17,9 +17,9 @@ const Info = () => (
     />
   </svg>
 );
-export default Info;
+// export default Info;
 
-const InfoMobile = () => (
+export const InfoMobile = () => (
   <svg
     width="15"
     height="15"
@@ -38,9 +38,8 @@ const InfoMobile = () => (
     />
   </svg>
 );
-export { InfoMobile };
 
-const Line = () => (
+export const Line = () => (
   <svg
     width="389"
     height="2"
@@ -52,8 +51,7 @@ const Line = () => (
   </svg>
 );
 
-export { Line };
-const VerticalLine = () => (
+export const VerticalLine = () => (
   <svg
     width="8"
     height="42"
@@ -64,8 +62,7 @@ const VerticalLine = () => (
     <path d="M1 41L1 0.999998" stroke="#0F2E3F" stroke-linecap="round" />
   </svg>
 );
-export { VerticalLine };
-const TickIcon = () => (
+export const TickIcon = () => (
   <img
     src="/tick-icon.svg"
     alt="tick-icon"
@@ -73,13 +70,10 @@ const TickIcon = () => (
   />
 );
 
-export { TickIcon };
-
-const CopyIcon = () => (
+export const CopyIcon = () => (
   <img
     src="/copy-icon.svg"
     alt="copy-icon"
     className="cursor-pointer w-[15px] h-[15px] md:w-[20px] md:h-[22px]"
   />
 );
-export { CopyIcon };

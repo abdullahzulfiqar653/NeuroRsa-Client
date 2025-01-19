@@ -1,11 +1,12 @@
 import React from "react";
-import Info, {
+import {
+  Info,
   InfoMobile,
   VerticalLine,
   TickIcon,
   Line,
   CopyIcon,
-} from "../../../assets/Icons";
+} from "../../assets/Icons";
 import { Field, Form, Formik } from "formik";
 import CopyToClipboard from "react-copy-to-clipboard";
 

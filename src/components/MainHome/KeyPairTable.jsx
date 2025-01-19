@@ -1,8 +1,7 @@
 import React from "react";
 import Popup from "reactjs-popup";
-import Info, { TickIcon, CopyIcon } from "../../../assets/Icons";
+import { Info, TickIcon, CopyIcon } from "../../assets/Icons";
 import CopyToClipboard from "react-copy-to-clipboard";
-
 import { Table } from "flowbite-react";
 
 const KeyPairTable = ({

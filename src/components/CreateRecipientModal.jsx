@@ -198,16 +198,15 @@ const CreateRecipientModal = () => {
                   className="w-[142px] font-sans hover:bg-red-700 text-white font-bold sm:py-2 px-4 rounded-[5px] save-btn"
                 >
                   Save
-                  {isLoadingC ||
-                    (isLoadingU && (
-                      <ThreeDots
-                        color="white"
-                        height={10}
-                        width={35}
-                        ariaLabel="loading"
-                        wrapperStyle={{ marginLeft: "5%", marginTop: "7px" }}
-                      />
-                    ))}
+                  {(isLoadingC || isLoadingU) && (
+                    <ThreeDots
+                      color="white"
+                      height={10}
+                      width={35}
+                      ariaLabel="loading"
+                      wrapperStyle={{ marginLeft: "5%", marginTop: "7px" }}
+                    />
+                  )}
                 </Button>
               </div>
             </Modal.Body>

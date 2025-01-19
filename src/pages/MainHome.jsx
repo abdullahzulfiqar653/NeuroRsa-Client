@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "reactjs-popup/dist/index.css";
-import { Info } from "../assets/Icons";
+import { Info, Line } from "../assets/Icons";
 import { debounce } from "lodash";
 import { useAuth } from "../AuthContext";
 import BottomSheet from "../components/BottomSheet";

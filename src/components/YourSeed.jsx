@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { ThreeDots } from "react-loader-spinner";
+import { ThreeCircles, ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import { useAuth } from "../AuthContext";
 import useCreateToken from "../hooks/useCreateToken";
 
-const GroupComponent = ({ seedsData = "" }) => {
+const GroupComponent = ({ seedsData = "", isLoading }) => {
   const { signup } = useAuth();
   const { mutate, isPending } = useCreateToken();
   const [copytext, setCopyText] = useState(false);
@@ -41,8 +41,9 @@ const GroupComponent = ({ seedsData = "" }) => {
       </h2>
       <div className="self-stretch flex flex-col items-start justify-start gap-[5px] text-mini-1 font-montserrat">
         <div className="flex flex-row items-start justify-start py-0 px-px">
-          <div className="text-[12px] relative leading-[22px] font-medium inline-block min-w-[66px] z-[1]">
+          <div className="text-[12px] relative leading-[22px] font-medium min-w-[66px] z-[1] flex gap-2">
             Key Seed
+            {isLoading && <ThreeCircles height="20" width="20" color="white" />}
           </div>
         </div>
         <div className="bg-darkslategray-200 w-full py-[10px] md:py-[21px] pb-0 md:pb-[10px] px-[5px] md:px-[19px] rounded-borderradius-large box-border  custom-tab-box">

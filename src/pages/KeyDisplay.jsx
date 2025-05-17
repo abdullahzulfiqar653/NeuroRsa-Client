@@ -27,8 +27,8 @@ const KeyDisplay = () => {
               <div className="w-full py-0 px-2.5 box-border">
                 <div className="flex justify-between gap-[10px] bg-[#1B3D4F] p-[15px]">
                   <p className="md:text-[18px] text-[14px] leading-[30px] md:font-normal font-semibold text-white">
-                    ----- BEGIN PGP {keyType} {!keyType === "Message" && "KEY"}{" "}
-                    BLOCK -----
+                    {/* ----- BEGIN PGP {keyType} {!keyType === "Message" && "KEY"}{" "}
+                    BLOCK ----- */}
                   </p>
                   {keyType === "Private" ? (
                     ""

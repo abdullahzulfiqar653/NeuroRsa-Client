@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import useGenerateSeeds from "../hooks/useGenerateSeeds";
 
 const GroupComponent = ({ className = "" }) => {
-  const { data } = useGenerateSeeds();
+  const { data, isLoading } = useGenerateSeeds();
   const [showSeed, setShowSeed] = useState(false);
   const [seedsData, setSeedsData] = useState(false);
 
@@ -49,7 +49,7 @@ const GroupComponent = ({ className = "" }) => {
         {!showSeed ? (
           <ImportantNotice onShowSeed={handleShowSeed} />
         ) : (
-          <YourSeed seedsData={seedsData} />
+          <YourSeed seedsData={seedsData} isLoading={isLoading} />
         )}
       </div>
       <div className="w-full flex flex-row items-center justify-center py-0 text-xs text-gainsboro-200 mb-8 md:mb-0">

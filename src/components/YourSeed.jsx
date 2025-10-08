@@ -1,24 +1,26 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { ThreeDots } from "react-loader-spinner";
+import { ThreeCircles, ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import { useAuth } from "../AuthContext";
 import useCreateToken from "../hooks/useCreateToken";
+import useGenerateSeeds from "../hooks/useGenerateSeeds";
 
-const GroupComponent = ({ seedsData = "" }) => {
+const GroupComponent = () => {
   const { signup } = useAuth();
   const { mutate, isPending } = useCreateToken();
+  const { data, isLoading } = useGenerateSeeds();
   const [copytext, setCopyText] = useState(false);
 
   const copyToClipBoard = () => {
     setCopyText(true);
-    navigator.clipboard.writeText(seedsData);
+    navigator.clipboard.writeText(data?.pass_phrase);
     setTimeout(() => {
       setCopyText(false);
     }, [700]);
   };
   const handleLogin = () => {
-    mutate(seedsData, {
+    mutate(data?.pass_phrase, {
       onSuccess: () => {
         toast.success("Logged In Successfully.");
         signup();
@@ -37,18 +39,31 @@ const GroupComponent = ({ seedsData = "" }) => {
   return (
     <>
       <h2 className="text-white text-[22px] leading-[64px] font-normal text-center w-full mb-[5px] mt-[0px]">
-        Your Seed
+        Your Seed{" "}
       </h2>
       <div className="self-stretch flex flex-col items-start justify-start gap-[5px] text-mini-1 font-montserrat">
         <div className="flex flex-row items-start justify-start py-0 px-px">
-          <div className="text-[12px] relative leading-[22px] font-medium inline-block min-w-[66px] z-[1]">
-            Key Seed
+          <div
+            className={`text-[12px] justify-center items-center relative leading-[22px] font-medium flex  z-[1] ${
+              isLoading ? "min-w-[106px]" : "min-w-[66px]"
+            }`}
+          >
+            Key Seed{" "}
+            {isLoading && (
+              <ThreeCircles
+                color="white"
+                height={15}
+                width={35}
+                ariaLabel="loading"
+                wrapperStyle={{ marginLeft: "5%" }}
+              />
+            )}
           </div>
         </div>
         <div className="bg-darkslategray-200 w-full py-[10px] md:py-[21px] pb-0 md:pb-[10px] px-[5px] md:px-[19px] rounded-borderradius-large box-border  custom-tab-box">
           {/* <TagsInput value={selected} name='tags' placeHolder='Enter your Key Seed...' /> */}
           <div className="flex md:gap-[8px] gap-[5px] flex-wrap">
-            {seedsData?.split(" ").map((seed, index) => (
+            {data?.pass_phrase?.split(" ").map((seed, index) => (
               <span
                 key={index}
                 className="dm-sans border-mediumturquoise border-[1px] px-[8px] text-[14px] md:text-[16px] leading-[20px] md:leading-[20px] font-[400] text-white rounded-[6px]"

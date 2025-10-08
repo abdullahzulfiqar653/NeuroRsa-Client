@@ -328,8 +328,11 @@ function CreateKeypairModal() {
             {step === 1 && (
               <>
                 <Button
+                  disabled={errors.email}
                   onClick={nextStep}
-                  className="!bg-[#57CBCC] hover:bg-red-700 text-white font-sans font-bold py-2 px-4 rounded-[5px] modal-btn"
+                  className={`!bg-[#57CBCC] hover:bg-red-700 text-white font-sans font-bold py-2 px-4 rounded-[5px] modal-btn ${
+                    errors.email ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
                   Next
                 </Button>

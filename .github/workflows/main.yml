@@ -1,4 +1,4 @@
-name: CI/CD > NeuroRsa Dev
+name: CI/CD > NeuroRsa Live
 
 on:
   push:

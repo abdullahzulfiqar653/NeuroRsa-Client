@@ -23,14 +23,18 @@ const RecipentsList = () => {
     search,
     currentPage
   );
-  const totalPages = Math.ceil(recipients?.count / 10);
+  const [totalPages, setTotalPages] = useState(
+    Math.ceil(recipients?.count / 10)
+  );
 
   const debouncedRefetch = debounce(() => {
     refetchRecipients();
   }, 500);
 
   useEffect(() => {
+    setTotalPages(Math.ceil(recipients?.count / 10));
     if (search) {
+      setCurrentPage(1);
       debouncedRefetch();
     } else {
       refetchRecipients();
@@ -129,50 +133,52 @@ const RecipentsList = () => {
               Create New Recipient
             </button>
           </div>
-          <div className="border-[1px] relative border-[#1B3D4F] p-[24px] h-[450px] overflow-auto">
-            <Table className="bg-[#1c3d4f] rounded-t-[12px] w-[750px] relative z-10">
-              <Table.Head className="bg-[#0f2e3f]">
-                <Table.HeadCell className="bg-[#1c3d4f] normal-case text w-[575px] text-white border-r-[5px] border-[#0f2e3f] rounded-t-[12px]">
-                  Recipient Names
-                </Table.HeadCell>
-                <Table.HeadCell className="bg-[#1c3d4f] normal-case text-white w-[95px]">
-                  Actions
-                </Table.HeadCell>
-                <Table.HeadCell className="bg-[#1c3d4f]"></Table.HeadCell>
-                <Table.HeadCell className="bg-[#1c3d4f] rounded-tr-[12px]"></Table.HeadCell>
-              </Table.Head>
-              <Table.Body className="">
-                {recipients?.results?.map((item, index) => (
-                  <Table.Row
-                    key={index}
-                    className="border-b-[5px] !border-t-[5px] border-[#0f2e3f] bg-[#1c3d4f]"
-                  >
-                    <Table.Cell className="text-white  border-r-[5px] border-[#0f2e3f]">
-                      {item.name}
-                    </Table.Cell>
-                    <Table.Cell className="text-white">
-                      <div className="flex justify-between">
-                        <div className="flex gap-[20px] items-center">
-                          <img
-                            src="/editBtn.svg"
-                            alt="copy-icon"
-                            className="cursor-pointer"
-                            onClick={() => handleModal(item)}
-                          />
+          <div className="border-[1px] relative border-[#1B3D4F] h-[450px] ">
+            <div className="p-[24px] h-full overflow-auto">
+              <Table className="bg-[#1c3d4f] rounded-t-[12px] w-[750px] relative z-10">
+                <Table.Head className="bg-[#0f2e3f]">
+                  <Table.HeadCell className="bg-[#1c3d4f] normal-case text-[22px] text w-[575px] text-white border-r-[5px] border-[#0f2e3f] rounded-t-[12px]">
+                    Recipient Names
+                  </Table.HeadCell>
+                  <Table.HeadCell className="bg-[#1c3d4f] normal-case text-[22px] text-white w-[95px]">
+                    Actions
+                  </Table.HeadCell>
+                  <Table.HeadCell className="bg-[#1c3d4f]"></Table.HeadCell>
+                  <Table.HeadCell className="bg-[#1c3d4f] rounded-tr-[12px]"></Table.HeadCell>
+                </Table.Head>
+                <Table.Body className="">
+                  {recipients?.results?.map((item, index) => (
+                    <Table.Row
+                      key={index}
+                      className="border-b-[5px] !border-t-[5px] border-[#0f2e3f] bg-[#1c3d4f]"
+                    >
+                      <Table.Cell className="text-white  border-r-[5px] border-[#0f2e3f]">
+                        {item.name}
+                      </Table.Cell>
+                      <Table.Cell className="text-white">
+                        <div className="flex justify-between">
+                          <div className="flex gap-[20px] items-center">
+                            <img
+                              src="/editBtn.svg"
+                              alt="copy-icon"
+                              className="cursor-pointer"
+                              onClick={() => handleModal(item)}
+                            />
 
-                          <img
-                            src="/delete-icon.svg"
-                            alt="delete-icon"
-                            className="cursor-pointer"
-                            onClick={() => openModalTwo(item.id)}
-                          />
+                            <img
+                              src="/delete-icon.svg"
+                              alt="delete-icon"
+                              className="cursor-pointer"
+                              onClick={() => openModalTwo(item.id)}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            </div>
             <img
               src="/bg-vector-bkp.png"
               className="absolute top-9 right-1 opacity-40 h-[400px]"
@@ -254,7 +260,7 @@ const RecipentsList = () => {
               onClick={handleModal}
               className="w-[130px] ml-1 text-[12px] bg-[#57CBCC] hover:bg-[#43a5a7] h-[30px] text-white rounded-[4.38px]"
             >
-              Create New Recipient
+              New Recipient
             </button>
           </div>
           <div className="border-[1px] border-[#1B3D4F] p-[12px]">
@@ -302,7 +308,7 @@ const RecipentsList = () => {
               <button
                 disabled={recipients?.previous === null}
                 onClick={() => setCurrentPage(currentPage - 1)}
-                className="text-[7.6px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
+                className="text-[9px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
               >
                 ← Prev
               </button>
@@ -311,7 +317,7 @@ const RecipentsList = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentPage(index + 1)}
-                  className={`text-[7.6px] px-3 py-1 rounded-md ${
+                  className={`text-[9px] px-3 py-1 rounded-md ${
                     currentPage === index + 1
                       ? "bg-teal-500 text-white"
                       : "bg-gray-700 text-white hover:bg-gray-600"
@@ -324,7 +330,7 @@ const RecipentsList = () => {
               <button
                 disabled={recipients?.next === null}
                 onClick={() => setCurrentPage(currentPage + 1)}
-                className="text-[7.6px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
+                className="text-[9px] px-1 py-1 bg-[#0B2837] text-white rounded-md hover:bg-[#1B3D4F]"
               >
                 Next →
               </button>

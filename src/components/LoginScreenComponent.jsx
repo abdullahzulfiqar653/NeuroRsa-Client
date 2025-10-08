@@ -4,15 +4,18 @@ import Words from "../data/Seeds";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
+
 import { useAuth } from "../AuthContext";
 import useCreateToken from "../hooks/useCreateToken";
 
 const GroupComponent = ({ className = "" }) => {
   const { login } = useAuth();
-  const { mutate } = useCreateToken();
+  const { mutate, isPending } = useCreateToken();
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [seedsValue, setSeedsValue] = useState([]);
+  console.log(isPending);
 
   const handleSubmit = () => {
     mutate(seedsValue.join(" "), {
@@ -21,7 +24,7 @@ const GroupComponent = ({ className = "" }) => {
         toast.success("Logged In Successfully.");
       },
       onError: (error) => {
-        toast.error(error.response.data.detail, { className: "toast-message" });
+        toast.error(error.response.data.detail);
         // setError("Login failed. Please check your credentials.", error);
       },
     });
@@ -75,9 +78,9 @@ const GroupComponent = ({ className = "" }) => {
 
   return (
     <div
-      className={`w-[458px] sm:w-[458px] md:w-[458px] lg:w-[458px] rounded-[32px] [background:linear-gradient(180deg,_#1f729d,_#0b2837)] border-darkslategray-100 border-[1px] border-solid box-border flex flex-col items-end justify-start pt-[67px] pb-3.5 pl-[18px] pr-[19px] gap-[10px] md:gap-[68px] max-w-full z-[4] text-left text-9xl text-white font-neue-plak mq450:gap-[34px] mq725:pt-11 mq725:pb-5 mq725:box-border ${className}`}
+      className={`w-[458px] sm:w-[458px] md:h-[732px] mt-7 md:w-[458px] lg:w-[458px] rounded-[32px] [background:linear-gradient(180deg,_#1f729d,_#0b2837)] border-darkslategray-100 border-[1px] border-solid box-border flex flex-col items-end justify-start pt-[67px] pb-3.5  pl-[18px] pr-[19px] gap-[10px] md:gap-[68px] max-w-full z-[4] text-left text-9xl text-white font-neue-plak mq450:gap-[34px] mq725:pt-11 mq725:pb-5 mq725:box-border ${className}`}
     >
-      <div className="w-[458px]  h-[732px] relative rounded-[32px] [background:linear-gradient(180deg,_#1f729d,_#0b2837)] border-darkslategray-100 border-[1px] border-solid box-border hidden max-w-full" />
+      {/* <div className="w-[458px] h-[732px]  relative rounded-[32px] [background:linear-gradient(180deg,_#1f729d,_#0b2837)] border-darkslategray-100 border-[1px] border-solid box-border hidden max-w-full" /> */}
       <div className="self-stretch flex flex-row items-start justify-end pt-0 pb-2 pl-10 pr-[38px] box-border max-w-full">
         <div className="flex-1 flex flex-col items-start justify-start gap-[23px] max-w-full">
           <div className="self-stretch flex flex-row  py-0 items-center justify-center mq450:pl-5 mq450:pr-5 mq450:box-border">
@@ -143,16 +146,32 @@ const GroupComponent = ({ className = "" }) => {
       </div>
       <div className="self-stretch flex flex-row items-start justify-center pt-0 px-0 pb-[59px] text-center text-base font-montserrat">
         <div className="w-[182px] md:w-[223px]  flex flex-col items-start justify-start gap-[5.8px]">
-          {/* <Link to='/VerifyLoginScreen' className='text-white no-underline w-full'> */}
-          <div
+          <button
+            disabled={isPending}
             onClick={handleSubmit}
-            className="cursor-pointer self-stretch h-[35px] w-[182px]  sm:h-[42.2px] sm:w-[223px] rounded-[4.38px] bg-mediumturquoise flex flex-row items-center justify-center text-center shrink-0 z-[1]"
+            className={` self-stretch h-[35px] w-[182px] sm:h-[42.2px] sm:w-[223px] rounded-[4.38px]
+              ${
+                isPending
+                  ? "bg-[#85d6d7] cursor-not-allowed"
+                  : "bg-mediumturquoise cursor-pointer"
+              }
+            flex flex-row items-center justify-center cur text-center shrink-0 z-[1]`}
           >
-            {/* <div className="h-[47.2px] w-[223px] relative rounded-[4.38px] bg-mediumturquoise hidden" /> */}
-            <div className="flex-1 relative z-[1]">Next</div>
-          </div>
+            <div className="flex items-center gap-2 justify-center relative z-[1]">
+              Next
+              {isPending && (
+                <ThreeDots
+                  color="white"
+                  height={10}
+                  width={35}
+                  ariaLabel="loading"
+                  wrapperStyle={{ marginLeft: "5%" }}
+                />
+              )}
+            </div>
+          </button>
           {/* </Link> */}
-          <div className="flex flex-row items-start justify-start px-[5px] py-0 md:px-[15px] text-xs text-gainsboro-200">
+          <div className="flex flex-row items-start justify-start px-[5px] py-0 md:px-[25px] text-xs text-gainsboro-200">
             <div className="flex flex-row items-start justify-start gap-[9px] shrink-0">
               <div className="relative leading-[32px] z-[1]">
                 Don’t have your seed?

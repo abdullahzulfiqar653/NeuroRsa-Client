@@ -248,11 +248,21 @@ const Recipients = () => {
                           </div>
                         )}
                         {recipients?.results?.map((item) => {
+                          const isSelected =
+                            encryptMessageData?.recipient_ids?.includes(
+                              item.id
+                            );
                           return (
                             <div
                               key={item.id}
                               onClick={() => handleRecipientClick(item.id)}
-                              className="self-stretch shadow-[0px_3.8px_11.44px_rgba(0,_0,_0,_0.32)] rounded-[11.44px] bg-[#113C53] flex flex-row items-center justify-between pt-[5.8px] pb-[6.7px] pl-[5px] pr-3.5 box-border max-w-full gap-5 z-[1]"
+                              role="button"
+                              aria-pressed={isSelected}
+                              className={`self-stretch relative shadow-[0px_3.8px_11.44px_rgba(0,_0,_0,_0.32)] rounded-[11.44px] flex flex-row items-center justify-between pt-[5.8px] pb-[6.7px] pl-[5px] pr-3.5 box-border max-w-full gap-5 z-[1] transition-colors ${
+                                isSelected
+                                  ? "bg-[#175C83] border border-[#57CBCC]"
+                                  : "bg-[#113C53]"
+                              }`}
                             >
                               <div className="w-full flex flex-row  max-w-full mq800:flex-wrap">
                                 <div className="flex gap-[23.8px] items-center w-full">
@@ -270,16 +280,14 @@ const Recipients = () => {
                                   </p>
                                 </div>
                               </div>
-                              {encryptMessageData?.recipient_ids?.includes(
-                                item.id
-                              ) && (
-                                <div className="w-[34.3px] h-[34.3px] flex">
+                              {isSelected && (
+                                <span className="absolute -top-2 -right-2">
                                   <img
-                                    className="w-[34.3px] h-[34.3px] relative z-[3] flex"
-                                    alt=""
+                                    className="h-5 w-5"
+                                    alt="selected"
                                     src="/group-1261153225.svg"
                                   />
-                                </div>
+                                </span>
                               )}
                             </div>
                           );
@@ -314,13 +322,19 @@ const Recipients = () => {
                         >
                           <label className="relative inline-flex items-center w-full">
                             <input
-                              type="radio"
+                              type="checkbox"
                               className="hidden peer"
                               name="key-pair"
-                              onClick={() =>
+                              checked={
+                                decryptMessageData.keypair_id === item.id
+                              }
+                              onChange={() =>
                                 setDecryptMessageData((prevState) => ({
                                   ...prevState,
-                                  keypair_id: item.id,
+                                  keypair_id:
+                                    prevState.keypair_id === item.id
+                                      ? ""
+                                      : item.id,
                                 }))
                               }
                             />
@@ -403,11 +417,21 @@ const Recipients = () => {
                           </div>
                         )}
                         {recipients?.results?.map((item) => {
+                          const isSelected =
+                            encryptMessageData?.recipient_ids?.includes(
+                              item.id
+                            );
                           return (
                             <div
                               key={item.id}
                               onClick={() => handleRecipientClick(item.id)}
-                              className="self-stretch shadow-[0px_3.8px_11.44px_rgba(0,_0,_0,_0.32)] rounded-[11.44px] bg-[#113C53] flex flex-row items-center justify-between pt-[5.8px] pb-[6.7px] pl-[5px] pr-3.5 box-border max-w-full gap-5 z-[1]"
+                              role="button"
+                              aria-pressed={isSelected}
+                              className={`self-stretch relative shadow-[0px_3.8px_11.44px_rgba(0,_0,_0,_0.32)] rounded-[11.44px] flex flex-row items-center justify-between pt-[5.8px] pb-[6.7px] pl-[5px] pr-3.5 box-border max-w-full gap-5 z-[1] transition-colors ${
+                                isSelected
+                                  ? "bg-[#175C83] border border-[#57CBCC]"
+                                  : "bg-[#113C53]"
+                              }`}
                             >
                               <div className="w-full flex flex-row  max-w-full mq800:flex-wrap">
                                 <div className="flex gap-[23.8px] items-center w-full">
@@ -425,16 +449,14 @@ const Recipients = () => {
                                   </p>
                                 </div>
                               </div>
-                              {encryptMessageData?.recipient_ids?.includes(
-                                item.id
-                              ) && (
-                                <div className="w-[34.3px] h-[34.3px] flex">
+                              {isSelected && (
+                                <span className="absolute -top-2 -right-2">
                                   <img
-                                    className="w-[34.3px] h-[34.3px] relative z-[3] flex"
-                                    alt=""
+                                    className="h-5 w-5"
+                                    alt="selected"
                                     src="/group-1261153225.svg"
                                   />
-                                </div>
+                                </span>
                               )}
                             </div>
                           );
@@ -470,13 +492,19 @@ const Recipients = () => {
                         >
                           <label className="relative inline-flex items-center w-full">
                             <input
-                              type="radio"
+                              type="checkbox"
                               className="hidden peer"
                               name="key-pair"
-                              onClick={() =>
+                              checked={
+                                decryptMessageData.keypair_id === item.id
+                              }
+                              onChange={() =>
                                 setDecryptMessageData((prevState) => ({
                                   ...prevState,
-                                  keypair_id: item.id,
+                                  keypair_id:
+                                    prevState.keypair_id === item.id
+                                      ? ""
+                                      : item.id,
                                 }))
                               }
                             />
@@ -485,7 +513,7 @@ const Recipients = () => {
                                 {item.name}
                               </p>
                             </span>
-                            <span className="hidden peer-checked:block absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
+                            <span className="hidden peer-checked:block absolute top-1 right-1 transform translate-x-1/2 -translate-y-1/2">
                               <img
                                 className="h-[20.2px] w-[20.2px] z-[3]"
                                 alt=""

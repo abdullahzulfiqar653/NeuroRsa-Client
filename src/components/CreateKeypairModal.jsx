@@ -31,14 +31,26 @@ function CreateKeypairModal() {
       if (value === "") {
         delete updatedValues[name];
       }
+      if (name === "email") {
+        const emailValue = value.trim();
+        const isValidEmail =
+          emailValue === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+        setErrors((prev) => ({
+          ...prev,
+          email: isValidEmail ? "" : "Please enter a valid email address.",
+        }));
+      }
       if (name === "confirmPassphrase" || name === "passphrase") {
         const { passphrase, confirmPassphrase } = updatedValues;
         if (!passphrase || !confirmPassphrase) {
-          setErrors({ passphrase: "" });
+          setErrors((prev) => ({ ...prev, passphrase: "" }));
         } else if (passphrase !== confirmPassphrase) {
-          setErrors({ passphrase: "Passphrases do not match" });
+          setErrors((prev) => ({
+            ...prev,
+            passphrase: "Passphrases do not match",
+          }));
         } else {
-          setErrors({ passphrase: "" });
+          setErrors((prev) => ({ ...prev, passphrase: "" }));
         }
       }
       return updatedValues;
@@ -47,6 +59,19 @@ function CreateKeypairModal() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Validate email if present
+    if (formValues?.email) {
+      const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        String(formValues.email).trim()
+      );
+      if (!isValidEmail) {
+        setErrors((prev) => ({
+          ...prev,
+          email: "Please enter a valid email address.",
+        }));
+        return;
+      }
+    }
     if (formValues?.passphrase && !formValues?.confirmPassphrase) {
       toast.error("Please confirm your passphrase.");
       return;
@@ -143,7 +168,11 @@ function CreateKeypairModal() {
                       value={formValues.email}
                       onChange={handleChange}
                     />
-                    <ErrorMessage name="email" component="div" />
+                    {errors.email && (
+                      <div className="text-red-500 mt-1 text-[12px]">
+                        {errors.email}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="block w-[98%] mx-auto h-[2px] bg-[#0E2E3F] mt-[20px]"></div>
@@ -299,8 +328,11 @@ function CreateKeypairModal() {
             {step === 1 && (
               <>
                 <Button
+                  disabled={errors.email}
                   onClick={nextStep}
-                  className="!bg-[#57CBCC] hover:bg-red-700 text-white font-sans font-bold py-2 px-4 rounded-[5px] modal-btn"
+                  className={`!bg-[#57CBCC] hover:bg-red-700 text-white font-sans font-bold py-2 px-4 rounded-[5px] modal-btn ${
+                    errors.email ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
                   Next
                 </Button>

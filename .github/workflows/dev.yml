@@ -1,4 +1,4 @@
-name: CI/CD > NeuroRsa Dev
+name: CI/CD → NeuroRsa Dev
 
 on:
   push:
@@ -10,9 +10,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  publish-images:
-    name: Connecting to server for deployment
+  deploy:
+    name: Deploy to Dev Server
     runs-on: ubuntu-latest
+
     steps:
       - name: Configure SSH
         env:
@@ -23,23 +24,20 @@ jobs:
           mkdir -p ~/.ssh/
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/github
           chmod 600 ~/.ssh/github
-          cat >>~/.ssh/config <<END
+          cat >> ~/.ssh/config <<EOF
           Host target
             HostName $SSH_HOST
             User $SSH_USER
             IdentityFile ~/.ssh/github
             LogLevel ERROR
             StrictHostKeyChecking no
-          END
+          EOF
 
-      - name: Run Deploy
+      - name: Deploy to Server
         run: |
           ssh target "\
             export PATH=/root/.nvm/versions/node/v22.12.0/bin:\$PATH && \
             cd Frontends/dev/NeuroRsa-Client && \
             git pull && \
-            export PATH=\$PATH:/root/.npm/bin && \
-            npm install && \
-            npm run build && \
             cp -r ./build/* /var/www/dev/dev.neurorsa.xyz/html/ && \
             systemctl reload nginx"

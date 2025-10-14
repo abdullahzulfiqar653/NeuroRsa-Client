@@ -42,15 +42,42 @@ function CreateKeypairModal() {
       }
       if (name === "confirmPassphrase" || name === "passphrase") {
         const { passphrase, confirmPassphrase } = updatedValues;
-        if (!passphrase || !confirmPassphrase) {
-          setErrors((prev) => ({ ...prev, passphrase: "" }));
+        const isPassphraseEmpty =
+          !passphrase || String(passphrase).length === 0;
+        const isConfirmEmpty =
+          !confirmPassphrase || String(confirmPassphrase).length === 0;
+
+        // Field-specific messages
+        if (isPassphraseEmpty && isConfirmEmpty) {
+          setErrors((prev) => ({
+            ...prev,
+            passphrase: "",
+            confirmPassphrase: "",
+          }));
+        } else if (!isPassphraseEmpty && isConfirmEmpty) {
+          setErrors((prev) => ({
+            ...prev,
+            passphrase: "",
+            confirmPassphrase: "Please confirm your passphrase.",
+          }));
+        } else if (isPassphraseEmpty && !isConfirmEmpty) {
+          setErrors((prev) => ({
+            ...prev,
+            passphrase: "Please enter a passphrase.",
+            confirmPassphrase: "",
+          }));
         } else if (passphrase !== confirmPassphrase) {
           setErrors((prev) => ({
             ...prev,
-            passphrase: "Passphrases do not match",
+            passphrase: "",
+            confirmPassphrase: "Passphrases do not match.",
           }));
         } else {
-          setErrors((prev) => ({ ...prev, passphrase: "" }));
+          setErrors((prev) => ({
+            ...prev,
+            passphrase: "",
+            confirmPassphrase: "",
+          }));
         }
       }
       return updatedValues;
@@ -72,12 +99,33 @@ function CreateKeypairModal() {
         return;
       }
     }
-    if (formValues?.passphrase && !formValues?.confirmPassphrase) {
-      toast.error("Please confirm your passphrase.");
+    const passphrase = String(formValues?.passphrase || "");
+    const confirmPassphrase = String(formValues?.confirmPassphrase || "");
+
+    // Passphrase validation: optional, but if one is provided, both must be provided and match
+    if (passphrase && !confirmPassphrase) {
+      setErrors((prev) => ({
+        ...prev,
+        confirmPassphrase: "Please confirm your passphrase.",
+      }));
+      return;
+    }
+    if (!passphrase && confirmPassphrase) {
+      setErrors((prev) => ({
+        ...prev,
+        passphrase: "Please enter a passphrase.",
+      }));
+      return;
+    }
+    if (passphrase && confirmPassphrase && passphrase !== confirmPassphrase) {
+      setErrors((prev) => ({
+        ...prev,
+        confirmPassphrase: "Passphrases do not match.",
+      }));
       return;
     }
 
-    if (!errors.passphrase) {
+    if (!errors.passphrase && !errors.confirmPassphrase) {
       mutate(formValues, {
         onSuccess: (response) => {
           setKeypair(response);
@@ -96,8 +144,6 @@ function CreateKeypairModal() {
         },
       });
       setFormValues({});
-    } else {
-      toast.error("Passphrases do not match! Please correct it.");
     }
   };
 
@@ -255,8 +301,10 @@ function CreateKeypairModal() {
                       value={formValues.confirmPassphrase}
                       onChange={handleChange}
                     />
-                    {errors.passphrase && (
-                      <div className="text-red-500">{errors.passphrase}</div>
+                    {errors.confirmPassphrase && (
+                      <div className="text-red-500">
+                        {errors.confirmPassphrase}
+                      </div>
                     )}
                   </div>
                 </div>

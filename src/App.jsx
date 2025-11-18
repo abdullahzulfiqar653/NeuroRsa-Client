@@ -20,6 +20,7 @@ import VerifyLoginScreen from "./pages/VerifyLoginScreen";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import RecipentsList from "./pages/RecipentsList";
 import InfoAboutWebsite from "./pages/InfoAboutWebsite";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function App() {
   const action = useNavigationType();
@@ -81,6 +82,7 @@ function App() {
         <Route path="/VerifyLoginScreen" element={<VerifyLoginScreen />} />
         <Route path="/register-seed" element={<RegisterScreen />} />
         <Route path="/what-is-this?" element={<InfoAboutWebsite />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route
           path="/my-recipients"
           element={<ProtectedRoute element={<Recipients />} />}

@@ -1,37 +1,100 @@
-import React, { useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { ThreeCircles, ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import { useAuth } from "../AuthContext";
 import useCreateToken from "../hooks/useCreateToken";
-import useGenerateSeeds from "../hooks/useGenerateSeeds";
+import { TfiReload } from "react-icons/tfi";
+import useRegisterSeeds from "../hooks/useRegisterSeeds";
+import {
+  deriveSeedsHash,
+  generateSeedPhrase,
+  performSignup,
+  handleSuccessfulLogin,
+} from "../utils/cryptoOperations";
 
 const GroupComponent = () => {
   const { signup } = useAuth();
-  const { mutate, isPending } = useCreateToken();
-  const { data, isLoading } = useGenerateSeeds();
+  const retryAttempt = useRef(0);
+  const { mutate: createToken, isPending: isCreatingToken } = useCreateToken();
+  const { mutate: registerSeeds, isPending: isRegistering } =
+    useRegisterSeeds();
   const [copytext, setCopyText] = useState(false);
+  const [seedsData, setSeedsData] = useState(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [triggerReload, setTriggerReload] = useState(0);
+
+  // Effect to generate seed phrase and crypto payload
+
+  useEffect(() => {
+    async function registerCryptoData() {
+      setIsGenerating(true);
+      try {
+        const seedPhrase = await generateSeedPhrase();
+
+        const cryptoData = await performSignup(seedPhrase);
+        const payload = {
+          enc_salt: cryptoData.encSalt,
+          encrypted_private_key: cryptoData.encryptedPrivateKey,
+          encrypted_private_key_iv: cryptoData.encryptedPrivateKeyIV,
+          encrypted_private_key_tag: cryptoData.encryptedPrivateKeyTag,
+          pass_phrase: cryptoData.loginHash,
+          public_key: cryptoData.publicKey,
+        };
+
+        registerSeeds(payload, {
+          onSuccess: () => {
+            setSeedsData(seedPhrase);
+            setIsGenerating(false);
+          },
+          onError: (error) => {
+            const errorMessage =
+              error.response.data[0] || "Registration failed.Please try again.";
+            if (retryAttempt.current === 0) {
+              retryAttempt.current = 1;
+              registerCryptoData();
+            } else {
+              toast.error(errorMessage);
+              setIsGenerating(false);
+            }
+          },
+        });
+      } catch (error) {
+        console.error("Crypto error:", error);
+        if (retryAttempt.current === 0) {
+          retryAttempt.current = 1;
+          registerCryptoData();
+        } else {
+          toast.error("Failed to generate credentials. Please refresh.");
+          setIsGenerating(false);
+        }
+      }
+    }
+
+    registerCryptoData();
+  }, [triggerReload]);
 
   const copyToClipBoard = () => {
     setCopyText(true);
-    navigator.clipboard.writeText(data?.pass_phrase);
+    navigator.clipboard.writeText(seedsData);
     setTimeout(() => {
       setCopyText(false);
     }, [700]);
   };
-  const handleLogin = () => {
-    mutate(data?.pass_phrase, {
-      onSuccess: () => {
+
+  const handleLogin = async () => {
+    const seedsHash = await deriveSeedsHash(seedsData);
+    const payload = {
+      pass_phrase: seedsHash.loginHash,
+    };
+    createToken(payload, {
+      onSuccess: async (response) => {
+        await handleSuccessfulLogin(response, seedsData);
         toast.success("Logged In Successfully.");
         signup();
       },
-
       onError: (error) => {
-        toast.error(error.response.data.detail, { className: "toast-message" });
-        setError(
-          "Login failed. Please check your credentials.",
-          error.response.data
-        );
+        toast.error("Login failed. Please try logging in manually.",);
       },
     });
   };
@@ -42,14 +105,14 @@ const GroupComponent = () => {
         Your Seed{" "}
       </h2>
       <div className="self-stretch flex flex-col items-start justify-start gap-[5px] text-mini-1 font-montserrat">
-        <div className="flex flex-row items-start justify-start py-0 px-px">
+        <div className="flex flex-row w-full items-center justify-between py-0 px-px">
           <div
             className={`text-[12px] justify-center items-center relative leading-[22px] font-medium flex  z-[1] ${
-              isLoading ? "min-w-[106px]" : "min-w-[66px]"
+              isGenerating || isRegistering ? "min-w-[106px]" : "min-w-[66px]"
             }`}
           >
             Key Seed{" "}
-            {isLoading && (
+            {(isGenerating || isRegistering) && (
               <ThreeCircles
                 color="white"
                 height={15}
@@ -59,11 +122,17 @@ const GroupComponent = () => {
               />
             )}
           </div>
+          <div
+            onClick={() => setTriggerReload((prev) => prev + 1)}
+            className="cursor-pointer pb-2 pr-2 "
+          >
+            <TfiReload className="text-white text-[16px] hover:text-[17px] font-[800]" />
+          </div>
         </div>
         <div className="bg-darkslategray-200 w-full py-[10px] md:py-[21px] pb-0 md:pb-[10px] px-[5px] md:px-[19px] rounded-borderradius-large box-border  custom-tab-box">
           {/* <TagsInput value={selected} name='tags' placeHolder='Enter your Key Seed...' /> */}
           <div className="flex md:gap-[8px] gap-[5px] flex-wrap">
-            {data?.pass_phrase?.split(" ").map((seed, index) => (
+            {seedsData?.split(" ").map((seed, index) => (
               <span
                 key={index}
                 className="dm-sans border-mediumturquoise border-[1px] px-[8px] text-[14px] md:text-[16px] leading-[20px] md:leading-[20px] font-[400] text-white rounded-[6px]"
@@ -130,10 +199,10 @@ const GroupComponent = () => {
       <div className="w-full max-w-[223px] mx-auto mt-4 md:mt-[68px] flex flex-col items-center justify-center pt-0 px-0 text-center text-base font-montserrat">
         <div className="w-full flex flex-col items-start justify-start gap-[10.8px] mb-[1px]">
           <button
-            disabled={isPending}
+            disabled={isCreatingToken}
             onClick={handleLogin}
             className={`self-stretch h-[25px] rounded-[4.38px]   ${
-              isPending
+              isCreatingToken
                 ? "cursor-not-allowed"
                 : "bg-mediumturquoise cursor-pointer"
             } bg-mediumturquoise flex flex-row items-start justify-center pt-1 pb-7 md:pb-[2rem] md:pl-[50px] md:pr-[49px] shrink-0 z-[1]`}
@@ -141,7 +210,7 @@ const GroupComponent = () => {
             {/* <div className="h-[47.2px] w-full relative rounded-[4.38px] bg-mediumturquoise hidden" /> */}
             <div className="flex items-center justify-center gap-2 relative z-[1]">
               Next
-              {isPending && (
+              {isCreatingToken && (
                 <ThreeDots
                   color="white"
                   height={10}

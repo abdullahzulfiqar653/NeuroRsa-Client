@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
+import { logoutUser } from "./utils/cryptoOperations";
 
 const AuthContext = createContext(null);
 
@@ -71,7 +72,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem("access_token");
+    logoutUser();
   };
 
   const handleSaveConfirmationModalVisibility = () => {

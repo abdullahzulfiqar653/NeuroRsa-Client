@@ -8,6 +8,10 @@ import { ThreeDots } from "react-loader-spinner";
 
 import { useAuth } from "../AuthContext";
 import useCreateToken from "../hooks/useCreateToken";
+import {
+  deriveSeedsHash,
+  handleSuccessfulLogin,
+} from "../utils/cryptoOperations";
 
 const GroupComponent = ({ className = "" }) => {
   const { login } = useAuth();
@@ -15,17 +19,21 @@ const GroupComponent = ({ className = "" }) => {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [seedsValue, setSeedsValue] = useState([]);
-  console.log(isPending);
 
-  const handleSubmit = () => {
-    mutate(seedsValue.join(" "), {
-      onSuccess: () => {
-        login();
+  const handleSubmit = async () => {
+    const seeds = seedsValue.join(" ");
+    const seedsHash = await deriveSeedsHash(seeds);
+    const payload = {
+      pass_phrase: seedsHash.loginHash,
+    };
+    mutate(payload, {
+      onSuccess: async (response) => {
+        await handleSuccessfulLogin(response, seeds);
         toast.success("Logged In Successfully.");
+        login();
       },
       onError: (error) => {
         toast.error(error.response.data.detail);
-        // setError("Login failed. Please check your credentials.", error);
       },
     });
   };

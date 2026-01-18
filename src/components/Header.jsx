@@ -75,6 +75,18 @@ const Header = () => {
                     </div>{" "}
                   </>
                 )}
+                {isAuthenticated && (
+                  <>
+                    <div className="relative group hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
+                      <Link
+                        to={"/privacy-policy"}
+                        className="block px-4 py-2 text-sm font-sans text-[10px] md:text-[20px] text-white w-full text-left hover-btn"
+                      >
+                        Privacy Policy
+                      </Link>
+                    </div>{" "}
+                  </>
+                )}
 
                 {/* <button className="block px-4 py-2 text-sm text-white w-full text-left z-20 hover:bg-[#327C85] border-l-[2px] border-l-[#1c3d4f] hover:border-l-[#57CACC]">
                   Import

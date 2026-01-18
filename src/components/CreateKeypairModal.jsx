@@ -1,6 +1,6 @@
 import React from "react";
 import { toast } from "react-toastify";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button, Modal } from "flowbite-react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import useCreateKeypair from "../hooks/useCreateKeypair";
@@ -20,27 +20,64 @@ function CreateKeypairModal() {
     formValues,
     setFormValues,
   } = useAuth();
-  const { mutate } = useCreateKeypair();
+  const { mutate, isPending } = useCreateKeypair();
   const { refetch } = useGetKeyPairs();
   const [keypair, setKeypair] = useState({});
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setLoading(false);
     setFormValues((prevValues) => {
       let updatedValues = { ...prevValues, [name]: value };
       if (value === "") {
         delete updatedValues[name];
       }
+      if (name === "email") {
+        const emailValue = value.trim();
+        const isValidEmail =
+          emailValue === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+        setErrors((prev) => ({
+          ...prev,
+          email: isValidEmail ? "" : "Please enter a valid email address.",
+        }));
+      }
       if (name === "confirmPassphrase" || name === "passphrase") {
         const { passphrase, confirmPassphrase } = updatedValues;
-        if (!passphrase || !confirmPassphrase) {
-          setErrors({ passphrase: "" });
+        const isPassphraseEmpty =
+          !passphrase || String(passphrase).length === 0;
+        const isConfirmEmpty =
+          !confirmPassphrase || String(confirmPassphrase).length === 0;
+
+        // Field-specific messages
+        if (isPassphraseEmpty && isConfirmEmpty) {
+          setErrors((prev) => ({
+            ...prev,
+            passphrase: "",
+            confirmPassphrase: "",
+          }));
+        } else if (!isPassphraseEmpty && isConfirmEmpty) {
+          setErrors((prev) => ({
+            ...prev,
+            passphrase: "",
+            confirmPassphrase: "Please confirm your passphrase.",
+          }));
+        } else if (isPassphraseEmpty && !isConfirmEmpty) {
+          setErrors((prev) => ({
+            ...prev,
+            passphrase: "Please enter a passphrase.",
+            confirmPassphrase: "",
+          }));
         } else if (passphrase !== confirmPassphrase) {
-          setErrors({ passphrase: "Passphrases do not match" });
+          setErrors((prev) => ({
+            ...prev,
+            passphrase: "",
+            confirmPassphrase: "Passphrases do not match.",
+          }));
         } else {
-          setErrors({ passphrase: "" });
+          setErrors((prev) => ({
+            ...prev,
+            passphrase: "",
+            confirmPassphrase: "",
+          }));
         }
       }
       return updatedValues;
@@ -49,34 +86,64 @@ function CreateKeypairModal() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formValues?.passphrase && !formValues?.confirmPassphrase) {
-      toast.error("Please confirm your passphrase.");
+    // Validate email if present
+    if (formValues?.email) {
+      const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        String(formValues.email).trim()
+      );
+      if (!isValidEmail) {
+        setErrors((prev) => ({
+          ...prev,
+          email: "Please enter a valid email address.",
+        }));
+        return;
+      }
+    }
+    const passphrase = String(formValues?.passphrase || "");
+    const confirmPassphrase = String(formValues?.confirmPassphrase || "");
+
+    // Passphrase validation: optional, but if one is provided, both must be provided and match
+    if (passphrase && !confirmPassphrase) {
+      setErrors((prev) => ({
+        ...prev,
+        confirmPassphrase: "Please confirm your passphrase.",
+      }));
+      return;
+    }
+    if (!passphrase && confirmPassphrase) {
+      setErrors((prev) => ({
+        ...prev,
+        passphrase: "Please enter a passphrase.",
+      }));
+      return;
+    }
+    if (passphrase && confirmPassphrase && passphrase !== confirmPassphrase) {
+      setErrors((prev) => ({
+        ...prev,
+        confirmPassphrase: "Passphrases do not match.",
+      }));
       return;
     }
 
-    setLoading(true);
-    if (!errors.passphrase) {
+    if (!errors.passphrase && !errors.confirmPassphrase) {
       mutate(formValues, {
         onSuccess: (response) => {
           setKeypair(response);
           setStep(4);
-          setLoading(false);
           toast.success(`Keypair Created successfully.`);
           refetch();
         },
         onError: (error) => {
           setErrors(error.response.data);
-          setLoading(false);
           for (const [attribute, errors] of Object.entries(
             error.response.data
           )) {
             toast.error(errors[0]);
           }
+          VisualViewport;
         },
       });
       setFormValues({});
-    } else {
-      toast.error("Passphrases do not match! Please correct it.");
     }
   };
 
@@ -147,7 +214,11 @@ function CreateKeypairModal() {
                       value={formValues.email}
                       onChange={handleChange}
                     />
-                    <ErrorMessage name="email" component="div" />
+                    {errors.email && (
+                      <div className="text-red-500 mt-1 text-[12px]">
+                        {errors.email}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="block w-[98%] mx-auto h-[2px] bg-[#0E2E3F] mt-[20px]"></div>
@@ -230,8 +301,10 @@ function CreateKeypairModal() {
                       value={formValues.confirmPassphrase}
                       onChange={handleChange}
                     />
-                    {errors.passphrase && (
-                      <div className="text-red-500">{errors.passphrase}</div>
+                    {errors.confirmPassphrase && (
+                      <div className="text-red-500">
+                        {errors.confirmPassphrase}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -303,8 +376,11 @@ function CreateKeypairModal() {
             {step === 1 && (
               <>
                 <Button
+                  disabled={errors.email}
                   onClick={nextStep}
-                  className="!bg-[#57CBCC] hover:bg-red-700 text-white font-sans font-bold py-2 px-4 rounded-[5px] modal-btn"
+                  className={`!bg-[#57CBCC] hover:bg-red-700 text-white font-sans font-bold py-2 px-4 rounded-[5px] modal-btn ${
+                    errors.email ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
                   Next
                 </Button>
@@ -333,7 +409,6 @@ function CreateKeypairModal() {
                 <Button
                   onClick={() => {
                     closeModal();
-                    setLoading(false);
                   }}
                   className="bg-[#0E2E3F] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                 >
@@ -341,11 +416,11 @@ function CreateKeypairModal() {
                 </Button>
                 <Button
                   onClick={handleSubmit}
-                  disabled={loading}
+                  disabled={isPending}
                   className="bg-[#13425c] border-[#345360] hover:bg-[#345360] font-sans text-white font-bold py-2 px-4 rounded-[5px] modal-btn"
                 >
                   OK
-                  {loading && (
+                  {isPending && (
                     <ThreeDots
                       color="white"
                       height={10}

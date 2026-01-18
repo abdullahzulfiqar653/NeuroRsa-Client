@@ -95,7 +95,7 @@ const Home = ({ className = "" }) => {
       </div>
       <div className="xs:w-[100%] md:w-[971px] lg:w-[971px] flex flex-col items-start justify-start pt-[41px] px-0 pb-0 box-border max-w-full xs:ml-[-100%] md:ml-[-618px] lg:ml-[-618px]">
         <img
-          className="absolute xs:right-[0] md:left-[auto] lg:left-[auto] md:right-0 lg:right-[0px] xs:bottom-[0px] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2  w-full xs:max-w-[300px] md:max-w-[549.8px] lg:max-w-[549.8px] xs:h-[310px] md:h-[600px] lg:h-[600px] z-[2]"
+          className="absolute xs:right-[0] md:left-[auto] lg:left-[auto] md:right-0 lg:right-[0px] xs:bottom-[0px] md:top-[50%] lg:top-[50%] transform md:-translate-y-1/2 lg:-translate-y-1/2  w-full xs:max-w-[300px] md:max-w-[549.8px] lg:max-w-[549.8px] xs:h-[310px] md:h-[580px] lg:h-[600px] z-[2]"
           loading="lazy"
           alt=""
           src="home-group.png"
